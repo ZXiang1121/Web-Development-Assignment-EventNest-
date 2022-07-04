@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{{url_for('static', filename='styles/style.css')}}">
     <title>{% block title%}{% endblock %}</title>
 </head>
@@ -35,10 +35,7 @@
             </li>
           </ul>
           <form class="d-flex ms-auto order-5">
-            <button type="button" class="btn btn-link  me-2" style="padding-bottom:0;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
-                <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
-              </svg>
+            <button type="button" class="btn btn-link  me-2" >
               <i class="bi bi-bag"></i>
             </button>
             <button type="button" class="btn btn-link px-3 me-2">
@@ -48,7 +45,7 @@
               Sign up for free
             </button>
           </form>
-          
+
         </div>
 
   </nav>
@@ -59,17 +56,31 @@
       <div class="container">
         <div class="row">
           <!-- Single Widget-->
+              <!-- Footer Logo-->
+              <div class="footer-logo mb-3"><img src="{{url_for('static', filename='images/logo/eventnest logo png.png')}}" height="80px" alt=""></div>
+
           <div class="col-12 col-sm-6 col-lg-4">
             <div class="single-footer-widget section_padding_0_130">
-              <!-- Footer Logo-->
-              <div class="footer-logo mb-3"><img src="{{url_for('static', filename='images/logo/eventnest logo png.png')}}" height="50px" alt=""></div>
+      
+              <h5 class="footer-heading">Subscribe</h5>
+						<form action="#" class="subscribe-form">
+              <div class="form-group d-flex">
+                <input type="text" class="form-control rounded-left" placeholder="Enter email address">
+                <button type="submit" class="form-control submit rounded-right"><span class="sr-only">Submit</span><i class="bi bi-send"></i></button>
+              </div>
+            </form>
               <p>Appland is completely creative, lightweight, clean app landing page.</p>
               <!-- Copywrite Text-->
               <div class="copywrite-text mb-5">
                 <p class="mb-0">Made with <i class="lni-heart mr-1"></i>by<a class="ml-1" href="https://wrapbootstrap.com/user/DesigningWorld">Designing World</a></p>
               </div>
               <!-- Footer Social Area-->
-              <div class="footer_social_area"><a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook"><i class="fa fa-facebook"></i></a><a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Pinterest"><i class="fa fa-pinterest"></i></a><a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Skype"><i class="fa fa-skype"></i></a><a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"><i class="fa fa-twitter"></i></a></div>
+              <div class="footer_social_area">
+                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook"><i class="bi bi-facebook"></i></a>
+                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Instagram"><i class="bi bi-instagram"></i></a>
+                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Pinterest"><i class="bi bi-pinterest"></i></a>
+                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"><i class="bi bi-twitter"></i></a>
+              </div>
             </div>
           </div>
           <!-- Single Widget-->
