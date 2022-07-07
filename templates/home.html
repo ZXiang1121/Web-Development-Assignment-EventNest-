@@ -42,21 +42,33 @@
         
         <div class="col cat-all cat-concert">
           <a href="/ticketdetails">
-          <div class="card">
-            <img src="{{(url_for('static', filename='images/nctconcert.jpg'))}}" class="card-img-top" alt="...">
-        </a>
-        <div class="card-body">
-              <h5 class="card-title">Card Title</h5>
-              <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            </div>
-          </div>  
+            <div class="card">
+
+                <img class="img-fluid" src="{{(url_for('static', filename='images/nctconcert.jpg'))}}" class="card-img-top" alt="...">
+              </div>
+            </a>
+            <div class="card-body">
+              <h5 class="card-title">NCT Concert</h5>
+              <div class="row py-3">
+                <span class="col">
+                  <i class="bi bi-geo-alt"> <span class="text-muted">esplanade</span></i>
+                </span>
+                <span class="col">
+                  <i class="bi bi-calendar4-event"> <span class="text-muted">4 september</span></i>
+                </span>
+              </div>
+              <p class="card-text py-2">From <strong>$</strong><span><strong>50</strong></span></p>
+              <button type="button" class="btn btn-primary btn-sm">View</button>
+          </div>
         </div>
+      </div>  
+        
 
         <div class="col cat-all cat-concert">
           <div class="card">
             <img src="{{(url_for('static', filename='images/xuezhiqianconcertposter.jpg'))}}" class="card-img-top" alt="...">
             <div class="card-body">
-              <h5 class="card-title">Card title</h5>
+              <h5 class="card-title">Joker Xue Concert</h5>
               <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
             </div>
           </div>
@@ -66,14 +78,14 @@
           <div class="card">
             <img src="{{(url_for('static', filename='images/sport bwf badminton.png'))}}" class="card-img-top" alt="...">
             <div class="card-body">
-              <h5 class="card-title">Card title</h5>
+              <h5 class="card-title">BWF Final</h5>
               <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
             </div>
           </div>
         </div>
 
 
-    </div>
+      </div>
 
     </div>
   </div>
