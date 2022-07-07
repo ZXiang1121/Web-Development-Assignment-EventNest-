@@ -2,7 +2,7 @@
 {% block title%}Homepage{% endblock %}
 
 {% block content%}
-  <div style="background-color:black" id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" height="50vh">
+  <div style="background-color:rgb(76, 75, 75)" id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" height="50vh">
     <div class="carousel-inner">
       <div class="carousel-item active">
         <img src="{{(url_for('static', filename='images/xuezhiqianconcertposter.jpg'))}}" class="d-block w-100 mx-auto" style="max-width: 60%;" alt="...">
@@ -24,7 +24,7 @@
     </button>
   </div>
 
-  <div class="container py-5">
+  <div class="container py-5" id="eventsection">
     
     <h3 id="event">Events</h3>
 
@@ -41,13 +41,15 @@
       <div class="row row-cols-1 row-cols-md-3 g-4 tab-pane active" id="nav-all" aria-labelledby="nav-all-tab">
         
         <div class="col cat-all cat-concert">
+          <a href="/ticketdetails">
           <div class="card">
             <img src="{{(url_for('static', filename='images/nctconcert.jpg'))}}" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">Card title</h5>
+        </a>
+        <div class="card-body">
+              <h5 class="card-title">Card Title</h5>
               <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
             </div>
-          </div>
+          </div>  
         </div>
 
         <div class="col cat-all cat-concert">
