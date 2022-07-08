@@ -27,28 +27,52 @@
   <div class="container py-5" id="eventsection">
     
     <h3 id="event">Events</h3>
-
-    <ul class="nav nav-tabs border-bottom-1">
+    <div>
+      <ul class="nav nav-tabs border-bottom-1">
 
         <a class="nav-link active" type="button" aria-current="page" data-filter="cat-all" >All</a>
         <a class="nav-link" type="button" data-filter="cat-sport" >Sport</a>
         <a class="nav-link" type="button" data-filter="cat-concert" >Concert</a>
 
-    </ul>
+      </ul>
+    </div>
 
     <div class="table-content py-5 event " id="nav-tabContent">
 
       <div class="row row-cols-1 row-cols-md-3 g-4 tab-pane active" id="nav-all" aria-labelledby="nav-all-tab">
         
         <div class="col cat-all cat-concert">
-          <a href="/ticketdetails">
             <div class="card">
-
+              <a href="/ticketdetails">
+                
                 <img class="img-fluid" src="{{(url_for('static', filename='images/nctconcert.jpg'))}}" class="card-img-top" alt="...">
+
+              </a>
+              <div class="card-body">
+                <h5 class="card-title">NCT Concert</h5>
+                <div class="row py-3">
+                  <span class="col">
+                    <i class="bi bi-geo-alt"> <span class="text-muted">esplanade</span></i>
+                  </span>
+                  <span class="col">
+                    <i class="bi bi-calendar4-event"> <span class="text-muted">4 september</span></i>
+                  </span>
+                </div>
+                <p class="card-text py-2">From <strong>$</strong><span><strong>50</strong></span></p>
+                <button type="button" class="btn btn-primary btn-dark btn-outline-light">View</button>
               </div>
+          </div>
+        </div>
+
+        <div class="col cat-all cat-concert">
+          <div class="card">
+            <a href="/ticketdetails">
+              
+              <img class="img-fluid" src="{{(url_for('static', filename='images/xuezhiqianconcertposter.jpg'))}}" class="card-img-top" alt="...">
+
             </a>
             <div class="card-body">
-              <h5 class="card-title">NCT Concert</h5>
+              <h5 class="card-title">Joker Xue Concert</h5>
               <div class="row py-3">
                 <span class="col">
                   <i class="bi bi-geo-alt"> <span class="text-muted">esplanade</span></i>
@@ -58,37 +82,40 @@
                 </span>
               </div>
               <p class="card-text py-2">From <strong>$</strong><span><strong>50</strong></span></p>
-              <button type="button" class="btn btn-primary btn-sm">View</button>
-          </div>
+              <button type="button" class="btn btn-primary btn-dark btn-outline-light">View</button>
+            </div>
         </div>
+      </div>
+
+      <div class="col cat-all cat-sport">
+        <div class="card">
+          <a href="/ticketdetails">
+            
+            <img class="img-fluid" src="{{(url_for('static', filename='images/sport bwf badminton.png'))}}" class="card-img-top" alt="...">
+
+          </a>
+          <div class="card-body">
+            <h5 class="card-title">BWF Final</h5>
+            <div class="row py-3">
+              <span class="col">
+                <i class="bi bi-geo-alt"> <span class="text-muted">esplanade</span></i>
+              </span>
+              <span class="col">
+                <i class="bi bi-calendar4-event"> <span class="text-muted">4 september</span></i>
+              </span>
+            </div>
+            <p class="card-text py-2">From <strong>$</strong><span><strong>50</strong></span></p>
+            <button type="button" class="btn btn-primary btn-dark btn-outline-light">View</button>
+          </div>
+      </div>
+    </div>
+      
+
       </div>  
-        
-
-        <div class="col cat-all cat-concert">
-          <div class="card">
-            <img src="{{(url_for('static', filename='images/xuezhiqianconcertposter.jpg'))}}" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">Joker Xue Concert</h5>
-              <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col cat-all cat-sport">
-          <div class="card">
-            <img src="{{(url_for('static', filename='images/sport bwf badminton.png'))}}" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">BWF Final</h5>
-              <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
-            </div>
-          </div>
-        </div>
-
-
       </div>
 
     </div>
-  </div>
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script type="text/javascript">
