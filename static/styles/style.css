@@ -1,8 +1,24 @@
-
-
-.w-100{
-    width: 50px;
+.nav-shadow{
+    background-color: rgb(68,68,68); /* Needed for IEs */
+    z-index: 1;
+	-moz-box-shadow: 5px 5px 5px rgba(68,68,68,0.6);
+	-webkit-box-shadow: 5px 5px 5px rgba(68,68,68,0.6);
+	box-shadow: 5px 5px 5px rgba(68,68,68,0.6);
+    position: sticky;
+    top:0;
 }
+
+
+
+.fit-image{
+    width:100%;
+    height:200px;
+    object-fit:cover;
+}
+
+
+
+
 
 
 .footer_area {
@@ -99,4 +115,9 @@ ol li, ul li {
 ol, ul {
     margin: 0;
     padding: 0;
+}
+
+.header-cart-border{
+    padding: 0 10px;
+    border-left: 3px solid #17252C
 }
