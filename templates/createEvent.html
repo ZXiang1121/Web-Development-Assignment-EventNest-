@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}EventNest - Create Event{% endblock %}
+
+{% block content %}
+<h1 class="display-4">Home</h1>
+
+<div class="p-3 mb-2 bg-light">
+    <div class="container-sm col-lg-6 ml-auto">
+
+        <h2 class="display-7">Create Event</h2>
+
+        <form action="/action_page.php" class="needs-validation" novalidate>
+            <div class="form-group">
+                <label class="control-label" for="ename">Event Name</label>
+                <input type="text" class="form-control" id="ename" required>
+
+                <div class="valid-feedback">Valid.</div>
+                <div class="invalid-feedback">Please fill out this field.</div>
+            </div>
+
+            <div class="form-group">
+                <label>Event Date</label>
+                <div class="row">
+                    <div class="col">
+                        <div class="md-form md-outline input-with-post-icon datepicker" id="customDays">
+                            <input placeholder="DD/MM/YYYY" type="text" id="datepicker" class="form-control">
+
+                            <i class="fas fa-calendar input-prefix text-info active" tabindex=0></i>
+                        </div>
+                    </div>
+                    <p class="pt-1">To</p>
+                    <div class="col">
+                        <div id="date-picker-example" class="md-form md-outline input-with-post-icon datepicker">
+                            <input placeholder="DD/MM/YYYY" type="text" id="example" class="form-control">
+
+                            <i class="fas fa-calendar input-prefix text-info active" tabindex=0></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="valid-feedback">Valid.</div>
+                <div class="invalid-feedback">Please fill out this field.</div>
+            </div>
+
+            <div class="form-group">
+                <p>Event Poster</p>
+                <div class="custom-file mb-3">
+
+                    <label for="Eventposter" class="custom-file-label">Choose file</label>
+                    <input class="custom-file-input" type="file" id="Eventposter" required>
+
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <p>Seating Plan</p>
+                <div class="custom-file mb-3">
+                    <label class="custom-file-label" for="eSeating">Choose file</label>
+                    <input type="file" class="custom-file-input" id="eSeating" required>
+
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                </div>
+                <label for="seatingcats">Number of Seating Categories</label>
+                <select class="form-control" id="seatingcats">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </div>
+
+
+            <div class="row justify-content-center pt-3">
+                <input type="submit" class="btn btn-info cen px-5" value="Submit">
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+// Disable form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Get the forms we want to add validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+
+// Data Picker Initialization
+$('.datepicker').datepicker({
+  inline: true
+});
+</script>
+{% endblock %}
+
