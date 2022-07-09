@@ -8,13 +8,26 @@
         <h2 class="display-7">Create Event</h2>
 
         <form action="/action_page.php" class="needs-validation" novalidate>
-            <div class="form-group my-4">
+            <div class="row">
+                <div class="col">
                 <label class="control-label" for="ename">Event Name</label>
                 <input type="text" class="form-control" id="ename" required>
 
                 <div class="valid-feedback">Valid.</div>
                 <div class="invalid-feedback">Please fill out this field.</div>
             </div>
+            <div class="col">
+                
+                <label for="seatingcats">Number of Seating Categories</label>
+                <select class="form-control" id="seatingcats">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </div>
+        </div>
 
             <div class="row py-4">
                 <div class="col">
@@ -53,21 +66,11 @@
             </div>
                 
 
-            <div class="form-group my-4">
-                
-                <label for="seatingcats" class=" mt-3">Number of Seating Categories</label>
-                <select class="form-control" id="seatingcats">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
-            </div>
+
 
             <div class="row justify-content-center mt-5 mb-3">
                 <form action="" method="POST">
-                    <input type="submit" class="btn btn-primary btn-md" style="width:40%" value="Submit">
+                    <input type="submit" class="btn btn-info sm" style="width:40%" value="Submit">
                 </form>
             </div>
 

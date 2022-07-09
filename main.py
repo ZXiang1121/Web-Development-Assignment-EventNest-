@@ -33,6 +33,14 @@ def signup():
 def accountDetails():
     return render_template('accountDetails.html')
 
+@app.route('/EditAcc')
+def EditAcc():
+    return render_template('EditAcc.html')
+
+@app.route('/ChangePass')
+def ChangePass():
+    return render_template('ChangePass.html')
+
 @app.route('/dashboard')
 def dashboard():
     return render_template('dashboard.html')
