@@ -8,9 +8,9 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/ticketdetails')
+@app.route('/ticketDetails')
 def ticketdetails():
-    return render_template('ticketdetails.html')
+    return render_template('ticketDetails.html')
 
 @app.route('/cart')
 def cart():
