@@ -18,7 +18,20 @@ def cart():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+
+        # return redirect(url_for('accountDetails'))
     return render_template('login.html')
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+
+    #return redirect(url_for('accountDetails'))
+    return render_template('signup.html')
+
+
+@app.route('/accountDetails')
+def accountDetails():
+    return render_template('accountDetails.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
