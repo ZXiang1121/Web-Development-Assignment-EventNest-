@@ -37,5 +37,10 @@ def accountDetails():
 def dashboard():
     return render_template('dashboard.html')
 
+@app.route('/createEvent')
+def createEvent():
+    return render_template('createEvent.html')
+    
+
 if __name__ == '__main__':
     app.run(debug=True)
