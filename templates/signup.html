@@ -1,32 +1,46 @@
 {% extends "base.html" %}
-{% block title %}EventNest - Log In{% endblock %}
+{% block title %}EventNest - SignUp{% endblock %}
 
 {% block content %}
-<div class="p-5 bg-light">
+<div class="p-3 mb-2 bg-light">
     <div class="container-sm col-lg-6 ml-auto">
 
-        <h2 class="display-7">Log In</h2>
+        <h2 class="display-7">Sign Up</h2>
 
         <form action="/action_page.php" class="needs-validation" novalidate>
 
             <div class="form-group my-4">
-                <label class="control-label" for="email">Email</label>
-                <input type="text" class="form-control" id="email" required>
+              <label class="control-label" for="email">Email</label>
+              <input type="text" class="form-control" id="email" required>
                 <div class="valid-feedback">Valid.</div>
                 <div class="invalid-feedback">Please fill out this field.</div>
             </div>
 
             <div class="form-group my-4">
-                <label class="control-label" for="pwd">Password</label>
-                <input type="password" class="form-control" id="pwd" required>
+              <label for="usr">Name</label>
+              <input type="text" class="form-control" id="usr" required>
+                <div class="valid-feedback">Valid.</div>
+                <div class="invalid-feedback">Please fill out this field.</div>
+            </div>
+
+            <div class="form-group my-4">
+              <label for="pwd">Password</label>
+              <input type="password" class="form-control" id="pwd" required>
+                <div class="valid-feedback">Valid.</div>
+                <div class="invalid-feedback">Please fill out this field.</div>
+            </div>
+
+            <div class="form-group my-4">
+              <label for="pwd">Comfirm Password</label>
+              <input type="password" class="form-control" id="pwd2" required>
                 <div class="valid-feedback">Valid.</div>
                 <div class="invalid-feedback">Please fill out this field.</div>
             </div>
 
             <div class="row justify-content-center mt-5 mb-3">
-              <form action="" method="POST">
-                <input type="submit" class="btn btn-primary btn-md" style="width:40%" value="Submit">
-              </form>
+                <form action="" method="POST">
+                    <input type="submit" class="btn btn-primary btn-md" style="width:40%" value="Submit">
+                </form>
             </div>
 
         </form>
@@ -55,6 +69,4 @@
 })();
 </script>
 {% endblock %}
-
-
 
