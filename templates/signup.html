@@ -2,7 +2,7 @@
 {% block title %}EventNest - SignUp{% endblock %}
 
 {% block content %}
-<div class="p-3 mb-2 bg-light">
+<div class="p-5 bg-light">
     <div class="container-sm col-lg-6 ml-auto">
 
       <h2 class="display-7">Sign Up</h2>
@@ -10,7 +10,7 @@
         <form action="/action_page.php" class="needs-validation" novalidate>
 
             <div class="form-group my-4">
-              <label class="control-label" for="email">Email</label>
+              <label class="control-label" for="email">Email<span class="text-danger">*</span></label>
               <input type="text" class="form-control" id="email" required>
                 <div class="valid-feedback">Valid.</div>
                 <div class="invalid-feedback">Please fill out this field.</div>
@@ -18,26 +18,24 @@
 
             <div class="form-group my-4">
               <label for="usr">Name</label>
-              <input type="text" class="form-control" id="usr" required>
-                <div class="valid-feedback">Valid.</div>
-                <div class="invalid-feedback">Please fill out this field.</div>
+              <input type="text" class="form-control" id="usr">
             </div>
 
-            <label>Event Date</label>
+            <label>Date of Birth</label>
               <div class="md-form md-outline input-with-post-icon datepicker" id="customDays">
                 <input placeholder="DD/MM/YYYY" type="text" id="datepicker" class="form-control">
                         
               </div>
 
             <div class="form-group my-4">
-              <label for="pwd">Password</label>
+              <label for="pwd">Password<span class="text-danger">*</span></label>
               <input type="password" class="form-control" id="pwd" required>
                 <div class="valid-feedback">Valid.</div>
                 <div class="invalid-feedback">Please fill out this field.</div>
             </div>
 
             <div class="form-group my-4">
-              <label for="pwd">Comfirm Password</label>
+              <label for="pwd">Comfirm Password<span class="text-danger">*</span></label>
               <input type="password" class="form-control" id="pwd2" required>
                 <div class="valid-feedback">Valid.</div>
                 <div class="invalid-feedback">Please fill out this field.</div>
