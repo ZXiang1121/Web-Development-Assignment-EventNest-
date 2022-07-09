@@ -40,7 +40,10 @@ def dashboard():
 @app.route('/createEvent')
 def createEvent():
     return render_template('createEvent.html')
-    
+
+@app.route('/myevent')
+def myEvent():
+    return render_template('myevent.html')   
 
 if __name__ == '__main__':
     app.run(debug=True)
