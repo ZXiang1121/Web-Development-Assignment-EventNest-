@@ -26,8 +26,8 @@
                         <option>5</option>
                     </select>
                 
+                </div>
             </div>
-        </div>
 
             <div class="row py-4">
                 <div class="col">
@@ -40,13 +40,24 @@
                 </div>
             </div>
 
+            <div class="row pb-4">
+                <div class="col">
+                    <label>Ticket Available</label>
+                    <input type="text" name="Lname" class="form-control" placeholder="Number of ticket for Sales">
+                </div>
+                <div class="col">
+                    <label>Event Location</label>
+                    <input type="text" name="Lname" class="form-control" placeholder="Event Location">
+                </div>
+            </div>
+
 
             <div class="row">
                 <div class="col">
                     <label>Add Event Poster</label>
                     <div class="image-upload">
                         <label for="file-input1">
-                            <img id="previewImg" src="https://www.chargeandparking.com/assets/img/default.png" style="width: 70%; border: 2px solid lightgray;margin-top:15px;" />
+                            <img id="previewImg" src="https://www.chargeandparking.com/assets/img/default.png" style="width: 70%; border: 2px solid lightgray;" />
                         </label>
                         
                         <input id="file-input1" type="file" onchange="poster(this);" style="display: none;" />
@@ -57,7 +68,7 @@
                     <label>Add Seating Image</label>
                     <div class="image-upload">
                         <label for="file-input2">
-                            <img id="previewImg2" src="https://www.chargeandparking.com/assets/img/default.png" style="width: 70%; border: 2px solid lightgray;margin-top:15px;" />
+                            <img id="previewImg2" class="overflow-hidden" src="https://www.chargeandparking.com/assets/img/default.png" style="width: 70%; border: 2px solid lightgray;" />
                         </label>
 
                         <input id="file-input2" type="file" onchange="seating(this);" style="display: none;" />

@@ -9,7 +9,7 @@ def home():
 
 
 @app.route('/ticketDetails')
-def ticketdetails():
+def ticketDetails():
     return render_template('ticketDetails.html')
 
 @app.route('/cart')
