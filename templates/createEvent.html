@@ -8,24 +8,24 @@
         <h2 class="display-7">Create Event</h2>
 
         <form action="/action_page.php" class="needs-validation" novalidate>
-            <div class="row">
-                <div class="col">
-                <label class="control-label" for="ename">Event Name</label>
-                <input type="text" class="form-control" id="ename" required>
+            <div class="col pt-2">
+                    <label class="control-label" for="ename">Event Name</label>
+                    <input type="text" class="form-control" id="ename" required>
 
-                <div class="valid-feedback">Valid.</div>
-                <div class="invalid-feedback">Please fill out this field.</div>
-            </div>
-            <div class="col">
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
                 
-                <label for="seatingcats">Number of Seating Categories</label>
-                <select class="form-control" id="seatingcats">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
+            
+                <div class="col pt-4">
+                    <label for="seatingcats">Number of Seating Categories</label>
+                    <select class="form-control" id="seatingcats">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                
             </div>
         </div>
 
@@ -46,7 +46,7 @@
                     <label>Add Event Poster</label>
                     <div class="image-upload">
                         <label for="file-input1">
-                            <img id="previewImg" src="https://static.thenounproject.com/png/3322766-200.png" style="width: 100px; height: 100px;  border: 2px solid black;margin-top:15px;" />
+                            <img id="previewImg" src="https://www.chargeandparking.com/assets/img/default.png" style="width: 70%; border: 2px solid lightgray;margin-top:15px;" />
                         </label>
                         
                         <input id="file-input1" type="file" onchange="poster(this);" style="display: none;" />
@@ -57,7 +57,7 @@
                     <label>Add Seating Image</label>
                     <div class="image-upload">
                         <label for="file-input2">
-                            <img id="previewImg2" src="https://static.thenounproject.com/png/3322766-200.png" style="width: 100px; height: 100px;  border: 2px solid black;margin-top:15px;" />
+                            <img id="previewImg2" src="https://www.chargeandparking.com/assets/img/default.png" style="width: 70%; border: 2px solid lightgray;margin-top:15px;" />
                         </label>
 
                         <input id="file-input2" type="file" onchange="seating(this);" style="display: none;" />
@@ -70,7 +70,7 @@
 
             <div class="row justify-content-center mt-5 mb-3">
                 <form action="" method="POST">
-                    <input type="submit" class="btn btn-info sm" style="width:40%" value="Submit">
+                    <input type="submit" class="btn btn-primary sm" style="width:40%" value="Submit">
                 </form>
             </div>
 
