@@ -16,7 +16,7 @@
                     <div class="invalid-feedback">Please fill out this field.</div>
                 
             
-                <div class="col pt-4">
+                <!-- <div class="col pt-4">
                     <label for="seatingcats">Number of Seating Categories</label>
                     <select class="form-control" id="seatingcats">
                         <option>1</option>
@@ -25,11 +25,87 @@
                         <option>4</option>
                         <option>5</option>
                     </select>
-                
+                </div> -->
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+		
+	<script>
+	$(document).ready(function() {
+        var max_fields      = 6; //maximum input boxes allowed
+        var wrapper         = $(".input_fields_wrap"); //Fields wrapper
+        var add_button      = $(".add_field_button"); //Add button ID
+    
+        var x = 1; //initlal text box count
+	
+	
+   $(add_button).click(function(e){ //on add input button click
+        e.preventDefault();
+        if(x < max_fields){ //max input box allowed
+	
+		     //text box increment
+            $(wrapper).append(
+                `
+                <div class="border-bottom pb-2">
+                    <div class="row py-3">
+                        <div class="col">
+                            <label>Seat Area / Seat Type</label>
+                            <input type="text" name="Lname" class="form-control" placeholder="E.g. Cat 1">
+                        </div>
+                    </div>
+                    <div class="row pb-3">
+                        <div class="col">
+                            <label>Ticket Available</label>
+                            <input type="text" name="Lname" class="form-control" placeholder="E.g. Cat 1">
+                        </div>
+                        <div class="col">
+                            <label>Price</label>
+                            <input type="text" name="Lname" class="form-control" placeholder="E.g. 170">
+                        </div>
+                    </div>
+                    <a href="#" class="remove_field">Remove</a>
+                </div>
+                `
+                ); //add input box
+            x++; 
+	    }
+    });
+   
+    $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+       
+		e.preventDefault(); 
+		$(this).parent('div').remove(); 
+		x--;
+    })
+});
+	
+	</script>
+    
+    <div class="input_fields_wrap border p-5 my-4 rounded shadow-sm">
+        <button class="add_field_button btn btn-primary">Add More Fields</button>
+        
+        <div class="border-bottom pb-2">
+            <div class="row py-3">
+                <div class="col">
+                    <label>Seat Area / Seat Type</label>
+                    <input type="text" name="Lname" class="form-control" placeholder="E.g. Cat 1">
                 </div>
             </div>
+            <div class="row pb-3">
+                <div class="col">
+                    <label>Ticket Available</label>
+                    <input type="text" name="Lname" class="form-control" placeholder="E.g. Cat 1">
+                </div>
+                <div class="col">
+                    <label>Price</label>
+                    <input type="text" name="Lname" class="form-control" placeholder="E.g. 170">
+                </div>
+            </div>
+            <!-- <a href="#" class="remove_field">Remove</a> -->
+        </div>
 
-            <div class="row py-4">
+    </div>
+
+            <div class="row pb-4">
                 <div class="col">
                     <label>Start Date</label>
                     <input type="text" name="Lname" class="form-control" placeholder="DD/MM/YY">
@@ -41,10 +117,6 @@
             </div>
 
             <div class="row pb-4">
-                <div class="col">
-                    <label>Ticket Available</label>
-                    <input type="text" name="Lname" class="form-control" placeholder="Number of ticket for Sales">
-                </div>
                 <div class="col">
                     <label>Event Location</label>
                     <input type="text" name="Lname" class="form-control" placeholder="Event Location">
@@ -87,6 +159,7 @@
 
         </form>
     </div>
+</div>
 </div>
 
 <script>
