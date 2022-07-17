@@ -10,7 +10,7 @@ def home():
 
 @app.route('/ticketDetails')
 def ticketdetails():
-    return render_template('ticketDetails.html')
+    return render_template('ticketdetails.html')
 
 @app.route('/cart')
 def cart():
@@ -32,6 +32,10 @@ def signup():
 @app.route('/accountDetails')
 def accountDetails():
     return render_template('accountDetails.html')
+
+@app.route('/newfile')
+def newfile():
+    return render_template('newfile.html')
 
 @app.route('/EditAcc')
 def EditAcc():
