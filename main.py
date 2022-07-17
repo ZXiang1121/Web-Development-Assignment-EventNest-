@@ -35,6 +35,10 @@ def signup():
 def accountDetails():
     return render_template('accountDetails.html')
 
+@app.route('/newfile')
+def newfile():
+    return render_template('newfile.html')
+
 @app.route('/EditAcc')
 def EditAcc():
     return render_template('EditAcc.html')
