@@ -8,6 +8,7 @@
         <h2 class="display-7">Create Event</h2>
 
         <form action="/action_page.php" class="needs-validation" novalidate>
+            {% from "includes/formHelper.html" import render_field %}
             <div class="col pt-2">
                     <label class="control-label" for="ename">Event Name</label>
                     <input type="text" class="form-control" id="ename" required>
