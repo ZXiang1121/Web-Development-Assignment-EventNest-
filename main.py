@@ -1,4 +1,5 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
+import shelve, event
 
 app = Flask(__name__)
 
@@ -9,8 +10,8 @@ def home():
 
 
 @app.route('/ticketDetails')
-def ticketdetails():
-    return render_template('ticketdetails.html')
+def ticketDetails():
+    return render_template('ticketDetails.html')
 
 @app.route('/cart')
 def cart():
@@ -49,8 +50,10 @@ def ChangePass():
 def dashboard():
     return render_template('dashboard.html')
 
-@app.route('/createEvent')
+@app.route('/createEvent', methods = ['GET', 'POST'])
 def createEvent():
+    # create_user_form = 
+
     return render_template('createEvent.html')
 
 @app.route('/myevent')
