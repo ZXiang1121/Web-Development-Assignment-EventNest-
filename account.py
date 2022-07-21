@@ -8,6 +8,7 @@ class Account:
         self.__name = name
         self.__email = email
         self.__password = password
+        self.__birthdate = None
 
     def get_user_id(self):
         return self.__user_id
@@ -23,6 +24,11 @@ class Account:
         return self.__email
     def set_email(self, email):
         self.__email = email
+
+    def get_birthdate(self):
+        return self.__birthdate
+    def set_name(self, birthdate):
+        self.__birthdate = birthdate
 
     def get_password(self):
         return self.__password

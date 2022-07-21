@@ -9,8 +9,8 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/ticketDetails')
-def ticketDetails():
+@app.route('/ticketdetails')
+def ticketdetails():
     return render_template('ticketDetails.html')
 
 @app.route('/cart')
@@ -24,10 +24,11 @@ def login():
     return render_template('login.html')
 
 @app.route('/signup', methods=['GET', 'POST'])
-def signup():
-
-    #return redirect(url_for('accountDetails'))
+def create_user():
+    if request.method == 'POST':
+        return redirect(url_for('home'))
     return render_template('signup.html')
+
 
 
 @app.route('/accountDetails')
