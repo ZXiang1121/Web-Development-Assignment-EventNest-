@@ -1,4 +1,5 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
+import shelve, account
 
 app = Flask(__name__)
 
@@ -23,10 +24,11 @@ def login():
     return render_template('login.html')
 
 @app.route('/signup', methods=['GET', 'POST'])
-def signup():
-
-    #return redirect(url_for('accountDetails'))
+def create_user():
+    if request.method == 'POST':
+        return redirect(url_for('home'))
     return render_template('signup.html')
+
 
 
 @app.route('/accountDetails')
