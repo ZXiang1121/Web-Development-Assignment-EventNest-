@@ -47,9 +47,42 @@ def ChangePass():
 def dashboard():
     return render_template('dashboard.html')
 
-@app.route('/createEvent')
+
+
+@app.route('/createEvent', methods = ['GET', 'POST'])
 def createEvent():
-    return render_template('createEvent.html')
+    # create_event_form = CreateEventForm(request.form)
+
+    # if request.method == 'POST' and create_event_form.validate():
+    #     events_dict = {}
+    #     db = shelve.open('storage.db', 'c')
+
+    #     try:
+    #         events_dict = db['Events']
+    #     except:
+    #         print("Error in retrieving Users from storage.db.")
+        
+    #     event = Event.Event(create_event_form.event_name.data,
+    #                         create_event_form.num_ticket.data,
+    #                         create_event_form.event_price.data,
+    #                         create_event_form.seat_type.data,
+    #                         create_event_form.event_date.data,
+    #                         # create_event_form.event_image.data,
+    #                         create_event_form.description.data
+    #                         )
+    #     events_dict[event.get_event_name()] = event
+    #     db['Events'] = events_dict
+        
+    #     #Test Code
+    #     events_dict = db['Events']
+    #     event = events_dict[event.get_event_name()]
+    #     print(event.get_event_location(), event.get_event_date(), "was stored in storage.db successfully with event_name ==", event.get_event_name)
+
+    #     db.close()
+
+
+    #     return redirect(url_for('home'))
+    return render_template('createEvent.html', form=create_event_form)
 
 @app.route('/myevent')
 def myEvent():

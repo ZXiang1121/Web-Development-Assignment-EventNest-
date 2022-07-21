@@ -8,6 +8,7 @@
         <h2 class="display-7">Create Event</h2>
 
         <form action="/action_page.php" class="needs-validation" novalidate>
+            {% from "includes/formHelper.html" import render_field %}
             <div class="col pt-2">
                     <label class="control-label" for="ename">Event Name</label>
                     <input type="text" class="form-control" id="ename" required>
@@ -16,7 +17,11 @@
                     <div class="invalid-feedback">Please fill out this field.</div>
                 
             
+<<<<<<< HEAD
                 <div class="col pt-4 justify-content-center">
+=======
+                <!-- <div class="col pt-4">
+>>>>>>> b61fa70410d0ae8ba5af7abf5e5c008d84b1c2e2
                     <label for="seatingcats">Number of Seating Categories</label>
                     <select class="form-control align-items-center" id="seatingcats">
                         <option>1</option>
@@ -25,11 +30,93 @@
                         <option>4</option>
                         <option>5</option>
                     </select>
+<<<<<<< HEAD
                 
                 </div>
             
+=======
+                </div> -->
 
-            <div class="row py-4">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+		
+	<script>
+	$(document).ready(function() {
+        var max_fields      = 6; //maximum input boxes allowed
+        var wrapper         = $(".input_fields_wrap"); //Fields wrapper
+        var add_button      = $(".add_field_button"); //Add button ID
+    
+        var x = 1; //initlal text box count
+	
+	
+   $(add_button).click(function(e){ //on add input button click
+        e.preventDefault();
+        if(x < max_fields){ //max input box allowed
+	
+		     //text box increment
+            $(wrapper).append(
+                `
+                <div class="border-bottom pb-2">
+                    <div class="row py-3">
+                        <div class="col">
+                            <label>Seat Area / Seat Type</label>
+                            <input type="text" name="Lname" class="form-control" placeholder="E.g. Cat 1">
+                        </div>
+                    </div>
+                    <div class="row pb-3">
+                        <div class="col">
+                            <label>Ticket Available</label>
+                            <input type="text" name="Lname" class="form-control" placeholder="E.g. Cat 1">
+                        </div>
+                        <div class="col">
+                            <label>Price</label>
+                            <input type="text" name="Lname" class="form-control" placeholder="E.g. 170">
+                        </div>
+                    </div>
+                    <a href="#" class="remove_field">Remove</a>
+                </div>
+                `
+                ); //add input box
+            x++; 
+	    }
+    });
+   
+    $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+       
+		e.preventDefault(); 
+		$(this).parent('div').remove(); 
+		x--;
+    })
+});
+	
+	</script>
+    
+    <div class="input_fields_wrap border p-5 my-4 rounded shadow-sm">
+        <button class="add_field_button btn btn-primary">Add More Fields</button>
+        
+        <div class="border-bottom pb-2">
+            <div class="row py-3">
+                <div class="col">
+                    <label>Seat Area / Seat Type</label>
+                    <input type="text" name="Lname" class="form-control" placeholder="E.g. Cat 1">
+                </div>
+            </div>
+            <div class="row pb-3">
+                <div class="col">
+                    <label>Ticket Available</label>
+                    <input type="text" name="Lname" class="form-control" placeholder="E.g. Cat 1">
+                </div>
+                <div class="col">
+                    <label>Price</label>
+                    <input type="text" name="Lname" class="form-control" placeholder="E.g. 170">
+                </div>
+            </div>
+            <!-- <a href="#" class="remove_field">Remove</a> -->
+        </div>
+>>>>>>> b61fa70410d0ae8ba5af7abf5e5c008d84b1c2e2
+
+    </div>
+
+            <div class="row pb-4">
                 <div class="col">
                     <label>Start Date</label>
                     <input type="text" name="Lname" class="form-control" placeholder="DD/MM/YY">
@@ -40,13 +127,20 @@
                 </div>
             </div>
 
+            <div class="row pb-4">
+                <div class="col">
+                    <label>Event Location</label>
+                    <input type="text" name="Lname" class="form-control" placeholder="Event Location">
+                </div>
+            </div>
+
 
             <div class="row">
                 <div class="col">
                     <label>Add Event Poster</label>
                     <div class="image-upload">
                         <label for="file-input1">
-                            <img id="previewImg" src="https://www.chargeandparking.com/assets/img/default.png" style="width: 70%; border: 2px solid lightgray;margin-top:15px;" />
+                            <img id="previewImg" src="https://www.chargeandparking.com/assets/img/default.png" style="width: 70%; border: 2px solid lightgray;" />
                         </label>
                         
                         <input id="file-input1" type="file" onchange="poster(this);" style="display: none;" />
@@ -57,7 +151,7 @@
                     <label>Add Seating Image</label>
                     <div class="image-upload">
                         <label for="file-input2">
-                            <img id="previewImg2" src="https://www.chargeandparking.com/assets/img/default.png" style="width: 70%; border: 2px solid lightgray;margin-top:15px;" />
+                            <img id="previewImg2" class="overflow-hidden" src="https://www.chargeandparking.com/assets/img/default.png" style="width: 70%; border: 2px solid lightgray;" />
                         </label>
 
                         <input id="file-input2" type="file" onchange="seating(this);" style="display: none;" />
@@ -77,6 +171,7 @@
 
         </form>
     </div>
+</div>
 </div>
 
 <script>

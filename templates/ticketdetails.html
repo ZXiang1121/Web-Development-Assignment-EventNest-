@@ -20,58 +20,65 @@
         <div class="col-12 col-md-7 mb-5">
             <h4 class="pb-2">Seating Plan</h4>
             <div class="rounded border w-75">
-                <img class="w-100" src="{{(url_for('static', filename='images/Seating Plan.jpg'))}}" alt="">
+                <img class="w-100 shadow-sm rounded" src="{{(url_for('static', filename='images/Seating Plan.jpg'))}}" alt="">
             </div>
+
+            <div class="mt-5">
+                <h4>Description</h4>
+                
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+                  More Details
+                </button>
+              </div>
+              
+              <!-- The Modal -->
+              <div class="modal" id="myModal">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+              
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                      <h4 class="modal-title">Modal Heading</h4>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+              
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                      Modal body..
+                    </div>
+              
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    </div>
+              
+                  </div>
+                </div>
+              </div>
         </div>
+
+
         <div class="col-6 col-md-4">
             <h4 class="pb-2">Select Category</h4>
-            <div class="rounded border">
+            <div class="rounded border shadow-sm">
                 <div class="d-flex flex-column">
                     <div class="p-2">
-                        <button type="button" class="btn btn-lg w-100 ">Cat 1</button>
+                        <button type="button" class="btn btn-lg w-100">Cat 1<div class="text-muted"><small>$123</small></div></button>
                     </div>
                     <div class="p-2">
-                        <button type="button" class="btn btn-lg w-100">Cat 2</button>
+                        <button type="button" class="btn btn-lg w-100">Cat 2<div class="text-muted"><small>$123</small></div></button>
                     </div>
                     <div class="p-2">
-                        <button type="button" class="btn btn-lg w-100">Cat 3</button>
+                        <button type="button" class="btn btn-lg w-100">Cat 3<div class="text-muted"><small>$123</small></div></button>
                     </div>
                     <div class="p-2">
-                        <button type="button" class="btn btn-lg w-100"> Cat 4</button>
+                        <button type="button" class="btn btn-lg w-100"> Cat 4<div class="text-muted"><small>$123</small></div></button>
                     </div>
                 </div>
 
             </div>
             <div class="col-sm rounded border mt-5">
                 <a type="button" class="btn btn-lg w-100" href="/cart">Add to Cart</a>
-            </div>
-        </div>
-    </div>
-
-    <div>
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-            Launch demo modal
-        </button>
-        
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-                <div class="modal-body">
-                ...
-                </div>
-                <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
             </div>
         </div>
         
