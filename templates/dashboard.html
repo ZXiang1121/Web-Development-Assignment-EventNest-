@@ -37,7 +37,25 @@
 								<canvas style="max-height:250px;" id="myChart"></canvas>
 								<script>
 
-
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: {{ labels | safe }},
+        datasets: [
+			{
+            label: "Tsales",
+            data: {{ values | safe }},
+            fill:false,
+			borderColor:"rgb(75, 92, 192)",
+			lineTension:0.1
+			}
+        ]
+    },
+    options: {
+		responsive:true
+    }
+});
 
     </script>
 							</div>

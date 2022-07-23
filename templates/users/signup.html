@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}EventNest - SignUp{% endblock %}
+
+{% block content %}
+{% from "_formHelper.html" import render_field %}
+
+<div class="p-5 bg-light">
+    <div class="container-sm col-lg-6 ml-auto">
+
+      <h2 class="display-7">Sign Up</h2>
+
+        <form method = "POST" action=""> <!-- class="needs-validation" novalidate> -->
+
+            <!-- <div class="form-group my-4">
+              <label class="control-label" for="email">Email<span class="texts-danger">*</span></label>
+              <input type="text" class="form-control" id="email" required>
+                <div class="valid-feedback">Valid.</div>
+                <div class="invalid-feedback">Please fill out this field.</div>
+            </div>
+
+            <div class="form-group my-4">
+              <label for="usr">Name</label>
+              <input type="text" class="form-control" id="usr">
+            </div>
+
+            <label>Date of Birth</label>
+              <div class="md-form md-outline input-with-post-icon datepicker" id="customDays">
+                <input placeholder="DD/MM/YYYY" type="text" id="datepicker" class="form-control">
+                        
+              </div>
+
+            <div class="form-group my-4">
+              <label for="pwd">Password<span class="text-danger">*</span></label>
+              <input type="password" class="form-control" id="pwd" required>
+                <div class="valid-feedback">Valid.</div>
+                <div class="invalid-feedback">Please fill out this field.</div>
+            </div>
+
+            <div class="form-group my-4">
+              <label for="pwd">Comfirm Password<span class="text-danger">*</span></label>
+              <input type="password" class="form-control" id="pwd2" required>
+                <div class="valid-feedback">Valid.</div>
+                <div class="invalid-feedback">Please fill out this field.</div>
+            </div> -->
+
+            <div class="form-group">
+              {{ render_field(form.name, class="form-control") }}
+            </div>
+            <br>
+            <div class="form-group">
+                {{ render_field(form.email, class="form-control") }}
+            </div>
+            <br>
+            <div class="form-group">
+                {{ render_field(form.dob, class="form-control") }}
+            </div>
+            <br>
+            <div class="form-group">
+             {{ render_field(form.password, class="form-control") }}
+            </div>
+            <br>
+
+            <!-- <div class="form-group">
+              <label for="password2">Comfirm Password</label>
+              <input type="password" class="form-control" id="password2" required>
+                <div class="valid-feedback">Valid.</div>
+                <div class="invalid-feedback">Passwords have to match.</div>
+            </div>
+            <br> -->
+
+            <div class="form-group form-check needs-validation" novalidate>
+              <input type="checkbox" class="form-check-input" id="toc" required>
+              <label class="form-check-label" for="toc">I agree to the Terms and Conditions of EventNest</label>
+            </div>
+
+            <div class="row justify-content-center mt-5 mb-3">
+                  <input type="submit" class="btn btn-primary btn-md" style="width:40%" value="Submit">
+            </div>
+            <br>
+            <span style="color:red">{{errorMessage}}</span>
+
+        </form>
+
+    </div>
+</div>
+<script>
+// $("#password").on("focusout", function () {
+//   if ($(this).val() != $("#password2").val()) {
+//     $("#password2").removeClass("valid").addClass("invalid");
+//   } else {
+//     $("#password2").removeClass("invalid").addClass("valid");
+//   }
+// });
+
+// $("#password2").on("keyup", function () {
+//   if ($("#password").val() != $(this).val()) {
+//     $(this).removeClass("valid").addClass("invalid");
+//   } else {
+//     $(this).removeClass("invalid").addClass("valid");
+//   }
+// })
+// </script>
+
+{% endblock %}
+

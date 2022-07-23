@@ -17,6 +17,16 @@
     border-radius: 5px;
 }
 
+<<<<<<< HEAD
+=======
+
+div.form-group label{
+    font-weight: 400;
+}
+
+
+
+>>>>>>> 6cf1f67891319b10be5cb1cdcae17579a8ad2fa8
 .footer_area {
     position: relative;
     z-index: 1;
