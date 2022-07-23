@@ -1,5 +1,5 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
-
+from forms import signupForm
 
 app = Flask(__name__)
 
@@ -21,19 +21,20 @@ def cart():
 def login():
 
         # return redirect(url_for('accountDetails'))
-    return render_template('login.html')
+    return render_template('users/login.html')
 
 @app.route('/signup', methods=['GET', 'POST'])
 def create_user():
+    signup = signupForm(request.form)
     if request.method == 'POST':
         return redirect(url_for('home'))
-    return render_template('signup.html')
+    return render_template('users/signup.html', form=signup)
 
 
 
 @app.route('/accountDetails')
 def accountDetails():
-    return render_template('accountDetails.html')
+    return render_template('users/accountDetails.html')
 
 @app.route('/EditAcc')
 def EditAcc():
