@@ -2,29 +2,26 @@
 {% block title %}EventNest - Log In{% endblock %}
 
 {% block content %}
+{% from "_formHelper.html" import render_field %}
+
 <div class="p-5 bg-light">
     <div class="container-sm col-lg-6 ml-auto">
 
         <h2 class="display-7">Log In</h2>
 
-        <form action="/action_page.php" class="needs-validation" novalidate>
+        <form method = "POST" action="">
 
-            <div class="form-group my-4">
-                <label class="control-label" for="email">Email</label>
-                <input type="text" class="form-control" id="email" required>
-                <div class="valid-feedback">Valid.</div>
-                <div class="invalid-feedback">Please fill out this field.</div>
-            </div>
-
-            <div class="form-group mt-4 pb-1">
-                <label class="control-label" for="pwd">Password</label>
-                <input type="password" class="form-control" id="pwd" required>
-                <div class="valid-feedback">Valid.</div>
-                <div class="invalid-feedback">Please fill out this field.</div>
-            </div>
+          <div class="form-group">
+            {{ render_field(form.email, class="form-control") }}
+          </div>
+          <br>
+          <div class="form-group">
+              {{ render_field(form.password, class="form-control") }}
+          </div>
+          <br>
 
             <span></span>
-            <a href="#" class="d-flex justify-content-end">Forget Password</a>
+            <a href="/ChangePass" class="d-flex justify-content-end">Forget Password</a>
             
 
             <div class="row justify-content-center mt-4">
@@ -42,26 +39,6 @@
     </div>
 </div>
 
-<script>
-// Disable form submissions if there are invalid fields
-(function() {
-  'use strict';
-  window.addEventListener('load', function() {
-    // Get the forms we want to add validation styles to
-    var forms = document.getElementsByClassName('needs-validation');
-    // Loop over them and prevent submission
-    var validation = Array.prototype.filter.call(forms, function(form) {
-      form.addEventListener('submit', function(event) {
-        if (form.checkValidity() === false) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-        form.classList.add('was-validated');
-      }, false);
-    });
-  }, false);
-})();
-</script>
 {% endblock %}
 
 

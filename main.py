@@ -1,5 +1,5 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
-from forms import signupForm
+from forms import signupForm, loginForm
 
 app = Flask(__name__)
 
@@ -17,17 +17,19 @@ def ticketdetails():
 def cart():
     return render_template('cart.html')
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-
-        # return redirect(url_for('accountDetails'))
-    return render_template('users/login.html')
+    login = loginForm(request.form)
+    if request.method == 'POST':
+        return redirect(url_for('accountDetails'))
+    return render_template('users/login.html', form=login)
 
 @app.route('/signup', methods=['GET', 'POST'])
 def create_user():
     signup = signupForm(request.form)
     if request.method == 'POST':
-        return redirect(url_for('home'))
+        return redirect(url_for('accountDetails'))
     return render_template('users/signup.html', form=signup)
 
 
@@ -42,7 +44,7 @@ def EditAcc():
 
 @app.route('/ChangePass')
 def ChangePass():
-    return render_template('ChangePass.html')
+    return render_template('users/ChangePass.html')
 
 @app.route('/dashboard')
 def dashboard():

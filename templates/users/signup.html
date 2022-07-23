@@ -9,7 +9,7 @@
 
       <h2 class="display-7">Sign Up</h2>
 
-        <form method = "POST" action="" class="needs-validation" novalidate>
+        <form method = "POST" action=""> <!-- class="needs-validation" novalidate> -->
 
             <!-- <div class="form-group my-4">
               <label class="control-label" for="email">Email<span class="texts-danger">*</span></label>
@@ -56,9 +56,22 @@
             </div>
             <br>
             <div class="form-group">
-                {{ render_field(form.password, class="form-control") }}
+             {{ render_field(form.password, class="form-control") }}
             </div>
             <br>
+
+            <!-- <div class="form-group">
+              <label for="password2">Comfirm Password</label>
+              <input type="password" class="form-control" id="password2" required>
+                <div class="valid-feedback">Valid.</div>
+                <div class="invalid-feedback">Passwords have to match.</div>
+            </div>
+            <br> -->
+
+            <div class="form-group form-check needs-validation" novalidate>
+              <input type="checkbox" class="form-check-input" id="toc" required>
+              <label class="form-check-label" for="toc">I agree to the Terms and Conditions of EventNest</label>
+            </div>
 
             <div class="row justify-content-center mt-5 mb-3">
                   <input type="submit" class="btn btn-primary btn-md" style="width:40%" value="Submit">
@@ -70,26 +83,23 @@
 
     </div>
 </div>
-
 <script>
-// Disable form submissions if there are invalid fields
-(function() {
-  'use strict';
-  window.addEventListener('load', function() {
-    // Get the forms we want to add validation styles to
-    var forms = document.getElementsByClassName('needs-validation');
-    // Loop over them and prevent submission
-    var validation = Array.prototype.filter.call(forms, function(form) {
-      form.addEventListener('submit', function(event) {
-        if (form.checkValidity() === false) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-        form.classList.add('was-validated');
-      }, false);
-    });
-  }, false);
-})();
-</script>
+// $("#password").on("focusout", function () {
+//   if ($(this).val() != $("#password2").val()) {
+//     $("#password2").removeClass("valid").addClass("invalid");
+//   } else {
+//     $("#password2").removeClass("invalid").addClass("valid");
+//   }
+// });
+
+// $("#password2").on("keyup", function () {
+//   if ($("#password").val() != $(this).val()) {
+//     $(this).removeClass("valid").addClass("invalid");
+//   } else {
+//     $(this).removeClass("invalid").addClass("valid");
+//   }
+// })
+// </script>
+
 {% endblock %}
 
