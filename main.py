@@ -1,5 +1,5 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
-from forms import signupForm, loginForm
+from forms import signupForm, loginForm, forgetpw, changPw
 
 app = Flask(__name__)
 
@@ -32,6 +32,13 @@ def create_user():
         return redirect(url_for('accountDetails'))
     return render_template('users/signup.html', form=signup)
 
+@app.route('/forgetpw', methods=['GET', 'POST'])
+def forgetpass():
+    forgetpwform = forgetpw(request.form)
+    if request.method == 'POST':
+        return redirect(url_for('login'))
+    return render_template('users/forgetpw.html', form=forgetpwform)
+
 
 
 @app.route('/accountDetails')
@@ -44,7 +51,7 @@ def EditAcc():
 
 @app.route('/ChangePass')
 def ChangePass():
-    return render_template('users/ChangePass.html')
+    return render_template('users/ChangePass.html', form=changPw)
 
 @app.route('/dashboard')
 def dashboard():

@@ -9,8 +9,8 @@ class signupForm(Form):
     password = PasswordField('Password', [validators.Length(min=8, max=20), validators.DataRequired()]) 
 
 class loginForm(Form):
-    email = EmailField('Email:', [validators.Email(), validators.DataRequired()])
-    password = PasswordField('Password:', [validators.length(max=100), validators.DataRequired()])
+    email = EmailField('Email', [validators.Email(), validators.DataRequired()])
+    password = PasswordField('Password', [validators.length(max=100), validators.DataRequired()])
 
 # parik part
 class createEvent(Form):
@@ -18,5 +18,8 @@ class createEvent(Form):
 
 # no html link yet
 class changPw(Form):
-    password = PasswordField('New Password:', [validators.length(max=100), validators.DataRequired()])
+    newpassword = PasswordField('New Password', [validators.length(max=100), validators.DataRequired()])
+
+class forgetpw(Form):
+    email = EmailField('Email', [validators.Email(), validators.DataRequired()])
 
