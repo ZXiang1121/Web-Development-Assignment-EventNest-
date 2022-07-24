@@ -1,6 +1,6 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 from forms import signupForm, loginForm, forgetpw, changPw, createEvent
-import shelve, Event
+import shelve, Event, account
 from werkzeug.utils import secure_filename
 import os
 
@@ -13,7 +13,7 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/ticketdetails')
+@app.route('/ticketDetails')
 def ticketdetails():
     return render_template('ticketDetails.html')
 
@@ -29,10 +29,36 @@ def login():
         return redirect(url_for('accountDetails'))
     return render_template('users/login.html', form=login)
 
+@app.route('/logout')
+def logout():
+   # remove the username from the session if it is there
+   session.pop('username', None)
+   return redirect(url_for('index'))
+
 @app.route('/signup', methods=['GET', 'POST'])
 def create_user():
     signup = signupForm(request.form)
     if request.method == 'POST':
+
+        users_dict = {}
+        db = shelve.open('storage.db', 'c')
+
+        try:
+            users_dict = db['Users']
+        except:
+            print("Error in retrieving Users from storage.db.")
+
+        user = account.Account(signup.name.data, signup.email.data, signup.password.data, signup.birthdate.data,)
+        users_dict[user.get_user_id()] = user
+        db['Users'] = users_dict
+
+        # Test codes
+        users_dict = db['Users']
+        user = users_dict[user.get_user_id()]
+        print(user.get_name(), "was stored in storage.db successfully with user_id ==", user.get_user_id())
+
+        db.close()
+
         return redirect(url_for('accountDetails'))
     return render_template('users/signup.html', form=signup)
 
@@ -47,7 +73,18 @@ def forgetpass():
 
 @app.route('/accountDetails')
 def accountDetails():
-    return render_template('users/accountDetails.html')
+    users_dict = {}
+    db = shelve.open('storage.db', 'r')
+    users_dict = db['Users']
+    db.close()
+
+    users_list = []
+    
+    for key in users_dict:
+        user = users_dict.get(key)
+        users_list.append(user)
+
+    return render_template('users/accountDetails.html', users_list=users_list)
 
 @app.route('/EditAcc')
 def EditAcc():

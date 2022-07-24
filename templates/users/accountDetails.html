@@ -35,18 +35,20 @@
                 <table class="table table-borderless mx-auto pl-2" style="width: 50%;">
                     
                     <tbody>
+                      {% for user in users_list %}
                       <tr>
                         <td scope="row">Name</td>
-                        <td>Mark</td>
+                        <td>{{user.get_name()}}</td>
                       </tr>
                       <tr>
                         <td scope="row">Email</td>
-                        <td>xx/xx/xxxx</td>
+                        <td>{{user.get_email()}}</td>
                       </tr>
                       <tr>
                         <td scope="row">Birthday</td>
-                        <td>email@gmail.com</td>
+                        <td>{{user.get_birthdate()}}</td>
                       </tr>
+                      {% endfor %}
                     </tbody>
                   </table>
                   <br>

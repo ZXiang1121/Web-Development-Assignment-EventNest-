@@ -5,7 +5,7 @@ from wtforms.fields import EmailField, DateField
 class signupForm(Form):
     name = StringField('Name', [validators.Length(min=1, max=150), validators.DataRequired()])
     email = EmailField('Email', [validators.Email(), validators.DataRequired()])
-    dob = DateField('Date of Birth', [validators.length(max=8), validators.Optional()])
+    birthdate = DateField('Date of Birth', [validators.length(max=8), validators.Optional()])
     password = PasswordField('Password', [validators.Length(min=8, max=20), validators.DataRequired()]) 
 
 class loginForm(Form):

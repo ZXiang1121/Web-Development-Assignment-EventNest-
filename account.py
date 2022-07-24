@@ -1,14 +1,14 @@
 class Account:
-    count_id = 100
+    count_id = 99
 
-    def __init__(self, name, email, password):
-        User.count_id += 1
+    def __init__(self, name, email, password, birthdate):
+        Account.count_id += 1
 
-        self.__user_id = User.count_id
+        self.__user_id = Account.count_id
         self.__name = name
         self.__email = email
         self.__password = password
-        self.__birthdate = None
+        self.__birthdate = birthdate
 
     def get_user_id(self):
         return self.__user_id
