@@ -1,8 +1,5 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
-<<<<<<< HEAD
-=======
 from forms import signupForm, loginForm
->>>>>>> 6cf1f67891319b10be5cb1cdcae17579a8ad2fa8
 
 app = Flask(__name__)
 
@@ -51,7 +48,17 @@ def ChangePass():
 
 @app.route('/dashboard')
 def dashboard():
-    return render_template('dashboard.html')
+    data = [
+        ("jan", 100),
+        ("feb", 150),
+        ("mar", 200),
+        ("apr", 130),
+        ("may", 120),
+        ("jun", 130),
+  ]
+    labels = [row[0] for row in data]
+    values = [row[1] for row in data]
+    return render_template('dashboard.html',labels=labels,values=values)
 
 
 
