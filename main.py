@@ -1,6 +1,6 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 from forms import signupForm, loginForm, forgetpw, changPw, createEvent
-import shelve, Event
+import shelve, event
 
 app = Flask(__name__)
 
@@ -10,7 +10,7 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/ticketdetails')
+@app.route('/ticketDetails')
 def ticketdetails():
     return render_template('ticketDetails.html')
 
