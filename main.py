@@ -92,10 +92,18 @@ def create_event():
 
 @app.route('/homeAdmin')
 def admin_homepage():
+    events_dict = {}
+    db = shelve.open('storage.db', 'r')
+    events_dict = db['Events']
+    db.close()
 
+    events_list = []
+    for key in events_dict:
+        event = events_dict.get(key)
+        events_list.append(event)
     
 
-    return render_template('homeAdmin.html')
+    return render_template('homeAdmin.html', count=len(events_list), events_list=events_list)
 
 
 
