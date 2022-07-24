@@ -29,6 +29,5 @@ class createEvent(Form):
     event_date = DateField('Event Date',  [validators.DataRequired()], format='%Y-%m-%d')
     event_time = TimeField('Event Time', [validators.DataRequired()], format='%H:%M')
     event_location = StringField('Event Location', [validators.Length(min=1, max=150), validators.DataRequired()])
-    event_desc = TextAreaField('Description', [validators.DataRequired()])
-
     event_image = FileField('Image')
+    event_desc = TextAreaField('Description', [validators.DataRequired()])

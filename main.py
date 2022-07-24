@@ -1,9 +1,12 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 from forms import signupForm, loginForm, forgetpw, changPw, createEvent
 import shelve, Event
+from werkzeug.utils import secure_filename
+import os
 
 app = Flask(__name__)
-
+app.config['SECRET_KEY'] = 'I have a dream'
+app.config['UPLOAD_FOLDER'] = 'static/images'
 
 @app.route('/')
 def home():
@@ -64,6 +67,9 @@ def dashboard():
 def create_event():
     create_event_form = createEvent(request.form)
     if request.method == 'POST' and create_event_form.validate():
+        imageFile = create_event_form.event_image.data # First grab the file
+        imageFile.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), app.config['UPLOAD_FOLDER'], secure_filename(imageFile.filename))) # Save the file
+
         events_dict = {}
         db = shelve.open('storage.db', 'c')
         try:
