@@ -1,9 +1,12 @@
 {% extends "base.html" %}
-{% block title%}Homepage{% endblock %}
+{% block title%}Homepage - Admin{% endblock %}
+
+{% block navbar %}
+{% include 'navbar/adminNavbar.html' %}
+{% endblock%}
+
 
 {% block content%}
-
-
 <div style="background-color:rgba(76, 75, 75, 0.4)" id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
   <div class="carousel-inner h-50">
     <div class="carousel-item active">
@@ -41,18 +44,96 @@
 
       </ul>
     </div>
+    
+    <div>
+      {% if count == 0 %}
+      <p>There are no events.</p>
+      {% elif count == 1 %}
+      <p>There is 1 event.</p>
+      {% else %}
+      <p>There are {{ count }} events.</p>
+      {% endif %}
+    </div>
+    
 
     <div class="table-content py-5 event " id="nav-tabContent">
 
       <div class="row row-cols-1 row-cols-md-3 g-4 tab-pane active" id="nav-all" aria-labelledby="nav-all-tab">
-        
-        <div class="col cat-all cat-concert">
+
+        {% for event in events_list %}
+
+        {% if event.get_event_category() == "C" %}
+          <div class="col cat-all cat-concert">
             <div class="card card-size-image">
-              
                   <img class="img-fluid fit-image" src="{{(url_for('static', filename='images/nctconcert.jpg'))}}" class="card-img-top" alt="...">
               
               <div class="card-body">
-                <h5 class="card-title">NCT Concert</h5>
+
+                  <h5 class="card-title">{{ event.get_event_name() }}</h5>
+
+
+                <div class="row py-3">
+                  <span class="col">
+                    <i class="bi bi-geo-alt"> <span class="text-muted">{{event.get_event_location()}}</span></i>
+                  </span>
+                  <span class="col">
+                    <i class="bi bi-calendar4-event"> <span class="text-muted">{{event.get_event_date()}}</span></i>
+                  </span>
+                </div>
+                <div class="row">
+                  <!-- <p class="card-text py-2 col">From <strong>$</strong><span><strong>50</strong></span></p> -->
+                  <span class="col d-flex justify-content-evenly mb-3">
+                    <a href="#" class="text-dark"><i class="bi bi-pencil-square">Edit</i></a>
+                    <a href="#" class="text-dark"><i class="bi bi-trash">Delete</i></a>
+                  </span>
+                </div>
+                <a href="/ticketDetails"><button type="button" class="btn btn-primary btn-dark btn-outline-light w-100">View</button></a>
+              </div>
+            </div>
+          </div>
+
+        {% elif event.get_event_category() == "S" %}
+          <div class="col cat-all cat-sport">
+            <div class="card">
+              <a href="/ticketdetails">
+                
+                <img class="img-fluid fit-image" src="{{(url_for('static', filename='images/sport bwf badminton.png'))}}" class="card-img-top" alt="...">
+    
+              </a>
+              <div class="card-body">
+                <h5 class="card-title">{{ event.get_event_name() }}</h5>
+                <div class="row py-3">
+                  <span class="col">
+                    <i class="bi bi-geo-alt"> <span class="text-muted">{{event.get_event_location()}}</span></i>
+                  </span>
+                  <span class="col">
+                    <i class="bi bi-calendar4-event"> <span class="text-muted">{{event.get_event_date()}}</span></i>
+                  </span>
+                </div>
+                <div class="row">
+                  <!-- <p class="card-text py-2 col">From <strong>$</strong><span><strong>50</strong></span></p> -->
+                  <span class="col d-flex justify-content-evenly mb-3">
+                    <a href="#" class="text-dark"><i class="bi bi-pencil-square">Edit</i></a>
+                    <a href="#" class="text-dark"><i class="bi bi-trash">Delete</i></a>
+                  </span>
+                </div>
+                <a href="/ticketdetails"></a><button type="button" class="btn btn-primary btn-dark btn-outline-light w-100">View</button></a>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+
+      {% endfor %}
+
+        <div class="col cat-all cat-concert">
+            <div class="card card-size-image">
+                  <img class="img-fluid fit-image" src="{{(url_for('static', filename='images/nctconcert.jpg'))}}" class="card-img-top" alt="...">
+              
+              <div class="card-body">
+  
+                  <h5 class="card-title">NCT Concert</h5>
+
+
                 <div class="row py-3">
                   <span class="col">
                     <i class="bi bi-geo-alt"> <span class="text-muted">esplanade</span></i>
@@ -61,7 +142,13 @@
                     <i class="bi bi-calendar4-event"> <span class="text-muted">4 september</span></i>
                   </span>
                 </div>
-                <p class="card-text py-2">From <strong>$</strong><span><strong>50</strong></span></p>
+                <div class="row">
+                  <p class="card-text py-2 col">From <strong>$</strong><span><strong>50</strong></span></p>
+                  <span class="col d-flex justify-content-lg-between">
+                    <a href="#" class="text-dark"><i class="bi bi-pencil-square">Edit</i></a>
+                    <a href="#" class="text-dark"><i class="bi bi-trash">Delete</i></a>
+                  </span>
+                </div>
                 <a href="/ticketDetails"><button type="button" class="btn btn-primary btn-dark btn-outline-light w-100">View</button></a>
               </div>
           </div>
@@ -84,8 +171,14 @@
                   <i class="bi bi-calendar4-event"> <span class="text-muted">4 september</span></i>
                 </span>
               </div>
-              <p class="card-text py-2">From <strong>$</strong><span><strong>50</strong></span></p>
-              <button type="button" class="btn btn-primary btn-dark btn-outline-light w-100">View</button>
+              <div class="row">
+                <p class="card-text py-2 col">From <strong>$</strong><span><strong>50</strong></span></p>
+                <span class="col d-flex justify-content-lg-between">
+                  <a href="#" class="text-dark"><i class="bi bi-pencil-square">Edit</i></a>
+                  <a href="#" class="text-dark"><i class="bi bi-trash">Delete</i></a>
+                </span>
+              </div>
+              <a href="/ticketdetails"></a><button type="button" class="btn btn-primary btn-dark btn-outline-light w-100">View</button></a>
             </div>
         </div>
       </div>
@@ -107,7 +200,13 @@
                 <i class="bi bi-calendar4-event"> <span class="text-muted">4 september</span></i>
               </span>
             </div>
-            <p class="card-text py-2">From <strong>$</strong><span><strong>50</strong></span></p>
+            <div class="row">
+              <p class="card-text py-2 col">From <strong>$</strong><span><strong>50</strong></span></p>
+              <span class="col d-flex justify-content-lg-between">
+                <a href="#" class="text-dark"><i class="bi bi-pencil-square">Edit</i></a>
+                <a href="#" class="text-dark"><i class="bi bi-trash">Delete</i></a>
+              </span>
+            </div>
             <a href="/ticketdetails"></a><button type="button" class="btn btn-primary btn-dark btn-outline-light w-100">View</button></a>
           </div>
       </div>
@@ -115,7 +214,7 @@
       
 
       </div>  
-    </div>
+      </div>
 
     </div>
 

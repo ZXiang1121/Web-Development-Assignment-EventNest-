@@ -8,34 +8,16 @@
         <h2 class="display-7">Create Event</h2>
 
         <form action="/action_page.php" class="needs-validation" novalidate>
-            {% from "includes/formHelper.html" import render_field %}
+            {% from "includes/_formHelper.html" import render_field %}
             <div class="col pt-2">
                     <label class="control-label" for="ename">Event Name</label>
                     <input type="text" class="form-control" id="ename" required>
 
                     <div class="valid-feedback">Valid.</div>
                     <div class="invalid-feedback">Please fill out this field.</div>
-                
-            
-<<<<<<< HEAD
-                <div class="col pt-4 justify-content-center">
-=======
-                <!-- <div class="col pt-4">
->>>>>>> b61fa70410d0ae8ba5af7abf5e5c008d84b1c2e2
-                    <label for="seatingcats">Number of Seating Categories</label>
-                    <select class="form-control align-items-center" id="seatingcats">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                    </select>
-<<<<<<< HEAD
-                
-                </div>
-            
-=======
-                </div> -->
+
+                    <label class="control-label" for="ename">Event Category</label>
+                    <input type="text" class="form-control" id="ename" required>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 		
@@ -110,9 +92,9 @@
                     <input type="text" name="Lname" class="form-control" placeholder="E.g. 170">
                 </div>
             </div>
-            <!-- <a href="#" class="remove_field">Remove</a> -->
+
         </div>
->>>>>>> b61fa70410d0ae8ba5af7abf5e5c008d84b1c2e2
+
 
     </div>
 
@@ -225,4 +207,3 @@ function seating(input){
 
 </script>
 {% endblock %}
-

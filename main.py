@@ -1,5 +1,6 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
-from forms import signupForm, loginForm, forgetpw, changPw
+from forms import signupForm, loginForm, forgetpw, changPw, createEvent
+import shelve, Event
 
 app = Flask(__name__)
 
@@ -59,13 +60,44 @@ def dashboard():
 
 
 
-@app.route('/createEvent', methods = ['GET', 'POST'])
-def createEvent():
-    return render_template('createEvent.html')
+@app.route('/createEventForm', methods = ['GET', 'POST'])
+def create_event():
+    create_event_form = createEvent(request.form)
+    if request.method == 'POST' and create_event_form.validate():
+        events_dict = {}
+        db = shelve.open('storage.db', 'c')
+        try:
+            events_dict = db['Events']
+        except:
+            print('Error in retrieving Events from storage.db')
 
-@app.route('/myevent')
-def myEvent():
-    return render_template('myevent.html')   
+        event = Event.Event(
+                            create_event_form.event_name.data,
+                            create_event_form.event_category.data,
+                            create_event_form.event_location.data,
+                            create_event_form.event_date.data,
+                            create_event_form.event_time.data,
+                            create_event_form.event_image.data,
+                            create_event_form.event_desc.data,
+                            )
+        
+        events_dict[event.get_event_id()] = event
+        db['Events'] = events_dict
+
+        db.close()
+
+        return redirect(url_for('homeAdmin'))
+    return render_template('createEventForm.html', form=create_event_form)
+
+
+@app.route('/homeAdmin')
+def admin_homepage():
+
+    
+
+    return render_template('homeAdmin.html')
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
