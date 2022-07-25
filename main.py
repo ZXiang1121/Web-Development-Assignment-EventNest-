@@ -3,10 +3,17 @@ from forms import signupForm, loginForm, forgetpw, changPw, createEvent
 import shelve, Event, account
 from werkzeug.utils import secure_filename
 import os
+from flask_login import LoginManager,login_user
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'I have a dream'
 app.config['UPLOAD_FOLDER'] = 'static/images'
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+@login_manager.user_loader
+def load_user(user_id):
+    return account.get(user_id)
 
 @app.route('/')
 def home():
@@ -20,20 +27,6 @@ def ticketdetails():
 @app.route('/cart')
 def cart():
     return render_template('cart.html')
-
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    login = loginForm(request.form)
-    if request.method == 'POST':
-        return redirect(url_for('accountDetails'))
-    return render_template('users/login.html', form=login)
-
-@app.route('/logout')
-def logout():
-   # remove the username from the session if it is there
-   session.pop('username', None)
-   return redirect(url_for('index'))
 
 @app.route('/signup', methods=['GET', 'POST'])
 def create_user():
@@ -62,13 +55,35 @@ def create_user():
         return redirect(url_for('accountDetails'))
     return render_template('users/signup.html', form=signup)
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    login = loginForm(request.form)
+    if request.method == 'POST':
+        # need sqlalchemy?
+        
+        login_user(user) # user is instance of account
+        flask.flash('Logged in successfully.')
+
+        return redirect(url_for('accountDetails'))
+    return render_template('users/login.html', form=login)
+
+@app.route('/logout')
+def logout():
+   # remove the username from the session if it is there
+   session.pop('name', None)
+   return redirect(url_for('home'))
+
+
 @app.route('/forgetpw', methods=['GET', 'POST'])
 def forgetpass():
     forgetpwform = forgetpw(request.form)
     if request.method == 'POST':
-        return redirect(url_for('login'))
+        return redirect(url_for('comfirmreset'))
     return render_template('users/forgetpw.html', form=forgetpwform)
 
+@app.route('/comfirmreset', methods=['GET', 'POST'])
+def comfirmreset():
+    return render_template('users/comfirmreset.html')
 
 
 @app.route('/accountDetails')
@@ -99,13 +114,17 @@ def dashboard():
     return render_template('dashboard.html')
 
 
-
 @app.route('/createEventForm', methods = ['GET', 'POST'])
 def create_event():
+    # zowie
     create_event_form = createEvent(request.form)
-    if request.method == 'POST' and create_event_form.validate():
-        imageFile = create_event_form.event_image.data # First grab the file
-        imageFile.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), app.config['UPLOAD_FOLDER'], secure_filename(imageFile.filename))) # Save the file
+    if request.method == 'POST' and create_event_form.event_image.data:
+        imagedata = request.FILES[form.image.name].read()
+        imagedata.save(os.path.join(UPLOAD_PATH, create_event_form.event_image.data), 'w').write(imagedata)
+    # create_event_form = createEvent(request.form)
+    # if request.method == 'POST' and create_event_form.validate():
+    #     imageFile = create_event_form.event_image.data # First grab the file
+    #     imageFile.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), app.config['UPLOAD_FOLDER'], secure_filename(imageFile.filename))) # Save the file
 
         events_dict = {}
         db = shelve.open('storage.db', 'c')
