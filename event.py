@@ -85,53 +85,53 @@ class Event:
         self.__event_desc = event_desc
 
 
-create_event1 = {}
+# create_event1 = {}
 
 
 
-cont = ''
+# cont = ''
 
-while cont != 'stop':
-    event_name = input('Enter event name: ')
-    event_category = input('Enter event category: ')
+# while cont != 'stop':
+#     event_name = input('Enter event name: ')
+#     event_category = input('Enter event category: ')
     
-    seat = []
-    seat_plan = {}
+#     seat = []
+#     seat_plan = {}
 
-    event_seat_type = input('Enter event seat type: ')
-    event_seat_available = input('Enter event seat available: ')
-    event_seat_price = input('Enter event seat price: ')
-
-
-    create_event1['event_name'] = event_name
-    create_event1['event_category'] = event_category
-
-    seat_plan['event_seat_type'] = event_seat_type
-    seat_plan['event_seatAvailable'] = event_seat_available
-    seat_plan['event_seatPrice'] = event_seat_price
-
-    seat.append(seat_plan)
-
-    create_event1['seat'] = seat
-
-    cont = input('Continue to add seat field? (enter "stop" to break): ')
-    while cont != 'stop':
-        event_seat_type = input('Enter event seat type: ')
-        event_seat_available = input('Enter event seat available: ')
-        event_seat_price = input('Enter event seat price: ')
-
-        seat_plan['event_seat_type'] = event_seat_type
-        seat_plan['event_seatAvailable'] = event_seat_available
-        seat_plan['event_seatPrice'] = event_seat_price
-
-        seat.append(seat_plan)
-
-        create_event1['seat'] = seat
-
-        cont = input('Continue to add seat field? (enter "stop" to break): ')
+#     event_seat_type = input('Enter event seat type: ')
+#     event_seat_available = input('Enter event seat available: ')
+#     event_seat_price = input('Enter event seat price: ')
 
 
+#     create_event1['event_name'] = event_name
+#     create_event1['event_category'] = event_category
 
-print(create_event1)
+#     seat_plan['event_seat_type'] = event_seat_type
+#     seat_plan['event_seatAvailable'] = event_seat_available
+#     seat_plan['event_seatPrice'] = event_seat_price
+
+#     seat.append(seat_plan)
+
+#     create_event1['seat'] = seat
+
+#     cont = input('Continue to add seat field? (enter "stop" to break): ')
+#     while cont != 'stop':
+#         event_seat_type = input('Enter event seat type: ')
+#         event_seat_available = input('Enter event seat available: ')
+#         event_seat_price = input('Enter event seat price: ')
+
+#         seat_plan['event_seat_type'] = event_seat_type
+#         seat_plan['event_seatAvailable'] = event_seat_available
+#         seat_plan['event_seatPrice'] = event_seat_price
+
+#         seat.append(seat_plan)
+
+#         create_event1['seat'] = seat
+
+#         cont = input('Continue to add seat field? (enter "stop" to break): ')
+
+
+
+# print(create_event1)
 
 
