@@ -1,15 +1,16 @@
 class Event:
     count_id = 0
 
-    def __init__(self, event_name,event_category, seat_type, ticket_available, seat_price, event_location, event_date, event_time, event_image, event_desc):
+    # def __init__(self, event_name,event_category, seat_type, ticket_available, seat_price, event_location, event_date, event_time, event_image, event_desc):
+    def __init__(self, event_name,event_category, event_location, event_date, event_time, event_image, event_desc):
         # Not sure of ticket id
         Event.count_id += 1
         self.__event_id = Event.count_id
         self.__event_name = event_name
         self.__event_category = event_category
-        self.__seat_type = seat_type
-        self.__ticket_available = ticket_available
-        self.__seat_price = seat_price
+        # self.__seat_type = seat_type
+        # self.__ticket_available = ticket_available
+        # self.__seat_price = seat_price
         self.__event_location = event_location
         self.__event_date = event_date
         self.__event_time = event_time
@@ -25,14 +26,14 @@ class Event:
     def get_event_category(self):
         return self.__event_category
 
-    def get_seat_type(self):
-        return self.__seat_type
+    # def get_seat_type(self):
+    #     return self.__seat_type
 
-    def get_ticket_available(self):
-        return self.__ticket_available
+    # def get_ticket_available(self):
+    #     return self.__ticket_available
 
-    def get_seat_price(self):
-        return self.__seat_price
+    # def get_seat_price(self):
+    #     return self.__seat_price
 
     def get_event_location(self):
         return self.__event_location
@@ -60,14 +61,14 @@ class Event:
     def set_event_category(self, event_category):
         self.__event_category = event_category
 
-    def set_seat_type(self, seat_type):
-        self.__seat_type = seat_type
+    # def set_seat_type(self, seat_type):
+    #     self.__seat_type = seat_type
     
-    def set_ticket_available(self, ticket_available):
-        self.__ticket_available = ticket_available
+    # def set_ticket_available(self, ticket_available):
+    #     self.__ticket_available = ticket_available
 
-    def set_seat_price(self, seat_price):
-        self.__seat_price = seat_price
+    # def set_seat_price(self, seat_price):
+    #     self.__seat_price = seat_price
 
     def set_event_location(self, event_location):
         self.__event_location = event_location
