@@ -3,6 +3,7 @@ from forms import signupForm, loginForm, forgetpw, changPw, createEvent
 import shelve, Event, account
 from werkzeug.utils import secure_filename
 import os
+from werkzeug.datastructures import CombinedMultiDict
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'I have a dream'
@@ -102,35 +103,48 @@ def dashboard():
 
 @app.route('/createEventForm', methods = ['GET', 'POST'])
 def create_event():
-    create_event_form = createEvent(request.form)
-    if request.method == 'POST' and create_event_form.validate():
-        imageFile = create_event_form.event_image.data # First grab the file
-        imageFile.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), app.config['UPLOAD_FOLDER'], secure_filename(imageFile.filename))) # Save the file
+    event_form = createEvent(CombinedMultiDict((request.files, request.form)))
+    print(event_form)
+    print("---")
+
+    if request.method == 'POST' and event_form.validate():
+        imageFile = event_form.event_image.data # First grab the file
+        print("---")
+        print("file")
+        print(imageFile)
+        print("---")
+        savePath = os.path.join(os.path.abspath(os.path.dirname(__file__)), app.config['UPLOAD_FOLDER'], secure_filename(imageFile.filename))
+        imageFile.save(savePath) # Save the file
 
         events_dict = {}
-        db = shelve.open('storage.db', 'c')
+        db = shelve.open('storage.db', flag='c' , writeback=True)
         try:
             events_dict = db['Events']
         except:
             print('Error in retrieving Events from storage.db')
 
-        event = Event.Event(
-                            create_event_form.event_name.data,
-                            create_event_form.event_category.data,
-                            create_event_form.event_location.data,
-                            create_event_form.event_date.data,
-                            create_event_form.event_time.data,
-                            create_event_form.event_image.data,
-                            create_event_form.event_desc.data,
+        seat = []
+
+        seat_plan = {}
+
+        new_event = Event.Event(
+                            event_form.event_name.data,
+                            event_form.event_category.data,
+                            
+                            event_form.event_location.data,
+                            event_form.event_date.data,
+                            event_form.event_time.data,
+                            event_form.event_image.data.filename,
+                            event_form.event_desc.data,
                             )
-        
-        events_dict[event.get_event_id()] = event
+
+        events_dict[new_event.get_event_id()] = new_event
         db['Events'] = events_dict
 
         db.close()
 
-        return redirect(url_for('homeAdmin'))
-    return render_template('createEventForm.html', form=create_event_form)
+        return redirect(url_for('admin_homepage'))
+    return render_template('createEventForm.html', form=event_form)
 
 
 @app.route('/homeAdmin')

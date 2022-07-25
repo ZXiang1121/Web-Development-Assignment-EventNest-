@@ -1,18 +1,18 @@
 class Event:
     count_id = 0
 
-    def __init__(self, event_name,event_category, event_location, event_date, event_time, event_image, event_desc):
+    def __init__(self, event_name,event_category, seat_type, ticket_available, seat_price, event_location, event_date, event_time, event_image, event_desc):
         # Not sure of ticket id
         Event.count_id += 1
         self.__event_id = Event.count_id
         self.__event_name = event_name
         self.__event_category = event_category
-        # self.__seat_type = seat_type
-        # self.__num_ticket = num_ticket
+        self.__seat_type = seat_type
+        self.__ticket_available = ticket_available
+        self.__seat_price = seat_price
         self.__event_location = event_location
         self.__event_date = event_date
         self.__event_time = event_time
-        # self.__event_price = event_price
         self.__event_image = event_image
         self.__event_desc = event_desc
 
@@ -25,12 +25,14 @@ class Event:
     def get_event_category(self):
         return self.__event_category
 
+    def get_seat_type(self):
+        return self.__seat_type
 
-    # def get_seat_type(self):
-    #     return self.__seat_type
+    def get_ticket_available(self):
+        return self.__ticket_available
 
-    # def get_num_ticket(self):
-    #     return self.__num_ticket
+    def get_seat_price(self):
+        return self.__seat_price
 
     def get_event_location(self):
         return self.__event_location
@@ -40,9 +42,6 @@ class Event:
     
     def get_event_time(self):
         return self.__event_time
-    
-    # def get_event_price(self):
-    #     return self.__event_price
     
     def get_event_image(self):
         return self.__event_image
@@ -61,11 +60,14 @@ class Event:
     def set_event_category(self, event_category):
         self.__event_category = event_category
 
-    # def set_num_seatCat(self, seat_type):
-    #     self.__seat_type = seat_type
+    def set_seat_type(self, seat_type):
+        self.__seat_type = seat_type
     
-    # def set_num_ticket(self, num_ticket):
-    #     self.__num_ticket = num_ticket
+    def set_ticket_available(self, ticket_available):
+        self.__ticket_available = ticket_available
+
+    def set_seat_price(self, seat_price):
+        self.__seat_price = seat_price
 
     def set_event_location(self, event_location):
         self.__event_location = event_location
@@ -76,12 +78,60 @@ class Event:
     def set_event_time(self, event_time):
         self.__event_time = event_time
 
-    # def set_event_price(self, event_price):
-    #     self.__event_price = event_price
-
     def set_event_image(self, event_image):
         self._event_image = event_image
 
-
     def set_event_desc(self, event_desc):
         self.__event_desc = event_desc
+
+
+create_event1 = {}
+
+
+
+cont = ''
+
+while cont != 'stop':
+    event_name = input('Enter event name: ')
+    event_category = input('Enter event category: ')
+    
+    seat = []
+    seat_plan = {}
+
+    event_seat_type = input('Enter event seat type: ')
+    event_seat_available = input('Enter event seat available: ')
+    event_seat_price = input('Enter event seat price: ')
+
+
+    create_event1['event_name'] = event_name
+    create_event1['event_category'] = event_category
+
+    seat_plan['event_seat_type'] = event_seat_type
+    seat_plan['event_seatAvailable'] = event_seat_available
+    seat_plan['event_seatPrice'] = event_seat_price
+
+    seat.append(seat_plan)
+
+    create_event1['seat'] = seat
+
+    cont = input('Continue to add seat field? (enter "stop" to break): ')
+    while cont != 'stop':
+        event_seat_type = input('Enter event seat type: ')
+        event_seat_available = input('Enter event seat available: ')
+        event_seat_price = input('Enter event seat price: ')
+
+        seat_plan['event_seat_type'] = event_seat_type
+        seat_plan['event_seatAvailable'] = event_seat_available
+        seat_plan['event_seatPrice'] = event_seat_price
+
+        seat.append(seat_plan)
+
+        create_event1['seat'] = seat
+
+        cont = input('Continue to add seat field? (enter "stop" to break): ')
+
+
+
+print(create_event1)
+
+
