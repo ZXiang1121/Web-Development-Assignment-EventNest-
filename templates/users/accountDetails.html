@@ -15,7 +15,7 @@
 {% elif 'user_updated' in session %}
 <div class="alert alert-warning alert-dismissible">
   {{ session.pop('user_updated', None) }} was updated.
-  <button type="button" class="close" data-bs-dismiss="alert">&times;</button>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 {% endif %}
 
@@ -51,18 +51,18 @@
                 <table class="table table-borderless mx-auto pl-2" style="width: 50%;">
                     
                     <tbody>
-                      {% for user in users_list %}
+                      
                       <tr>
                         <td scope="row">Name</td>
-                        <td>{{ user.get_name() }}</td>
+                        <td>{{ users_list[0].get_name() }}</td>
                       </tr>
                       <tr>
                         <td scope="row">Email</td>
-                        <td>{{ user.get_email() }}</td>
+                        <td>{{ users_list[0].get_email() }}</td>
                       </tr>
                       <tr>
                         <td scope="row">Birthday</td>
-                        <td>{{ user.get_birthdate() }}</td>
+                        <td>{{ users_list[0].get_birthdate() }}</td>
                       </tr>
                       
                     </tbody>
@@ -71,7 +71,7 @@
 
                 <div class="row justify-content-center pt-3">
                     <div class="col">
-                        <a href="/EditAcc/{{user.get_user_id()}}"><button type="button" class="btn btn-primary btn-md form-control btn-block">Edit details</button></a>
+                        <a href="/EditAcc/{{users_list[0].get_user_id()}}"><button type="button" class="btn btn-primary btn-md form-control btn-block">Edit details</button></a>
                     </div>
                     <div class="col">
                         <a href="/ChangePass"><button type="button" class="btn btn-primary btn-md form-control btn-block">Change password</button></a>
@@ -81,7 +81,7 @@
                 <div class="row justify-content-center mt-3 mb-3">
                   <a class="btn btn-outline-primary btn-md" style="width:45%" href="/logout" role="button">Log Out</a>
                 </div>
-                {% endfor %}
+                
           </div>
           
 

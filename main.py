@@ -22,7 +22,7 @@ def ticketdetails():
 def cart():
     return render_template('cart.html')
 
-
+# make account
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     login = loginForm(request.form)
@@ -72,7 +72,7 @@ def forgetpass():
         return redirect(url_for('login'))
     return render_template('users/forgetpw.html', form=forgetpwform)
 
-
+# account made
 
 @app.route('/accountDetails')
 def accountDetails():
@@ -92,24 +92,33 @@ def accountDetails():
 @app.route('/EditAcc/<int:id>/', methods=['GET', 'POST'])
 def EditAcc(id):
     update_user_form = signupForm(request.form)
-    if request.method == 'POST' and update_user_form.validate():
+
+    if request.method == 'POST':
         users_dict = {}
         db = shelve.open('storage.db', 'w')
         users_dict = db['Users']
 
         user = users_dict.get(id)
-        update_user_form.name.data = user.get_name()
-        update_user_form.email.data = user.get_email()
-        update_user_form.birthdate.data = user.get_birthdate()
+        user.set_name(update_user_form.name.data)
+        user.set_email(update_user_form.email.data)
 
         db['Users'] = users_dict
         db.close()
 
         session['user_updated'] = user.get_name()    
         return redirect(url_for('accountDetails'))
-            
 
-    return render_template('users/EditAcc.html', form = update_user_form)
+    else:
+        users_dict = {}
+        db = shelve.open('storage.db', 'r')
+        users_dict = db['Users']
+        db.close()
+
+        user = users_dict.get(id)
+        update_user_form.name.data = user.get_name()
+        update_user_form.email.data = user.get_email()
+
+        return render_template('users/EditAcc.html', form = update_user_form)
 
 @app.route('/ChangePass')
 def ChangePass():
