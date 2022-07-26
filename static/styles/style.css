@@ -179,6 +179,13 @@ ol, ul {
     border-radius: 4px;
     padding: 10px;
 }
+.contact textarea#number {
+    width: 100%;
+    height: 50px;
+    border: 1px solid #dddddd78;
+    border-radius: 4px;
+    padding: 10px;
+}
 .contact textarea#subject {
     width: 100%;
     height: 50px;

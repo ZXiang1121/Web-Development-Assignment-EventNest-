@@ -36,6 +36,7 @@ class createEvent(Form):
 class ContactForm(FlaskForm):
     name = TextAreaField("Name")
     email = TextAreaField("Email")
+    number =  TextAreaField("number")
     subject = TextAreaField("Subject")
     message = TextAreaField("Message")
     submit = SubmitField("Send")
