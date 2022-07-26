@@ -133,6 +133,10 @@ ol, ul {
 
 /* ------------------------------------------------------------------------------------- */
 
+.form-outline input{
+    width:50%;
+}
+
 .contact form {
     margin-top: 0px;
     padding: 0px 30px;
@@ -200,7 +204,10 @@ ol, ul {
     border-radius: 4px;
     padding: 10px;
 }
-.contact input#submit {
+
+
+.contact button {
+    width:100%;
     color: white;
     background: linear-gradient(0.25turn,#2a78ca, #71a1d4);
     float: right;
@@ -210,4 +217,19 @@ ol, ul {
     /* margin-right: 10px; */
     box-shadow: 0px 0px 4px 0px #00000087;
     margin-top: 15px;
-}
+} 
+
+
+
+/* .contact input#submit {
+    color: white;
+    background: linear-gradient(0.25turn,#2a78ca, #71a1d4);
+    float: right;
+    border: none;
+    border-radius: 4px;
+    padding: 15px 23px;
+    /* margin-right: 10px; 
+    box-shadow: 0px 0px 4px 0px #00000087;
+    margin-top: 15px;
+} */
+
