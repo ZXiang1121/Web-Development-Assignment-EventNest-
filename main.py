@@ -1,5 +1,6 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 from forms import signupForm, loginForm, forgetpw, changPw, createEvent, ContactForm
+from flask_login import LoginManager
 import shelve, Event, account
 from werkzeug.utils import secure_filename
 import os
@@ -9,6 +10,7 @@ import pandas as pd
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'I have a dream'
 app.config['UPLOAD_FOLDER'] = 'static/images'
+
 
 @app.route('/')
 def home():
@@ -24,18 +26,59 @@ def cart():
     return render_template('cart.html')
 
 # make account
+login_manager = LoginManager()
+login_manager.init_app(app)
+@login_manager.user_loader
+
+def load_user(user_id):
+    return User.get(user_id)
+
+def get_id(val, my_dict):
+    for key, value in my_dict.items():
+         if val == value:
+             return key
+    return 'None'
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     login = loginForm(request.form)
+    # error = None
+
     if request.method == 'POST':
-        return redirect(url_for('accountDetails'))
+        users_dict = {}
+        db = shelve.open('storage.db', 'r')
+        users_dict = db['Users']
+
+        
+
+        if get_id(login.email.data, users_dict) == 'None':
+            flash('Invalid login credentials', 'danger')
+
+        else:
+            user = users_dict.get(get_id(login.email.data, users_dict)) # get( key )
+            session['logged_in'] = user.get_name()
+            return redirect(url_for('accountDetails'))
+        
+
+        # if login.email.data and login.password.data not in users_dict.values():
+        #     error = 'Invalid login credentials'
+        #     # flash('Invalid login credentials', 'danger')
+            
+        # else:
+        #     # login_user(user)
+        #     user = users_dict.get(login.email.data)
+        # # if valid_login(request.form['username'],request.form['password']):
+        #     session['logged_in'] = user.get_name()
+        #     db.close()
+            
+ 
     return render_template('users/login.html', form=login)
 
 @app.route('/logout')
 def logout():
    # remove the username from the session if it is there
-   session.pop('username', None)
-   return redirect(url_for('index'))
+   session.pop('logged_in', None)
+   return redirect(url_for('home'))
 
 @app.route('/signup', methods=['GET', 'POST'])
 def create_user():
@@ -63,7 +106,7 @@ def create_user():
 
         session['user_created'] = user.get_name()
 
-        return redirect(url_for('accountDetails'))
+        return redirect(url_for('login'))
     return render_template('users/signup.html', form=signup)
 
 @app.route('/forgetpw', methods=['GET', 'POST'])
@@ -82,7 +125,7 @@ def accountDetails():
     users_dict = db['Users']
     db.close()
 
-    users_list = []
+    users_list = [] # all users information
     
     for key in users_dict:
         user = users_dict.get(key)
