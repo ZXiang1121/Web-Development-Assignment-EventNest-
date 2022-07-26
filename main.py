@@ -1,7 +1,8 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
-from forms import signupForm, loginForm, forgetpw, changPw, createEvent
-import shelve, Event, account
+from forms import createEvent, signupForm, loginForm, forgetpw, changPw
+import shelve, Event, account, Seat
 from werkzeug.utils import secure_filename
+
 import os
 from werkzeug.datastructures import CombinedMultiDict
 
@@ -103,7 +104,9 @@ def dashboard():
 
 @app.route('/createEventForm', methods = ['GET', 'POST'])
 def create_event():
+    # event_form = createEvent(CombinedMultiDict((request.files, request.form)))
     event_form = createEvent(CombinedMultiDict((request.files, request.form)))
+    
     print(event_form)
     print("---")
 
@@ -123,28 +126,67 @@ def create_event():
         except:
             print('Error in retrieving Events from storage.db')
 
-        seat = []
 
-        seat_plan = {}
+        ## uuid, createdTime
 
         new_event = Event.Event(
                             event_form.event_name.data,
                             event_form.event_category.data,
-                            
                             event_form.event_location.data,
                             event_form.event_date.data,
                             event_form.event_time.data,
                             event_form.event_image.data.filename,
                             event_form.event_desc.data,
                             )
+                            
+        seating_plan_list = []
+        for i in event_form.data['seating_plan']:
+            print(i)
+            seat = Seat.Seat(i['seat_type'],
+                             i['seat_available'],
+                             i['seat_price'])
+            seating_plan_list.append(seat)
+        
+        new_event.set_seating_plan(seating_plan_list)
+        # for i in event_form.seating_plan.entries:
+        #     print(i)
+        #     temp = i.data
+            # for n in temp:
+            #     print(n)
+            #     seat = Seat.Seat(n,
+            #                      n,
+            #                      n
+            #                     )
+
+        # new_event.seats.append(seat)
+
+# seating_plan=createEvent.seating_plan.entries
+
+        
+  
+
+        
+        # for(int i=0; i < event_from.data.seats; i++){
+        #     temp = event_from.data.seats[i]
+        #     seat = Seat.Seat(temp.name, temp.xxx, temp.yyyy)
+        #     new_event.seats.append(seat)
+        # }
+
+        # vip_seat = Seat.Seat("VIP Area")
+        # normal_seat = Seat.Seat("Normal Area")
+        # new_event.seats.append(vip_seat)
+        # new_event.seats.append(normal_seat)
+
 
         events_dict[new_event.get_event_id()] = new_event
         db['Events'] = events_dict
 
         db.close()
 
-        return redirect(url_for('admin_homepage'))
+        # return redirect(url_for('admin_homepage'))
+        return redirect(url_for('submit_result'))
     return render_template('createEventForm.html', form=event_form)
+
 
 
 @app.route('/homeAdmin')
@@ -152,17 +194,33 @@ def admin_homepage():
     events_dict = {}
     db = shelve.open('storage.db', 'r')
     events_dict = db['Events']
+
     db.close()
 
     events_list = []
     for key in events_dict:
         event = events_dict.get(key)
         events_list.append(event)
+
     
 
     return render_template('homeAdmin.html', count=len(events_list), events_list=events_list)
 
 
+@app.route('/submitResult')
+def submit_result():
+    events_dict = {}
+    db = shelve.open('storage.db', 'r')
+    events_dict = db['Events']
+
+    db.close()
+
+    events_list = []
+    for key in events_dict:
+        event = events_dict.get(key)
+        events_list.append(event)
+
+    return render_template('submitResult.html', count=len(events_list), events_list=events_list)
 
 if __name__ == '__main__':
     app.run(debug=True)
