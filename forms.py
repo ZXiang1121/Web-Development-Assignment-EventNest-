@@ -1,5 +1,6 @@
-from wtforms import Form, StringField, SelectField, TextAreaField, PasswordField, validators,DateField, TimeField, FileField, RadioField, IntegerField, BooleanField
+from wtforms import Form, StringField, SelectField, TextAreaField, PasswordField, validators,DateField, TimeField, FileField, RadioField, IntegerField, BooleanField, SubmitField
 from wtforms.fields import EmailField, DateField
+from flask_wtf import FlaskForm
 
 
 class signupForm(Form):
@@ -30,3 +31,11 @@ class createEvent(Form):
     event_location = StringField('Event Location', [validators.Length(min=1, max=150), validators.DataRequired()])
     event_image = FileField('Image')
     event_desc = TextAreaField('Description', [validators.DataRequired()])
+
+
+class ContactForm(FlaskForm):
+    name = TextAreaField("Name")
+    email = TextAreaField("Email")
+    subject = TextAreaField("Subject")
+    message = TextAreaField("Message")
+    submit = SubmitField("Send")

@@ -1,9 +1,10 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
-from forms import signupForm, loginForm, forgetpw, changPw, createEvent
+from forms import signupForm, loginForm, forgetpw, changPw, createEvent, ContactForm
 import shelve, Event, account
 from werkzeug.utils import secure_filename
 import os
 from werkzeug.datastructures import CombinedMultiDict
+import pandas as pd
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'I have a dream'
@@ -182,7 +183,22 @@ def admin_homepage():
 
     return render_template('homeAdmin.html', count=len(events_list), events_list=events_list)
 
-
+@app.route('/contactus', methods=["GET","POST"])
+def get_contact():
+    form = ContactForm()
+    # here, if the request type is a POST we get the data on contat
+    #forms and save them else we return the contact forms html page
+    if request.method == 'POST':
+        name =  request.form["name"]
+        email = request.form["email"]
+        subject = request.form["subject"]
+        message = request.form["message"]
+        res = pd.DataFrame({'name':name, 'email':email, 'subject':subject ,'message':message}, index=[0])
+        res.to_csv('./contactusMessage.csv')
+        print("The data are saved !")
+        
+    else:
+        return render_template('contact.html', form=form)
 
 if __name__ == '__main__':
     app.run(debug=True)
