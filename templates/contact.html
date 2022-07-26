@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title%}Contact Us{% endblock %}
+
+<!-- here we add our contact forms -->
+{% block content %}
+<div class="contact">
+    <h1>Contact Us</h1>
+    
+    <h3> Got a Question? We'd love to hear from you! Send us a message and we'll respond as soon as possible.</h3>
+<!-- Just here i use "url_for" to call the function get_contact.
+         This function return the html code of our contact page-->
+    <form action="{{url_for('get_contact') }}" method=post>
+        <div>
+            <!-- name forms -->
+            <p>Name:
+                {{ form.name.label }} <br>
+                {{ form.name(placeholder='Your name') }}
+            </p>
+            <!-- email forms -->
+            <p>Email:
+                {{ form.email.label }} <br>
+                {{ form.email(placeholder='Your e-mail ...') }}
+            </p>
+            <!---number forms-->
+            <p> Phone No:
+                {{ form.number.label }} <br>
+                {{ form.number(placeholder='Your number ...') }}
+            </p>
+            <!-- Subject of your request -->
+            <p>Subject:
+                {{ form.subject.label }}<br>
+                {{form.subject(placeholder='Your subject ...')}}
+            </p>
+            <!-- Content of your request -->
+            <p> Feedback/ Question:
+                {{ form.message.label }}<br>
+                {{ form.message(placeholder='Write your feedback/question ...') }}
+            </p>
+            <!-- Submit button -->
+            <a href='/message'><button type="button" class="contact">Submit</button></a>
+                
+             
+           
+            
+        </div>
+    </form>
+</div>
+{% endblock %}
+

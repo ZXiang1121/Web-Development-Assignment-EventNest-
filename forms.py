@@ -1,17 +1,18 @@
-from wtforms import Form, StringField, SelectField, TextAreaField, PasswordField, validators,DateField, TimeField, FileField, FieldList, FormField, RadioField, IntegerField, BooleanField
+from wtforms import Form, StringField, SelectField, TextAreaField, PasswordField, validators,DateField, TimeField, FileField, FieldList, FormField, RadioField, IntegerField, BooleanField, SubmitField
 from wtforms.fields import EmailField, DateField
+from flask_wtf import FlaskForm
 
 
 class signupForm(Form):
     name = StringField('Name', [validators.Length(min=1, max=150), validators.DataRequired()])
     email = EmailField('Email', [validators.Email(), validators.DataRequired()])
     birthdate = DateField('Date of Birth', [validators.length(max=8), validators.Optional()])
-    password = PasswordField('Password', [validators.Length(min=8, max=20), validators.DataRequired()]) 
+    password = PasswordField('Password', [validators.Length(min=8, max=20), validators.DataRequired()])
+    
 
 class loginForm(Form):
     email = EmailField('Email', [validators.Email(), validators.DataRequired()])
     password = PasswordField('Password', [validators.length(max=100), validators.DataRequired()])
-
 
 
 # no html link yet
@@ -39,3 +40,12 @@ class createEvent(Form):
     event_image = FileField('Image')
     event_desc = TextAreaField('Description', [validators.DataRequired()])
 
+
+
+class ContactForm(FlaskForm):
+    name = TextAreaField("Name")
+    email = TextAreaField("Email")
+    number =  TextAreaField("number")
+    subject = TextAreaField("Subject")
+    message = TextAreaField("Message")
+    submit = SubmitField("Send")
