@@ -1,5 +1,7 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
-from forms import signupForm, loginForm
+from forms import signupForm, loginForm, forgetpw, changPw, createEvent
+import shelve, event
+import jinja2
 
 app = Flask(__name__)
 
@@ -9,7 +11,7 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/ticketdetails')
+@app.route('/ticketDetails')
 def ticketdetails():
     return render_template('ticketDetails.html')
 
@@ -32,6 +34,13 @@ def create_user():
         return redirect(url_for('accountDetails'))
     return render_template('users/signup.html', form=signup)
 
+@app.route('/forgetpw', methods=['GET', 'POST'])
+def forgetpass():
+    forgetpwform = forgetpw(request.form)
+    if request.method == 'POST':
+        return redirect(url_for('login'))
+    return render_template('users/forgetpw.html', form=forgetpwform)
+
 
 
 @app.route('/accountDetails')
@@ -44,31 +53,79 @@ def EditAcc():
 
 @app.route('/ChangePass')
 def ChangePass():
-    return render_template('users/ChangePass.html')
+    return render_template('users/ChangePass.html', form=changPw)
 
 @app.route('/dashboard')
 def dashboard():
-    data = [
-        ("jan", 100),
-        ("feb", 150),
-        ("mar", 200),
-        ("apr", 130),
-        ("may", 120),
-        ("jun", 130),
-  ]
-    labels = [row[0] for row in data]
-    values = [row[1] for row in data]
-    return render_template('dashboard.html',labels=labels,values=values)
+    # users_dict = {}
+    # db = shelve.open('storage.db','r')
+    # users_dict = db['Users']
+    # db.close()
+
+    # users_list = []
+    # for key in users_dict:
+    #     user = users_dict.get(key)
+    #     users_list.append(user)
+
+    legend = 'Monthly Data'
+    labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
+    new = [4]
+    values = [8, 3, 1, 4,5, 14]
+    BarVal = [8, 7, 2, 5, 6, 14]
+    return render_template('dashboard.html', values=values, labels=labels, legend=legend,BarVal=BarVal,new = new)
+    
+if __name__ == "__main__":
+    app.run(debug=True)
 
 
 
-@app.route('/createEvent', methods = ['GET', 'POST'])
-def createEvent():
-    return render_template('createEvent.html')
 
-@app.route('/myevent')
-def myEvent():
-    return render_template('myevent.html')   
+@app.route('/createEventForm', methods = ['GET', 'POST'])
+def create_event():
+    create_event_form = createEvent(request.form)
+    if request.method == 'POST' and create_event_form.validate():
+        events_dict = {}
+        db = shelve.open('storage.db', 'c')
+        try:
+            events_dict = db['Events']
+        except:
+            print('Error in retrieving Events from storage.db')
+
+        event = Event.Event(
+                            create_event_form.event_name.data,
+                            create_event_form.event_category.data,
+                            create_event_form.event_location.data,
+                            create_event_form.event_date.data,
+                            create_event_form.event_time.data,
+                            create_event_form.event_image.data,
+                            create_event_form.event_desc.data,
+                            )
+        
+        events_dict[event.get_event_id()] = event
+        db['Events'] = events_dict
+
+        db.close()
+
+        return redirect(url_for('homeAdmin'))
+    return render_template('createEventForm.html', form=create_event_form)
+
+
+@app.route('/homeAdmin')
+def admin_homepage():
+    events_dict = {}
+    db = shelve.open('storage.db', 'r')
+    events_dict = db['Events']
+    db.close()
+
+    events_list = []
+    for key in events_dict:
+        event = events_dict.get(key)
+        events_list.append(event)
+    
+
+    return render_template('homeAdmin.html', count=len(events_list), events_list=events_list)
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
