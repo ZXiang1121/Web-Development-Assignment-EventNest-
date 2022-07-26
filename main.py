@@ -256,5 +256,9 @@ def get_contact():
 def faq():
    return render_template('faq.html')
 
+@app.route('/message')
+def message():
+   return render_template('contactusMessage.html')
+
 if __name__ == '__main__':
     app.run(debug=True)

@@ -12,34 +12,36 @@
     <form action="{{url_for('get_contact') }}" method=post>
         <div>
             <!-- name forms -->
-            <p>
+            <p>Name:
                 {{ form.name.label }} <br>
                 {{ form.name(placeholder='Your name') }}
             </p>
             <!-- email forms -->
-            <p>
+            <p>Email:
                 {{ form.email.label }} <br>
                 {{ form.email(placeholder='Your e-mail ...') }}
             </p>
             <!---number forms-->
-            <p>
+            <p> Phone No:
                 {{ form.number.label }} <br>
-                {{ form.number(placeholder='Your phone no. ...') }}
+                {{ form.number(placeholder='Your number ...') }}
             </p>
             <!-- Subject of your request -->
-            <p>
+            <p>Subject:
                 {{ form.subject.label }}<br>
                 {{form.subject(placeholder='Your subject ...')}}
             </p>
             <!-- Content of your request -->
-            <p>
+            <p> Feedback/ Question:
                 {{ form.message.label }}<br>
                 {{ form.message(placeholder='Write your feedback/question ...') }}
             </p>
             <!-- Submit button -->
-            <p>
-                {{ form.submit }}
-            </p>
+            <a href='/message'><button type="button" class="contact">Submit</button></a>
+                
+             
+           
+            
         </div>
     </form>
 </div>
