@@ -60,6 +60,8 @@ def create_user():
 
         db.close()
 
+        session['user_created'] = user.get_name()
+
         return redirect(url_for('accountDetails'))
     return render_template('users/signup.html', form=signup)
 
@@ -87,9 +89,27 @@ def accountDetails():
 
     return render_template('users/accountDetails.html', users_list=users_list)
 
-@app.route('/EditAcc')
-def EditAcc():
-    return render_template('EditAcc.html')
+@app.route('/EditAcc/<int:id>/', methods=['GET', 'POST'])
+def EditAcc(id):
+    update_user_form = signupForm(request.form)
+    if request.method == 'POST' and update_user_form.validate():
+        users_dict = {}
+        db = shelve.open('storage.db', 'w')
+        users_dict = db['Users']
+
+        user = users_dict.get(id)
+        update_user_form.name.data = user.get_name()
+        update_user_form.email.data = user.get_email()
+        update_user_form.birthdate.data = user.get_birthdate()
+
+        db['Users'] = users_dict
+        db.close()
+
+        session['user_updated'] = user.get_name()    
+        return redirect(url_for('accountDetails'))
+            
+
+    return render_template('users/EditAcc.html', form = update_user_form)
 
 @app.route('/ChangePass')
 def ChangePass():

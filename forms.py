@@ -13,7 +13,6 @@ class loginForm(Form):
     password = PasswordField('Password', [validators.length(max=100), validators.DataRequired()])
 
 
-
 # no html link yet
 class changPw(Form):
     newpassword = PasswordField('New Password', [validators.length(max=100), validators.DataRequired()])
