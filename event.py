@@ -63,11 +63,14 @@ class Event:
     def get_event_poster(self):
         return self.__event_poster
 
-    def get_event_image(self):
+    def get_seat_image(self):
         return self.__seat_image
 
     def get_event_desc(self):
         return self.__event_desc
+    
+    def get_seating_plan(self):
+        return self.seating_plan
 
 
 

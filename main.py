@@ -203,7 +203,7 @@ def create_event():
                             event_form.event_date.data,
                             event_form.event_time.data,
                             event_form.event_poster.data.filename,
-                            # event_form.seat_image.data.filename,
+                            event_form.seat_image.data.filename,
                             event_form.event_desc.data,
                             )
                             
@@ -242,6 +242,8 @@ def admin_homepage():
     for key in events_dict:
         event = events_dict.get(key)
         events_list.append(event)
+    
+    print(events_list)
 
     
 
