@@ -33,15 +33,6 @@ login_manager.init_app(app)
 
 def load_user(user_id):
     return User.get(user_id)
-<<<<<<< HEAD
-=======
-
-def get_id(val, my_dict):
-    for key, value in my_dict.items():
-         if val == value.get_email():
-             return key
-    return 'user'
->>>>>>> 0704a4df31525774f56ea52fa59b8e2838c3f6bb
 
 def get_id(val, my_dict):
     for key, value in my_dict.items():
