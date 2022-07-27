@@ -26,7 +26,7 @@
       {% for event in events_list %}
 
       {% if event.get_event_category() == "C" %}
-        <img class="img-fluid fit-image" src="{{url_for('static', filename='images/' + event.get_event_image() )}}" class="card-img-top" alt="...">
+        <img class="img-fluid fit-image" src="{{url_for('static', filename='images/' + event.get_event_poster() )}}" class="card-img-top" alt="...">
         {{ event.get_event_name() }}
         {{event.get_event_location()}}
         {{event.get_event_date()}}
@@ -42,7 +42,7 @@
 
       {% elif event.get_event_category() == "S" %}
 
-            <img class="img-fluid fit-image" src="{{url_for('static', filename='images/' + event.get_event_image() )}}" class="card-img-top" alt="...">
+            <img class="img-fluid fit-image" src="{{url_for('static', filename='images/' + event.get_event_poster() )}}" class="card-img-top" alt="...">
 
            {{ event.get_event_name() }}
            {{ event.get_event_location() }}
