@@ -26,13 +26,13 @@ def ticketdetails():
 def cart():
     return render_template('cart.html')
 
-# # make account
-# login_manager = LoginManager()
-# login_manager.init_app(app)
-# @login_manager.user_loader
+# make account
+login_manager = LoginManager()
+login_manager.init_app(app)
+@login_manager.user_loader
 
-# def load_user(user_id):
-#     return User.get(user_id)
+def load_user(user_id):
+    return User.get(user_id)
 
 def get_id(val, my_dict):
     for key, value in my_dict.items():
@@ -61,15 +61,6 @@ def login():
             session['logged_in'] = user.get_name()
             return redirect(url_for('accountDetails'))
 
-        #     users_dict = db['Users']
-        # user = users_dict[user.get_user_id()]
-        # print(user.get_name(), "was stored in storage.db successfully with user_id ==", user.get_user_id())
-
-        # db.close()
-
-        # session['user_created'] = user.get_name()
-        
- 
     return render_template('users/login.html', form=login)
 
 @app.route('/logout')
