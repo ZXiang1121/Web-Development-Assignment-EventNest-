@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title%}Homepage - Admin{% endblock %}
+
+{% block navbar %}
+  {% include 'navbar/adminNavbar.html' %}
+{% endblock%}
+
+
+{% block content%}
+<div class="container">
+<div>
+    {% if count == 0 %}
+    <p>There are no events.</p>
+    {% elif count == 1 %}
+    <p>There is 1 event.</p>
+    {% else %}
+    <p>There are {{ count }} events.</p>
+    {% endif %}
+  </div>
+  
+
+  <div class="table-content py-5 event " id="nav-tabContent">
+
+    <div class="row row-cols-1 row-cols-md-3 g-4 tab-pane active" id="nav-all" aria-labelledby="nav-all-tab">
+
+      {% for event in events_list %}
+
+      {% if event.get_event_category() == "C" %}
+        <img class="img-fluid fit-image" src="{{url_for('static', filename='images/' + event.get_event_image() )}}" class="card-img-top" alt="...">
+        {{ event.get_event_name() }}
+        {{event.get_event_location()}}
+        {{event.get_event_date()}}
+
+        <ul>
+          {% for seat in seating_plan %}
+              {% for i in seat %}
+                  <li>{{i.data}}</li>
+              {% endfor %}
+          {% endfor %}
+      </ul>
+        
+
+      {% elif event.get_event_category() == "S" %}
+
+            <img class="img-fluid fit-image" src="{{url_for('static', filename='images/' + event.get_event_image() )}}" class="card-img-top" alt="...">
+
+           {{ event.get_event_name() }}
+           {{ event.get_event_location() }}
+           {{ event.get_event_date() }}
+
+           <ul>
+            {% for seat in seating_plan %}
+                {% for i in seat %}
+                    <li>{{i.data}}</li>
+                {% endfor %}
+            {% endfor %}
+          </ul>
+
+      {% endif %}
+
+    {% endfor %}
+
+    <h1 style="text-align: center;">My Favourite movies</h1>
+    <!-- <h4>Favourite movies</h4> -->
+  </div>
+
+{% endblock%}
