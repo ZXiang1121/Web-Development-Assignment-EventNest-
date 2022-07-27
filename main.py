@@ -43,7 +43,12 @@ def get_id(val, my_dict):
     for key, value in my_dict.items():
         if val == value.get_email():
             return key
-    return 'user'
+    return 'None'
+def get_pw(val, my_dict):
+    for key, value in my_dict.items():
+        if val == value.get_password():
+            return key
+    return 'None'
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -55,21 +60,24 @@ def login():
         users_dict = db['Users']
 
         key = get_id(login.email.data, users_dict)
+        key2 = get_pw(login.password.data, users_dict)
 
-        if key == 'user':
-            print(key, login.email.data, users_dict)
+        if key == 'None': 
+            print(key, login.email.data, users_dict) # test
             flash('Invalid login credentials', 'danger')
 
-        elif login.email.data == 'admin@gmail.com':
+        elif login.email.data == 'admin@gmail.com' and login.password.data == 'eventnest':
             user = users_dict.get(key) # get( user_id )
             db.close()
             session['admin_in'] = user.get_name()
             return redirect(url_for('admin_homepage'))
 
-        else:
+        elif key == key2:
             user = users_dict.get(key) # get( user_id )
             db.close()
             session['logged_in'] = user.get_name()
+            session['user_email'] = user.get_email()
+            session['user_birthdate'] = user.get_birthdate()
             return redirect(url_for('accountDetails'))
 
     return render_template('users/login.html', form=login)
@@ -92,21 +100,28 @@ def create_user():
             users_dict = db['Users']
         except:
             print("Error in retrieving Users from storage.db.")
+        
+        key = get_id(signup.email.data, users_dict)
+        if key == 'None': 
 
-        user = account.Account(signup.name.data, signup.email.data, signup.password.data, signup.birthdate.data)
-        users_dict[user.get_user_id()] = user
-        db['Users'] = users_dict
+            user = account.Account(signup.name.data, signup.email.data, signup.password.data, signup.birthdate.data)
+            users_dict[user.get_user_id()] = user
+            db['Users'] = users_dict
 
-        # Test codes
-        users_dict = db['Users']
-        user = users_dict[user.get_user_id()]
-        print(user.get_name(), "was stored in storage.db successfully with user_id ==", user.get_user_id())
+            # Test codes
+            users_dict = db['Users']
+            user = users_dict[user.get_user_id()]
+            print(user.get_name(), "was stored in storage.db successfully with user_id ==", user.get_user_id())
 
-        db.close()
+            db.close()
 
-        session['user_created'] = user.get_name()
+            session['user_created'] = user.get_name()
 
-        return redirect(url_for('login'))
+            return redirect(url_for('login'))
+
+        else:
+            flash('Email is used for an existing account.', 'danger')
+
     return render_template('users/signup.html', form=signup)
 
 @app.route('/forgetpw', methods=['GET', 'POST'])
@@ -119,17 +134,19 @@ def forgetpass():
 # account made
 
 @app.route('/accountDetails')
-def accountDetails():
+def accountDetails(): # how to display info of logged in user
+    login = loginForm(request.form)
+
     users_dict = {}
     db = shelve.open('storage.db', 'r')
     users_dict = db['Users']
     db.close()
 
-    users_list = [] # all users information
+    # users_list = [] # all users information
     
-    for key in users_dict:
-        user = users_dict.get(key)
-        users_list.append(user)
+    # for key in users_dict:
+    #     user = users_dict.get(key)
+    #     users_list.append(user)
 
     return render_template('users/accountDetails.html', users_list=users_list)
 

@@ -27,7 +27,7 @@ class Account:
 
     def get_birthdate(self):
         return self.__birthdate
-    def set_name(self, birthdate):
+    def set_get_birthdate(self, birthdate):
         self.__birthdate = birthdate
 
     def get_password(self):
