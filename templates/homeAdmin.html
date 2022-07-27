@@ -2,7 +2,7 @@
 {% block title%}Homepage - Admin{% endblock %}
 
 {% block navbar %}
-{% include 'navbar/adminNavbar.html' %}
+  {% include 'navbar/adminNavbar.html' %}
 {% endblock%}
 
 
@@ -65,7 +65,7 @@
         {% if event.get_event_category() == "C" %}
           <div class="col cat-all cat-concert">
             <div class="card card-size-image">
-                  <img class="img-fluid fit-image" src="{{(url_for('static', filename='images/nctconcert.jpg'))}}" class="card-img-top" alt="...">
+                  <img class="img-fluid fit-image" src="{{url_for('static', filename='images/' + event.get_event_image() )}}" class="card-img-top" alt="...">
               
               <div class="card-body">
 
@@ -97,7 +97,7 @@
             <div class="card">
               <a href="/ticketdetails">
                 
-                <img class="img-fluid fit-image" src="{{(url_for('static', filename='images/sport bwf badminton.png'))}}" class="card-img-top" alt="...">
+                <img class="img-fluid fit-image" src="{{url_for('static', filename='images/' + event.get_event_image() )}}" class="card-img-top" alt="...">
     
               </a>
               <div class="card-body">

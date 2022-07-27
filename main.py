@@ -1,10 +1,15 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
-from forms import signupForm, loginForm, forgetpw, changPw, createEvent
-import shelve, event
-import jinja2
+from forms import signupForm, loginForm, forgetpw, changPw, createEvent, ContactForm
+import shelve, account
+from werkzeug.utils import secure_filename
+import os
+from werkzeug.datastructures import CombinedMultiDict
+
+# import pandas as pd
 
 app = Flask(__name__)
-
+app.config['SECRET_KEY'] = 'I have a dream'
+app.config['UPLOAD_FOLDER'] = 'static/images'
 
 @app.route('/')
 def home():
@@ -19,7 +24,7 @@ def ticketdetails():
 def cart():
     return render_template('cart.html')
 
-
+# make account
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     login = loginForm(request.form)
@@ -27,10 +32,38 @@ def login():
         return redirect(url_for('accountDetails'))
     return render_template('users/login.html', form=login)
 
+@app.route('/logout')
+def logout():
+   # remove the username from the session if it is there
+   session.pop('username', None)
+   return redirect(url_for('index'))
+
 @app.route('/signup', methods=['GET', 'POST'])
 def create_user():
     signup = signupForm(request.form)
     if request.method == 'POST':
+
+        users_dict = {}
+        db = shelve.open('storage.db', 'c')
+
+        try:
+            users_dict = db['Users']
+        except:
+            print("Error in retrieving Users from storage.db.")
+
+        user = account.Account(signup.name.data, signup.email.data, signup.password.data, signup.birthdate.data,)
+        users_dict[user.get_user_id()] = user
+        db['Users'] = users_dict
+
+        # Test codes
+        users_dict = db['Users']
+        user = users_dict[user.get_user_id()]
+        print(user.get_name(), "was stored in storage.db successfully with user_id ==", user.get_user_id())
+
+        db.close()
+
+        session['user_created'] = user.get_name()
+
         return redirect(url_for('accountDetails'))
     return render_template('users/signup.html', form=signup)
 
@@ -41,15 +74,53 @@ def forgetpass():
         return redirect(url_for('login'))
     return render_template('users/forgetpw.html', form=forgetpwform)
 
-
+# account made
 
 @app.route('/accountDetails')
 def accountDetails():
-    return render_template('users/accountDetails.html')
+    users_dict = {}
+    db = shelve.open('storage.db', 'r')
+    users_dict = db['Users']
+    db.close()
 
-@app.route('/EditAcc')
-def EditAcc():
-    return render_template('EditAcc.html')
+    users_list = []
+    
+    for key in users_dict:
+        user = users_dict.get(key)
+        users_list.append(user)
+
+    return render_template('users/accountDetails.html', users_list=users_list)
+
+@app.route('/EditAcc/<int:id>/', methods=['GET', 'POST'])
+def EditAcc(id):
+    update_user_form = signupForm(request.form)
+
+    if request.method == 'POST':
+        users_dict = {}
+        db = shelve.open('storage.db', 'w')
+        users_dict = db['Users']
+
+        user = users_dict.get(id)
+        user.set_name(update_user_form.name.data)
+        user.set_email(update_user_form.email.data)
+
+        db['Users'] = users_dict
+        db.close()
+
+        session['user_updated'] = user.get_name()    
+        return redirect(url_for('accountDetails'))
+
+    else:
+        users_dict = {}
+        db = shelve.open('storage.db', 'r')
+        users_dict = db['Users']
+        db.close()
+
+        user = users_dict.get(id)
+        update_user_form.name.data = user.get_name()
+        update_user_form.email.data = user.get_email()
+
+        return render_template('users/EditAcc.html', form = update_user_form)
 
 @app.route('/ChangePass')
 def ChangePass():
@@ -69,10 +140,34 @@ def dashboard():
 
     legend = 'Monthly Data'
     labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
+    users_list=[]
+    dict = {'n1': {'ticket_name':'JustinB','price':10,'date':'23/10/2020','quantity':1,'age':18},
+            'n2': {'ticket_name':'LR','price':10,'date':'20/8/2020','quantity':3,'age':40},
+            'n3': {'ticket_name':'LR','price':10,'date':'20/8/2020','quantity':3,'age':25},
+            'n4': {'ticket_name':'LR','price':10,'date':'20/8/2020','quantity':3,'age':33},
+            'n5': {'ticket_name':'LR','price':10,'date':'20/8/2020','quantity':3,'age':39}
+
+}
+
+    for key in dict:
+        user= dict.get(key)
+        users_list.append(user)
+
+
+    age2 = sum(d['price'] for d in users_list if d['age'] < 20)
+    age3 = sum(d['price'] for d in users_list if d['age'] > 20 and d['age'] < 30 )
+    age4 = sum(d['price'] for d in users_list if d['age'] > 30 and d['age'] <40) 
+
+    ages = [age2,age3,age4]
+
+
+
+            
+
     new = [4]
     values = [8, 3, 1, 4,5, 14]
-    BarVal = [8, 7, 2, 5, 6, 14]
-    return render_template('dashboard.html', values=values, labels=labels, legend=legend,BarVal=BarVal,new = new)
+    BarVal = [4, 7, 2, 5, 6, 14]
+    return render_template('dashboard.html', values=values, labels=labels, legend=legend,BarVal=BarVal,dict=dict,new=new,users_list=users_list,count=len(users_list),ages=ages)
     
 if __name__ == "__main__":
     app.run(debug=True)
@@ -82,32 +177,48 @@ if __name__ == "__main__":
 
 @app.route('/createEventForm', methods = ['GET', 'POST'])
 def create_event():
-    create_event_form = createEvent(request.form)
-    if request.method == 'POST' and create_event_form.validate():
+    event_form = createEvent(CombinedMultiDict((request.files, request.form)))
+    print(event_form)
+    print("---")
+
+    if request.method == 'POST' and event_form.validate():
+        imageFile = event_form.event_image.data # First grab the file
+        print("---")
+        print("file")
+        print(imageFile)
+        print("---")
+        savePath = os.path.join(os.path.abspath(os.path.dirname(__file__)), app.config['UPLOAD_FOLDER'], secure_filename(imageFile.filename))
+        imageFile.save(savePath) # Save the file
+
         events_dict = {}
-        db = shelve.open('storage.db', 'c')
+        db = shelve.open('storage.db', flag='c' , writeback=True)
         try:
             events_dict = db['Events']
         except:
             print('Error in retrieving Events from storage.db')
 
-        event = Event.Event(
-                            create_event_form.event_name.data,
-                            create_event_form.event_category.data,
-                            create_event_form.event_location.data,
-                            create_event_form.event_date.data,
-                            create_event_form.event_time.data,
-                            create_event_form.event_image.data,
-                            create_event_form.event_desc.data,
+        seat = []
+
+        seat_plan = {}
+
+        new_event = Event.Event(
+                            event_form.event_name.data,
+                            event_form.event_category.data,
+                            
+                            event_form.event_location.data,
+                            event_form.event_date.data,
+                            event_form.event_time.data,
+                            event_form.event_image.data.filename,
+                            event_form.event_desc.data,
                             )
-        
-        events_dict[event.get_event_id()] = event
+
+        events_dict[new_event.get_event_id()] = new_event
         db['Events'] = events_dict
 
         db.close()
 
-        return redirect(url_for('homeAdmin'))
-    return render_template('createEventForm.html', form=create_event_form)
+        return redirect(url_for('admin_homepage'))
+    return render_template('createEventForm.html', form=event_form)
 
 
 @app.route('/homeAdmin')
@@ -125,7 +236,26 @@ def admin_homepage():
 
     return render_template('homeAdmin.html', count=len(events_list), events_list=events_list)
 
-
+@app.route('/contactus', methods=["GET","POST"])
+def get_contact():
+    form = ContactForm()
+    # here, if the request type is a POST we get the data on contat
+    #forms and save them else we return the contact forms html page
+    if request.method == 'POST':
+        name =  request.form["name"]
+        email = request.form["email"]
+        subject = request.form["subject"]
+        message = request.form["message"]
+        res = pd.DataFrame({'name':name, 'email':email, 'subject':subject ,'message':message}, index=[0])
+        res.to_csv('./contactusMessage.csv')
+        print("The data are saved !")
+        
+    else:
+        return render_template('contact.html', form=form)
+    
+@app.route('/faq')
+def faq():
+   return render_template('faq.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

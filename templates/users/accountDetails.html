@@ -3,6 +3,22 @@
 
 {% block content %}
 
+<!-- if user created alert -->
+{% if 'user_created' in session %}
+<div class="alert alert-success alert-dismissible fade show">
+  {{ session.pop('user_created', None) }} was created.
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+
+<!-- if user updated alert -->
+{% elif 'user_updated' in session %}
+<div class="alert alert-warning alert-dismissible">
+  {{ session.pop('user_updated', None) }} was updated.
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+
 <div class="p-3 mb-2 bg-light pt-5">
     <div class="container-sm col-lg-6 ml-auto">
         
@@ -35,31 +51,39 @@
                 <table class="table table-borderless mx-auto pl-2" style="width: 50%;">
                     
                     <tbody>
+                      
                       <tr>
                         <td scope="row">Name</td>
-                        <td>Mark</td>
+                        <td>{{ users_list[0].get_name() }}</td>
                       </tr>
                       <tr>
                         <td scope="row">Email</td>
-                        <td>xx/xx/xxxx</td>
+                        <td>{{ users_list[0].get_email() }}</td>
                       </tr>
                       <tr>
                         <td scope="row">Birthday</td>
-                        <td>email@gmail.com</td>
+                        <td>{{ users_list[0].get_birthdate() }}</td>
                       </tr>
+                      
                     </tbody>
                   </table>
                   <br>
 
                 <div class="row justify-content-center pt-3">
                     <div class="col">
-                        <a href="/signup"><button type="button" class="btn btn-primary btn-md form-control btn-block">Edit details</button></a>
+                        <a href="/EditAcc/{{users_list[0].get_user_id()}}"><button type="button" class="btn btn-primary btn-md form-control btn-block">Edit details</button></a>
                     </div>
                     <div class="col">
-                        <a href="#"><button type="button" class="btn btn-primary btn-md form-control btn-block">Change Password</button></a>
+                        <a href="/ChangePass"><button type="button" class="btn btn-primary btn-md form-control btn-block">Change password</button></a>
                     </div>
                 </div>
+
+                <div class="row justify-content-center mt-3 mb-3">
+                  <a class="btn btn-outline-primary btn-md" style="width:45%" href="/logout" role="button">Log Out</a>
+                </div>
+                
           </div>
+          
 
           <div class="tab-pane fade" id="pills-dashboard" role="tabpanel" aria-labelledby="pills-dashboard-tab">
             <div class="app">   
@@ -345,8 +369,6 @@
                 </div><!--//app-content-->
           </div>
         </div>
-
-        <!-- Tab panes -->
 
 
     </div>

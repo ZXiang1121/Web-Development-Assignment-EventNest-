@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH":"${PYTHONPATH}:C:\\Users\\Zhang Xiang\\Desktop\\Year 2\\Sem 1\\Web Application Development\\Assignment\\EventNes\\"
+            }
+        }
+    ]
+}

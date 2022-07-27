@@ -1,43 +1,50 @@
 {% extends "base.html" %}
 {% block title %}Create Event{% endblock %}
 
+{% block navbar %}
+    {% include 'navbar/adminNavbar.html' %}
+{% endblock%}
+
 {% block content %}
 
     {% from "includes/_formHelper.html" import render_field %}
+    <div class="p-5 bg-light">
+        <div class="container-sm col-lg-6 ml-auto">
+            <h1>Create Event</h1>
 
-    <h1>Create Event</h1>
-    <div class="container">
-    <form method="POST" action="" enctype="multipart/form-data">
-        <div class="form-group">
-            {{render_field(form.event_name, class="form-control")}}
+            <form method="POST" action="" enctype="multipart/form-data">
+                <div class="form-group">
+                    {{render_field(form.event_name, class="form-control")}}
+                </div>
+
+                <div class="form-group">
+                    {{render_field(form.event_category, class="form-control")}}
+                </div>
+
+                <div class="form-group">
+                    {{render_field(form.event_location, class="form-control")}}
+                </div>
+
+                <div class="form-group">
+                    {{render_field(form.event_date, class="form-control")}}
+                </div>
+
+                <div class="form-group">
+                    {{render_field(form.event_time, class="form-control")}}
+                </div>
+
+                <div class="form-group">
+                    {{render_field(form.event_image, class="form-control-file")}}
+                </div>
+
+                <div class="form-group">
+                    {{render_field(form.event_desc, class="form-control")}}
+                </div>
+
+                <input type="submit" value="Submit" class="btn btn-primary"/>
+            </form>
         </div>
-
-        <div class="form-group">
-            {{render_field(form.event_category, class="form-control")}}
-        </div>
-
-        <div class="form-group">
-            {{render_field(form.event_location, class="form-control")}}
-        </div>
-
-        <div class="form-group">
-            {{render_field(form.event_date, class="form-control")}}
-        </div>
-
-        <div class="form-group">
-            {{render_field(form.event_time, class="form-control")}}
-        </div>
-
-        <div class="form-group">
-            {{render_field(form.event_image, class="form-control")}}
-        </div>
-
-        <div class="form-group">
-            {{render_field(form.event_desc, class="form-control")}}
-        </div>
-
-        <input type="submit" value="Submit" class="btn btn-primary"/>
-    </form>
     </div>
+</div>
 
 {% endblock %}
