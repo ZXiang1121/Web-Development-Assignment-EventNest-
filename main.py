@@ -2,6 +2,7 @@ from flask import Flask, redirect, url_for, render_template, request, session, f
 from forms import createEvent, signupForm, loginForm, forgetpw, changPw
 import shelve, Event, account, Seat
 from werkzeug.utils import secure_filename
+from flask_login import LoginManager
 
 import os
 from werkzeug.datastructures import CombinedMultiDict
