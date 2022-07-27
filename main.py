@@ -1,12 +1,17 @@
+import os
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 from forms import createEvent, signupForm, loginForm, forgetpw, changPw, ContactForm
 import shelve, Event, account, Seat
 from werkzeug.utils import secure_filename
 from flask_login import LoginManager
 
-import os
+
 from werkzeug.datastructures import CombinedMultiDict
 import pandas as pd
+
+# admin name: admin
+# admin email: admin@gmail.com
+# admin pw: eventnest
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'I have a dream'
@@ -36,8 +41,8 @@ def load_user(user_id):
 
 def get_id(val, my_dict):
     for key, value in my_dict.items():
-         if val == value.get_email():
-             return key
+        if val == value.get_email():
+            return key
     return 'user'
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -54,6 +59,12 @@ def login():
         if key == 'user':
             print(key, login.email.data, users_dict)
             flash('Invalid login credentials', 'danger')
+
+        elif login.email.data == 'admin@gmail.com':
+            user = users_dict.get(key) # get( user_id )
+            db.close()
+            session['admin_in'] = user.get_name()
+            return redirect(url_for('admin_homepage'))
 
         else:
             user = users_dict.get(key) # get( user_id )
@@ -242,8 +253,6 @@ def admin_homepage():
     for key in events_dict:
         event = events_dict.get(key)
         events_list.append(event)
-
-    
 
     return render_template('homeAdmin.html', count=len(events_list), events_list=events_list)
 
