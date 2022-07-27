@@ -35,42 +35,39 @@ def cart():
 
 def get_id(val, my_dict):
     for key, value in my_dict.items():
-         if val == value:
+         if val == value.get_email():
              return key
-    return 'None'
+    return 'user'
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     login = loginForm(request.form)
-    # error = None
 
     if request.method == 'POST':
         users_dict = {}
         db = shelve.open('storage.db', 'r')
         users_dict = db['Users']
 
-        
+        key = get_id(login.email.data, users_dict)
 
-        if get_id(login.email.data, users_dict) == 'None':
+        if key == 'user':
+            print(key, login.email.data, users_dict)
             flash('Invalid login credentials', 'danger')
 
         else:
-            user = users_dict.get(get_id(login.email.data, users_dict)) # get( key )
+            user = users_dict.get(key) # get( user_id )
+            db.close()
             session['logged_in'] = user.get_name()
             return redirect(url_for('accountDetails'))
-        
 
-        # if login.email.data and login.password.data not in users_dict.values():
-        #     error = 'Invalid login credentials'
-        #     # flash('Invalid login credentials', 'danger')
-            
-        # else:
-        #     # login_user(user)
-        #     user = users_dict.get(login.email.data)
-        # # if valid_login(request.form['username'],request.form['password']):
-        #     session['logged_in'] = user.get_name()
-        #     db.close()
-            
+        #     users_dict = db['Users']
+        # user = users_dict[user.get_user_id()]
+        # print(user.get_name(), "was stored in storage.db successfully with user_id ==", user.get_user_id())
+
+        # db.close()
+
+        # session['user_created'] = user.get_name()
+        
  
     return render_template('users/login.html', form=login)
 
@@ -93,7 +90,7 @@ def create_user():
         except:
             print("Error in retrieving Users from storage.db.")
 
-        user = account.Account(signup.name.data, signup.email.data, signup.password.data, signup.birthdate.data,)
+        user = account.Account(signup.name.data, signup.email.data, signup.password.data, signup.birthdate.data)
         users_dict[user.get_user_id()] = user
         db['Users'] = users_dict
 
@@ -330,3 +327,4 @@ def message():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
