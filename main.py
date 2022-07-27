@@ -1,5 +1,5 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
-from forms import createEvent, signupForm, loginForm, forgetpw, changPw
+from forms import createEvent, signupForm, loginForm, forgetpw, changPw, ContactForm
 import shelve, Event, account, Seat
 from werkzeug.utils import secure_filename
 
@@ -25,13 +25,13 @@ def ticketdetails():
 def cart():
     return render_template('cart.html')
 
-# make account
-login_manager = LoginManager()
-login_manager.init_app(app)
-@login_manager.user_loader
+# # make account
+# login_manager = LoginManager()
+# login_manager.init_app(app)
+# @login_manager.user_loader
 
-def load_user(user_id):
-    return User.get(user_id)
+# def load_user(user_id):
+#     return User.get(user_id)
 
 def get_id(val, my_dict):
     for key, value in my_dict.items():
@@ -183,16 +183,22 @@ def create_event():
     print("---")
 
     if request.method == 'POST' and event_form.validate():
-        imageFile = event_form.event_image.data # First grab the file
+        posterFile = event_form.event_poster.data # First grab the file
+        seatFile = event_form.seat_image.data
         print("---")
         print("file")
-        print(imageFile)
+        print(posterFile)
         print("---")
-        savePath = os.path.join(os.path.abspath(os.path.dirname(__file__)), app.config['UPLOAD_FOLDER'], secure_filename(imageFile.filename))
-        imageFile.save(savePath) # Save the file
+        print(seatFile)
+        print("---")
+        savePosterPath = os.path.join(os.path.abspath(os.path.dirname(__file__)), app.config['UPLOAD_FOLDER'], secure_filename(posterFile.filename))
+        posterFile.save(savePosterPath) # Save the file
+        print("---")
+        saveSeatPath = os.path.join(os.path.abspath(os.path.dirname(__file__)), app.config['UPLOAD_FOLDER'], secure_filename(seatFile.filename))
+        seatFile.save(saveSeatPath) # Save the file
 
         events_dict = {}
-        db = shelve.open('storage.db', flag='c' , writeback=True)
+        db = shelve.open('storage.db', flag='c')
         try:
             events_dict = db['Events']
         except:
@@ -207,7 +213,8 @@ def create_event():
                             event_form.event_location.data,
                             event_form.event_date.data,
                             event_form.event_time.data,
-                            event_form.event_image.data.filename,
+                            event_form.event_poster.data.filename,
+                            event_form.seat_image.data.filename,
                             event_form.event_desc.data,
                             )
                             

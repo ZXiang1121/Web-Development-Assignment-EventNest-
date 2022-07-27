@@ -6,7 +6,7 @@ class Event:
     seating_plan = []
 
     # def __init__(self, event_name,event_category, seat_type, seat_available, seat_price, event_location, event_date, event_time, event_image, event_desc):
-    def __init__(self, event_name,event_category, event_location, event_date, event_time, event_image, event_desc):
+    def __init__(self, event_name,event_category, event_location, event_date, event_time, event_poster, seat_image, event_desc):
         # Not sure of ticket id
         # super().__init__()
         Event.count_id += 1
@@ -22,8 +22,10 @@ class Event:
         self.__event_location = event_location
         self.__event_date = event_date
         self.__event_time = event_time
-        self.__event_image = event_image
+        self.__event_poster = event_poster
+        self.__seat_image = seat_image
         self.__event_desc = event_desc
+
 
     def get_event_id(self):
         return self.__event_id
@@ -58,8 +60,11 @@ class Event:
     def get_event_time(self):
         return self.__event_time
     
+    def get_event_poster(self):
+        return self.__event_poster
+
     def get_event_image(self):
-        return self.__event_image
+        return self.__seat_image
 
     def get_event_desc(self):
         return self.__event_desc
@@ -96,8 +101,11 @@ class Event:
     def set_event_time(self, event_time):
         self.__event_time = event_time
 
-    def set_event_image(self, event_image):
-        self._event_image = event_image
+    def set_event_poster(self, event_poster):
+        self.__event_poster = event_poster
+        
+    def set_seat_image(self, seat_image):
+        self.__seat_image = seat_image
 
     def set_event_desc(self, event_desc):
         self.__event_desc = event_desc
