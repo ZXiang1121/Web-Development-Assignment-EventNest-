@@ -25,13 +25,19 @@ def ticketdetails():
 def cart():
     return render_template('cart.html')
 
-# # make account
-# login_manager = LoginManager()
-# login_manager.init_app(app)
-# @login_manager.user_loader
+# make account
+login_manager = LoginManager()
+login_manager.init_app(app)
+@login_manager.user_loader
 
-# def load_user(user_id):
-#     return User.get(user_id)
+def load_user(user_id):
+    return User.get(user_id)
+
+def get_id(val, my_dict):
+    for key, value in my_dict.items():
+         if val == value.get_email():
+             return key
+    return 'user'
 
 def get_id(val, my_dict):
     for key, value in my_dict.items():
@@ -195,7 +201,7 @@ def create_event():
         seatFile.save(saveSeatPath) # Save the file
 
         events_dict = {}
-        db = shelve.open('storage.db', flag='c')
+        db = shelve.open('storage.db', flag='c', writeback=True)
         try:
             events_dict = db['Events']
         except:
@@ -211,7 +217,7 @@ def create_event():
                             event_form.event_date.data,
                             event_form.event_time.data,
                             event_form.event_poster.data.filename,
-                            event_form.seat_image.data.filename,
+                            # event_form.seat_image.data.filename,
                             event_form.event_desc.data,
                             )
                             
@@ -224,34 +230,7 @@ def create_event():
             seating_plan_list.append(seat)
         
         new_event.set_seating_plan(seating_plan_list)
-        # for i in event_form.seating_plan.entries:
-        #     print(i)
-        #     temp = i.data
-            # for n in temp:
-            #     print(n)
-            #     seat = Seat.Seat(n,
-            #                      n,
-            #                      n
-            #                     )
 
-        # new_event.seats.append(seat)
-
-# seating_plan=createEvent.seating_plan.entries
-
-        
-  
-
-        
-        # for(int i=0; i < event_from.data.seats; i++){
-        #     temp = event_from.data.seats[i]
-        #     seat = Seat.Seat(temp.name, temp.xxx, temp.yyyy)
-        #     new_event.seats.append(seat)
-        # }
-
-        # vip_seat = Seat.Seat("VIP Area")
-        # normal_seat = Seat.Seat("Normal Area")
-        # new_event.seats.append(vip_seat)
-        # new_event.seats.append(normal_seat)
 
 
         events_dict[new_event.get_event_id()] = new_event
