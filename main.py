@@ -62,7 +62,7 @@ def login():
         key = get_id(login.email.data, users_dict)
         key2 = get_pw(login.password.data, users_dict)
 
-        if key == 'None': 
+        if key == 'None' or key != key2: 
             print(key, login.email.data, users_dict) # test
             flash('Invalid login credentials', 'danger')
 
@@ -76,6 +76,7 @@ def login():
             user = users_dict.get(key) # get( user_id )
             db.close()
             session['logged_in'] = user.get_name()
+            session['user_id'] = user.get_user_id()
             session['user_email'] = user.get_email()
             session['user_birthdate'] = user.get_birthdate()
             return redirect(url_for('accountDetails'))
@@ -101,26 +102,31 @@ def create_user():
         except:
             print("Error in retrieving Users from storage.db.")
         
-        key = get_id(signup.email.data, users_dict)
-        if key == 'None': 
-
-            user = account.Account(signup.name.data, signup.email.data, signup.password.data, signup.birthdate.data)
-            users_dict[user.get_user_id()] = user
-            db['Users'] = users_dict
-
-            # Test codes
-            users_dict = db['Users']
-            user = users_dict[user.get_user_id()]
-            print(user.get_name(), "was stored in storage.db successfully with user_id ==", user.get_user_id())
-
-            db.close()
-
-            session['user_created'] = user.get_name()
-
-            return redirect(url_for('login'))
+        if signup.password.data != signup.comfirmpw.data:
+            flash('Passwords do not match.', 'danger')
 
         else:
-            flash('Email is used for an existing account.', 'danger')
+
+            key = get_id(signup.email.data, users_dict)
+            if key == 'None': 
+
+                user = account.Account(signup.name.data, signup.email.data, signup.password.data, signup.birthdate.data)
+                users_dict[user.get_user_id()] = user
+                db['Users'] = users_dict
+
+                # Test codes
+                users_dict = db['Users']
+                user = users_dict[user.get_user_id()]
+                print(user.get_name(), "was stored in storage.db successfully with user_id ==", user.get_user_id())
+
+                db.close()
+
+                session['user_created'] = user.get_name()
+
+                return redirect(url_for('login'))
+
+            else:
+                flash('Email is used for an existing account.', 'danger')
 
     return render_template('users/signup.html', form=signup)
 
@@ -142,13 +148,14 @@ def accountDetails(): # how to display info of logged in user
     users_dict = db['Users']
     db.close()
 
-    # users_list = [] # all users information
+    users_list = [] # all users information
     
-    # for key in users_dict:
-    #     user = users_dict.get(key)
-    #     users_list.append(user)
+    for key in users_dict:
+        user = users_dict.get(key)
+        users_list.append(user)
 
     return render_template('users/accountDetails.html', users_list=users_list)
+    # return render_template('users/accountDetails.html')
 
 @app.route('/EditAcc/<int:id>/', methods=['GET', 'POST'])
 def EditAcc(id):
@@ -181,9 +188,36 @@ def EditAcc(id):
 
         return render_template('users/EditAcc.html', form = update_user_form)
 
-@app.route('/ChangePass')
-def ChangePass():
-    return render_template('users/ChangePass.html', form=changPw)
+@app.route('/ChangePass/<int:id>/', methods=['GET', 'POST'])
+def ChangePass(id):
+    changepass = changPw(request.form)
+
+    if request.method == 'POST':
+        users_dict = {}
+        db = shelve.open('storage.db', 'w')
+        users_dict = db['Users']
+
+        user = users_dict.get(id)
+
+        if changepass.nowpassword.data != user.get_password():
+            flash('Password does not match current password.', 'danger')
+
+        elif changepass.newpassword.data != changepass.comfirmpw.data:
+            flash('New passwords do not match.', 'danger')
+
+        else:
+            user.set_password(changepass.newpassword.data)
+
+            db['Users'] = users_dict
+            db.close()
+
+            session['user_updated'] = user.get_name()    
+            return redirect(url_for('accountDetails'))
+
+    return render_template('users/ChangePass.html', form=changepass)
+
+    
+    
 
 @app.route('/dashboard')
 def dashboard():
