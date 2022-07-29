@@ -49,6 +49,11 @@ def get_pw(val, my_dict):
         if val == value.get_password():
             return key
     return 'None'
+def get_name(val, my_dict):
+    for key, value in my_dict.items():
+        if val == value.get_password():
+            return key
+    return 'None'
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -76,6 +81,8 @@ def login():
             user = users_dict.get(key) # get( user_id )
             db.close()
             session['logged_in'] = user.get_name()
+
+            session['username'] = user.get_name()
             session['user_id'] = user.get_user_id()
             session['user_email'] = user.get_email()
             session['user_birthdate'] = user.get_birthdate()
@@ -123,6 +130,8 @@ def create_user():
 
                 session['user_created'] = user.get_name()
 
+                session['username'] = signup.name.data
+
                 return redirect(url_for('login'))
 
             else:
@@ -136,6 +145,13 @@ def forgetpass():
     if request.method == 'POST':
         return redirect(url_for('login'))
     return render_template('users/forgetpw.html', form=forgetpwform)
+
+@app.route('/newpw', methods=['GET', 'POST'])
+def newpass():
+    newpw = changPw(request.form)
+    if request.method == 'POST':
+        return redirect(url_for('login'))
+    return render_template('users/newpw.html', form=newpw)
 
 # account made
 

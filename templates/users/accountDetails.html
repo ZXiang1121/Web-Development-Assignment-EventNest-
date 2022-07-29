@@ -61,15 +61,15 @@
                       
                       <tr>
                         <td scope="row">Name</td>
-                        <td>{{ users_list[-1].get_name() }}</td>
+                        <td>{{ session['username'] }}</td>
                       </tr>
                       <tr>
                         <td scope="row">Email</td>
-                        <td>{{ users_list[-1].get_email() }}</td>
+                        <td>{{ session['user_email'] }}</td>
                       </tr>
                       <tr>
                         <td scope="row">Birthday</td>
-                        <td>{{ users_list[-1].get_birthdate() }}</td>
+                        <td>{{ session['user_birthdate'] }}</td>
                       </tr>
                       
                     </tbody>
