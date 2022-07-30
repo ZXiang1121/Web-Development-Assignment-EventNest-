@@ -131,6 +131,7 @@ def create_user():
                 session['user_created'] = user.get_name()
 
                 session['username'] = signup.name.data
+                sesson['uid'] = user.get_user_id
 
                 return redirect(url_for('login'))
 
@@ -173,8 +174,8 @@ def accountDetails(): # how to display info of logged in user
     return render_template('users/accountDetails.html', users_list=users_list)
     # return render_template('users/accountDetails.html')
 
-@app.route('/EditAcc/<int:id>/', methods=['GET', 'POST'])
-def EditAcc(id):
+@app.route('/EditAcc/<uuid(strict=False):id>/', methods=['GET', 'POST'])
+def EditAcc(id):    
     update_user_form = signupForm(request.form)
 
     if request.method == 'POST':
@@ -204,7 +205,7 @@ def EditAcc(id):
 
         return render_template('users/EditAcc.html', form = update_user_form)
 
-@app.route('/ChangePass/<int:id>/', methods=['GET', 'POST'])
+@app.route('/ChangePass/<uuid(strict=False):id>/', methods=['GET', 'POST'])
 def ChangePass(id):
     changepass = changPw(request.form)
 

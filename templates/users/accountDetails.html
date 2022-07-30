@@ -78,10 +78,10 @@
 
                 <div class="row justify-content-center pt-3">
                     <div class="col">
-                        <a href="/EditAcc/{{ users_list[-1].get_user_id()}}"><button type="button" class="btn btn-primary btn-md form-control btn-block">Edit details</button></a>
+                        <a href="/EditAcc/{{ session['uid'] }}"><button type="button" class="btn btn-primary btn-md form-control btn-block">Edit details</button></a>
                     </div>
                     <div class="col">
-                        <a href="/ChangePass/{{ users_list[-1].get_user_id()}}"><button type="button" class="btn btn-primary btn-md form-control btn-block">Change password</button></a>
+                        <a href="/ChangePass/{{ session['uid'] }}"><button type="button" class="btn btn-primary btn-md form-control btn-block">Change password</button></a>
                     </div>
                 </div>
 
