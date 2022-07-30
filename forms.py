@@ -28,7 +28,7 @@ class createSeating(Form):
     seat_available = IntegerField('Seat Available', [validators.NumberRange(min=1, max=100000), validators.DataRequired()])
     seat_price = IntegerField('Seat Price', [validators.NumberRange(min=1, max=100000), validators.DataRequired()])
     
-    
+
 
 class createEvent(Form):
     event_name = StringField('Event Name', [validators.Length(min=1, max=150), validators.DataRequired()])
@@ -41,6 +41,11 @@ class createEvent(Form):
     event_desc = TextAreaField('Description', [validators.DataRequired()])
     seat_image = FileField('Seating Plan')
 
+class addOrder(Form):
+    order_price = RadioField('Seat Price' , [validators.DataRequired()], choices=[],)
+    order_quantity = IntegerField('Ticket', [validators.NumberRange(min=1), validators.DataRequired()], default=1)
+    # def order_price_multiply_quantity(self):
+    #     return self.order_price * self.order_quantity
 
 
 

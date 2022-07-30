@@ -1,24 +1,18 @@
 from Seat import Seat
+import uuid
 
 class Event:
-    count_id = 0
+    # count_id = 0
 
     seating_plan = []
 
     # def __init__(self, event_name,event_category, seat_type, seat_available, seat_price, event_location, event_date, event_time, event_image, event_desc):
     def __init__(self, event_name,event_category, event_location, event_date, event_time, event_poster, seat_image, event_desc):
-        # Not sure of ticket id
-        # super().__init__()
-        Event.count_id += 1
-        
 
-        self.__event_id = Event.count_id
+        # Event.count_id += 1
+        self.__event_id = uuid.uuid4()
         self.__event_name = event_name
         self.__event_category = event_category
-        # self.__seating_plan_entries = seating_plan_entries
-        # self.__seat_type = seat_type
-        # self.__seat_available = seat_available
-        # self.__seat_price = seat_price
         self.__event_location = event_location
         self.__event_date = event_date
         self.__event_time = event_time
@@ -35,21 +29,6 @@ class Event:
     
     def get_event_category(self):
         return self.__event_category
-    
-    # def get_seating_plan(self):
-    #     return self.__seating_plan
-
-    # def get_seating_plan_entries(self):
-    #     return self.__seating_plan_entries
-
-    # def get_seat_type(self):
-    #     return self.__seat_type
-
-    # def get_seat_available(self):
-    #     return self.__seat_available
-
-    # def get_seat_price(self):
-    #     return self.__seat_price
 
     def get_event_location(self):
         return self.__event_location

@@ -29,95 +29,91 @@
 
 
 
-  <div class="container py-5" id="eventsection">
+<div class="container py-5" id="eventsection">
     
-    <h3 id="event">Events</h3>
-    <div>
-      <ul class="nav nav-tabs border-bottom-1">
+  <h3 id="event">Events</h3>
+  <div>
+    <ul class="nav nav-tabs border-bottom-1">
 
-        <a class="nav-link active" type="button" aria-current="page" data-filter="cat-all" >All</a>
-        <a class="nav-link" type="button" data-filter="cat-sport" >Sport</a>
-        <a class="nav-link" type="button" data-filter="cat-concert" >Concert</a>
+      <a class="nav-link active" type="button" aria-current="page" data-filter="cat-all" >All</a>
+      <a class="nav-link" type="button" data-filter="cat-sport" >Sport</a>
+      <a class="nav-link" type="button" data-filter="cat-concert" >Concert</a>
 
-      </ul>
-    </div>
+    </ul>
+  </div>
+  
+  <div>
+    {% if count == 0 %}
+    <p>There are no events.</p>
+    {% elif count == 1 %}
+    <p>There is 1 event.</p>
+    {% else %}
+    <p>There are {{ count }} events.</p>
+    {% endif %}
+  </div>
+  
 
-    <div class="table-content py-5 event " id="nav-tabContent">
+  <div class="table-content py-5 event " id="nav-tabContent">
 
-      <div class="row row-cols-1 row-cols-md-3 g-4 tab-pane active" id="nav-all" aria-labelledby="nav-all-tab">
-        
-        <div class="col cat-all cat-concert">
+    <div class="row row-cols-1 row-cols-md-3 g-4 tab-pane active" id="nav-all" aria-labelledby="nav-all-tab">
+
+      {% for event in events_list %}
+
+        {% if event.get_event_category() == "C" %}
+          <div class="col cat-all cat-concert">
             <div class="card card-size-image">
-              
-                  <img class="img-fluid fit-image" src="{{(url_for('static', filename='images/nctconcert.jpg'))}}" class="card-img-top" alt="...">
+                  <img class="img-fluid fit-image" src="{{url_for('static', filename='images/' + event.get_event_poster() )}}" class="card-img-top" alt="...">
               
               <div class="card-body">
-                <h5 class="card-title">NCT Concert</h5>
+
+                  <h5 class="card-title">{{ event.get_event_name() }}</h5>
+
+
                 <div class="row py-3">
                   <span class="col">
-                    <i class="bi bi-geo-alt"> <span class="text-muted">esplanade</span></i>
+                    <i class="bi bi-geo-alt"> <span class="text-muted">{{event.get_event_location()}}</span></i>
                   </span>
                   <span class="col">
-                    <i class="bi bi-calendar4-event"> <span class="text-muted">4 september</span></i>
+                    <i class="bi bi-calendar4-event"> <span class="text-muted">{{event.get_event_date()}}</span></i>
                   </span>
                 </div>
-                <p class="card-text py-2">From <strong>$</strong><span><strong>50</strong></span></p>
-                <a href="/ticketDetails"><button type="button" class="btn btn-primary btn-dark btn-outline-light w-100">View</button></a>
+
+                <a href="/ticketDetails"><button type="button" class="btn btn-primary btn-dark btn-outline-light mt-3 w-100">View</button></a>
               </div>
+            </div>
           </div>
-        </div>
 
-        <div class="col cat-all cat-concert">
-          <div class="card">
-            <a href="/ticketDetails">
-              
-              <img class="img-fluid fit-image" src="{{(url_for('static', filename='images/xuezhiqianconcertposter.jpg'))}}" class="card-img-top" alt="...">
-
-            </a>
-            <div class="card-body">
-              <h5 class="card-title">Joker Xue Concert</h5>
-              <div class="row py-3">
-                <span class="col">
-                  <i class="bi bi-geo-alt"> <span class="text-muted">esplanade</span></i>
-                </span>
-                <span class="col">
-                  <i class="bi bi-calendar4-event"> <span class="text-muted">4 september</span></i>
-                </span>
+        {% elif event.get_event_category() == "S" %}
+          <div class="col cat-all cat-sport">
+            <div class="card">
+              <a href="/ticketdetails">
+                
+                <img class="img-fluid fit-image" src="{{url_for('static', filename='images/' + event.get_event_poster() )}}" class="card-img-top" alt="...">
+    
+              </a>
+              <div class="card-body">
+                <h5 class="card-title">{{ event.get_event_name() }}</h5>
+                <div class="row py-3">
+                  <span class="col">
+                    <i class="bi bi-geo-alt"> <span class="text-muted">{{event.get_event_location()}}</span></i>
+                  </span>
+                  <span class="col">
+                    <i class="bi bi-calendar4-event"> <span class="text-muted">{{event.get_event_date()}}</span></i>
+                  </span>
+                </div>
+                <div class="row my-auto px-3 py-2 mb-3">
+    
               </div>
-              <p class="card-text py-2">From <strong>$</strong><span><strong>50</strong></span></p>
-              <button type="button" class="btn btn-primary btn-dark btn-outline-light w-100">View</button>
+              <a href="/ticketDetails"><button type="button" class="btn btn-primary btn-dark btn-outline-light mt-3 w-100">View</button></a>
+              </div>
             </div>
-        </div>
-      </div>
-
-      <div class="col cat-all cat-sport">
-        <div class="card">
-          <a href="/ticketdetails">
-            
-            <img class="img-fluid fit-image" src="{{(url_for('static', filename='images/sport bwf badminton.png'))}}" class="card-img-top" alt="...">
-
-          </a>
-          <div class="card-body">
-            <h5 class="card-title">BWF Final</h5>
-            <div class="row py-3">
-              <span class="col">
-                <i class="bi bi-geo-alt"> <span class="text-muted">esplanade</span></i>
-              </span>
-              <span class="col">
-                <i class="bi bi-calendar4-event"> <span class="text-muted">4 september</span></i>
-              </span>
-            </div>
-            <p class="card-text py-2">From <strong>$</strong><span><strong>50</strong></span></p>
-            <a href="/ticketdetails"></a><button type="button" class="btn btn-primary btn-dark btn-outline-light w-100">View</button></a>
           </div>
-      </div>
-    </div>
-      
+       {% endif %}
 
-      </div>  
-    </div>
-
-    </div>
+      {% endfor %}
+    </div>  
+  </div>
+</div>
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
