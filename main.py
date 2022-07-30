@@ -217,5 +217,9 @@ def faq():
 def message():
    return render_template('contactusMessage.html')
 
+@app.route('/askqn')
+def askqn():
+   return render_template('askqnpopup.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
