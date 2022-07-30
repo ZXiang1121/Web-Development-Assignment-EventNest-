@@ -22,9 +22,17 @@
             <button type="button" class="btn btn-link  me-2" >
               <a href="/cart"><i class="bi bi-bag"></a></i>
             </button>
-            <a href="/login"><button type="button" class="btn btn-primary me-3">
-              Login
+
+            {% if 'logged_in' in session %}
+            <a href="/accountDetails"><button type="button" class="btn btn-link me-3">
+              <i class="fa-regular fa-user"></i>
             </button></a>
+            {% else %}
+            <a href="/login"><button type="button" class="btn btn-primary me-3">
+              Log In
+            </button></a>
+            {% endif %}
+
           </form>
 
         </div>

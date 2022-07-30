@@ -17,6 +17,13 @@
   {{ session.pop('user_updated', None) }} was updated.
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
+
+<!-- if user log in -->
+{% elif 'logged_in' in session %}
+<div class="alert alert-success alert-dismissible">
+  {{ session.pop('logged_in', None) }} has logged in.
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 {% endif %}
 
 <div class="p-3 mb-2 bg-light pt-5">
@@ -54,15 +61,15 @@
                       
                       <tr>
                         <td scope="row">Name</td>
-                        <td>{{ users_list[0].get_name() }}</td>
+                        <td>{{ session['username'] }}</td>
                       </tr>
                       <tr>
                         <td scope="row">Email</td>
-                        <td>{{ users_list[0].get_email() }}</td>
+                        <td>{{ session['user_email'] }}</td>
                       </tr>
                       <tr>
                         <td scope="row">Birthday</td>
-                        <td>{{ users_list[0].get_birthdate() }}</td>
+                        <td>{{ session['user_birthdate'] }}</td>
                       </tr>
                       
                     </tbody>
@@ -71,17 +78,18 @@
 
                 <div class="row justify-content-center pt-3">
                     <div class="col">
-                        <a href="/EditAcc/{{users_list[0].get_user_id()}}"><button type="button" class="btn btn-primary btn-md form-control btn-block">Edit details</button></a>
+                        <a href="/EditAcc/{{ session['user_id'] }}"><button type="button" class="btn btn-primary btn-md form-control btn-block">Edit details</button></a>
                     </div>
                     <div class="col">
-                        <a href="/ChangePass"><button type="button" class="btn btn-primary btn-md form-control btn-block">Change password</button></a>
+                        <a href="/ChangePass/{{ session['user_id'] }}"><button type="button" class="btn btn-primary btn-md form-control btn-block">Change password</button></a>
                     </div>
                 </div>
 
-                <div class="row justify-content-center mt-3 mb-3">
-                  <a class="btn btn-outline-primary btn-md" style="width:45%" href="/logout" role="button">Log Out</a>
+                <!-- <div class="row justify-content-center mt-3" > -->
+                <div class="d-grid gap-2 col-6 mx-auto mt-3">
+                  <a class="btn btn-outline-primary  display-inline-block" href="/logout" role="button" onclick="return confirm('Are you sure you want to log out?');">Log Out</a>
                 </div>
-                
+
           </div>
           
 

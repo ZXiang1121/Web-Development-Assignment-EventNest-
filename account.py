@@ -1,10 +1,12 @@
+import uuid
+
 class Account:
-    count_id = 99
+    # count_id = 99
 
     def __init__(self, name, email, password, birthdate):
-        Account.count_id += 1
+        # Account.count_id += 1
 
-        self.__user_id = Account.count_id
+        self.__user_id = uuid.uuid4()
         self.__name = name
         self.__email = email
         self.__password = password
@@ -27,7 +29,7 @@ class Account:
 
     def get_birthdate(self):
         return self.__birthdate
-    def set_name(self, birthdate):
+    def set_get_birthdate(self, birthdate):
         self.__birthdate = birthdate
 
     def get_password(self):
