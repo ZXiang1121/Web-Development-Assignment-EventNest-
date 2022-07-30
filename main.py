@@ -131,7 +131,7 @@ def create_user():
                 session['user_created'] = user.get_name()
 
                 session['username'] = signup.name.data
-                sesson['uid'] = user.get_user_id
+                
 
                 return redirect(url_for('login'))
 
@@ -190,7 +190,11 @@ def EditAcc(id):
         db['Users'] = users_dict
         db.close()
 
-        session['user_updated'] = user.get_name()    
+        session['user_updated'] = user.get_name()  
+        session['username'] = user.get_name()
+        session['user_id'] = user.get_user_id()
+        session['user_email'] = user.get_email()
+        session['user_birthdate'] = user.get_birthdate()
         return redirect(url_for('accountDetails'))
 
     else:
