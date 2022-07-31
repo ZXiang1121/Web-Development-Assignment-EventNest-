@@ -1,7 +1,6 @@
-from wtforms import Form, StringField, SelectField, TextAreaField, PasswordField, validators,DateField, TimeField, FileField, FieldList, FormField, RadioField, IntegerField, BooleanField, SubmitField
+from wtforms import Form, StringField, SelectField, TextAreaField, PasswordField, validators,DateField, TimeField, FileField, FieldList, FormField, RadioField, IntegerField, SubmitField
 from wtforms.fields import EmailField, DateField
 from flask_wtf import FlaskForm
-
 
 class signupForm(Form):
     name = StringField('Name', [validators.Length(min=1, max=150), validators.DataRequired()])
@@ -32,7 +31,7 @@ class createSeating(Form):
     seat_available = IntegerField('Seat Available', [validators.NumberRange(min=1, max=100000), validators.DataRequired()])
     seat_price = IntegerField('Seat Price', [validators.NumberRange(min=1, max=100000), validators.DataRequired()])
     
-    
+
 
 class createEvent(Form):
     event_name = StringField('Event Name', [validators.Length(min=1, max=150), validators.DataRequired()])
@@ -45,6 +44,11 @@ class createEvent(Form):
     event_desc = TextAreaField('Description', [validators.DataRequired()])
     seat_image = FileField('Seating Plan')
 
+class addOrder(Form):
+    order_price = RadioField('Seat Price', [validators.DataRequired()] , choices=[])
+    order_quantity = IntegerField('Ticket', [validators.NumberRange(min=1), validators.DataRequired()], default=1)
+    # def order_price_multiply_quantity(self):
+    #     return self.order_price * self.order_quantity
 
 class ContactForm(FlaskForm):
     name = TextAreaField("Name",[validators.DataRequired()])
@@ -54,9 +58,10 @@ class ContactForm(FlaskForm):
     message = TextAreaField("Message",[validators.DataRequired()])
     submit = SubmitField("Send")
 
-class CreateQnForm(Form):
+
+class CreateUserForm(Form):
     first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
     last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()])
-    email = SelectField('Email')
-    number= RadioField('Number')
-    remarks = TextAreaField('Comments', [validators.Optional()])
+    gender = SelectField('Gender', [validators.DataRequired()], choices=[('', 'Select'), ('F', 'Female'), ('M', 'Male')], default='')
+    membership = RadioField('Membership', choices=[('F', 'Fellow'), ('S', 'Senior'), ('P', 'Professional')], default='F')
+    remarks = TextAreaField('Remarks', [validators.Optional()])

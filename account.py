@@ -3,6 +3,8 @@ import uuid
 class Account:
     # count_id = 99
 
+    cart_item = []
+
     def __init__(self, name, email, password, birthdate):
         # Account.count_id += 1
 
@@ -36,3 +38,10 @@ class Account:
         return self.__password
     def set_password(self, password):
         self.__password = password
+
+
+
+    def get_cart_item(self):
+        return self.cart_item
+    def set_cart_item(self, cart_item):
+        self.cart_item = cart_item

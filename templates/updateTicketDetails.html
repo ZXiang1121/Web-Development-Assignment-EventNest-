@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title%}Ticket Details{% endblock %}
+{% block title%}Update Ticket Details{% endblock %}
 
 {% block content%}
 
@@ -13,18 +13,15 @@
 {% endmacro %}
 
 <div class="container pb-5">
-
-
-
     <div class="d-flex justify-content-center overflow-hidden">
-        <img class="w-75" src="{{(url_for('static', filename='images/' + event.get_event_poster() ))}}" class="card-img-top" alt="...">
+        <img class="w-75" src="{{(url_for('static', filename='images/' + order.get_order_image() ))}}" class="card-img-top" alt="...">
     </div>
     <div class="row text-center py-5">
-        <div class="col py-3">{{ event.get_event_name() }}</div>
-        <div class="col py-3">{{ event.get_event_date() }}</div>
+        <div class="col py-3">{{ order.get_order_name() }}</div>
+        <div class="col py-3">{{ order.get_event_date() }}</div>
         <div class="w-100"></div>
-        <div class="col py-3">{{ event.get_event_location() }}</div>
-        <div class="col py-3">{{ event.get_event_time() }}</div>
+        <div class="col py-3">{{ order.get_event_location() }}</div>
+        <div class="col py-3">{{ order.get_event_time() }}</div>
  
     </div>
 
@@ -32,12 +29,12 @@
         <div class="col-12 col-md-7 mb-5">
             <h4 class="pb-2">Seating Plan</h4>
             <div class="rounded border w-75">
-                <img class="w-100 shadow-sm rounded" src="{{(url_for('static', filename='images/' + event.get_seat_image() ))}}" alt="">
+                <img class="w-100 shadow-sm rounded" src="{{(url_for('static', filename='images/' + order.get_order_seat_image() ))}}" alt="">
             </div>
             <div class="mt-5">
                 <h4>Description</h4>
                 
-                  <p>{{ event.get_event_desc() }}</p>
+                  <p>{{ order.get_event_desc() }}</p>
               </div>
         </div>
             
@@ -61,15 +58,14 @@
                 </div>
 
                 <div class="col-sm mt-5">
-                    <input type="submit" value="Add to Cart" class="btn btn-primary"/>
+                    <input type="submit" value="Update Order" class="btn btn-primary"/>
                 </div>
             </form>
         </div>
  
         
     </div>
-
-  </div>
+</div>
 
 
 
