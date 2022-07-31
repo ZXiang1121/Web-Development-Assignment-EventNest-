@@ -1,12 +1,15 @@
 import uuid
 
 class Order:
+    # count_id = 0
 
-    order_id = uuid.uuid4()
+
+
 
     def __init__(self, event_id, order_name, order_category, event_location, order_image, order_seat_image, event_date, event_time, event_desc, order_seat_type, order_seat_price, order_quantity, order_seating_plan):
         
-        self.__order_id = Order.order_id
+   
+        self.__order_id = uuid.uuid4()
         self.__event_id = event_id
         self.__order_name = order_name
         self.__order_category = order_category

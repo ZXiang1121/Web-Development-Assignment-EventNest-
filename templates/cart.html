@@ -118,7 +118,9 @@
             {% print(orders) %}<br>
             {%for order in orders%}
               {% print(order) %} ----> {%print(order.get_event_id())%}<br>
+              {%print(order.get_order_category())%}
             {%endfor%}
+            
 
 
     </div>

@@ -56,7 +56,7 @@ def ticket_details(id):
     if request.method == 'POST' and add_order_form.validate():
 
         orders_dict = {}
-        db = shelve.open('storage.db', 'c', writeback=True)
+        db = shelve.open('storage.db', 'c')
         try:
             orders_dict = db['Orders']
         except:
