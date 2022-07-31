@@ -1,6 +1,6 @@
 import os
 from flask import Flask, redirect, url_for, render_template, request, session, flash
-from forms import createEvent, signupForm, loginForm, forgetpw, changPw, ContactForm
+from forms import createEvent, signupForm, loginForm, forgetpw, changPw, ContactForm, FlaskForm
 import shelve, Event, account, Seat
 from werkzeug.utils import secure_filename
 from flask_login import LoginManager
@@ -368,16 +368,50 @@ def submit_result():
     return render_template('submitResult.html', count=len(events_list), events_list=events_list)
 
 
-@app.route('/message')
+@app.route('/success')
 def message():
    return render_template('contactusMessage.html')
 
-<<<<<<< HEAD
-@app.route('/askqn')
-def askqn():
-   return render_template('askqnpopup.html')
-=======
->>>>>>> eb1108ae09591b5ddccf91e0ec99e215f5779ad1
+
+
+
+
+
+@app.route('/createQn', methods=['GET', 'POST'])
+def create_qn():
+    create_qn_form = CreateQnForm(Form)
+    if request.method == 'POST' and create_qn_form.validate():
+        qn_dict = {}
+        db = shelve.open('storage.db', 'c')
+
+        try:
+            qn_dict = db['Question']
+        except:
+            print("Error in retrieving Users from storage.db.")
+
+        qn = Qn.Qn(create_qn_form.first_name.data,
+                         create_qn_form.last_name.data,
+                         create_qn_form.email.data,
+                         create_qn_form.number.data,
+                         create_qn_form.comments.data)
+
+        qn_dict[qn.get_qn_id()] = qn
+        db['Question'] = qn_dict
+
+        # Test codes
+        # users_dict = db['Users']
+        # user = users_dict[user.get_user_id()]
+        # print(user.get_first_name(), user.get_last_name(), "was stored in storage.db successfully with user_id ==", user.get_user_id())
+        #
+        # db.close()
+
+
+        return redirect(url_for('create_qn_form'))
+    return render_template('createqnpopup.html', form=create_qn_form)
+
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -46,8 +46,6 @@ class createEvent(Form):
     seat_image = FileField('Seating Plan')
 
 
-
-
 class ContactForm(FlaskForm):
     name = TextAreaField("Name",[validators.DataRequired()])
     email = TextAreaField("Email",[validators.DataRequired()])
@@ -55,3 +53,10 @@ class ContactForm(FlaskForm):
     subject = TextAreaField("Subject",[validators.DataRequired()])
     message = TextAreaField("Message",[validators.DataRequired()])
     submit = SubmitField("Send")
+
+class CreateQnForm(Form):
+    first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
+    last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()])
+    email = SelectField('Email')
+    number= RadioField('Number')
+    remarks = TextAreaField('Comments', [validators.Optional()])
