@@ -8,16 +8,20 @@ class signupForm(Form):
     email = EmailField('Email', [validators.Email(), validators.DataRequired()])
     birthdate = DateField('Date of Birth', [validators.length(max=8), validators.Optional()])
     password = PasswordField('Password', [validators.Length(min=8, max=20), validators.DataRequired()])
+    comfirmpw = PasswordField('Comfirm Password', [validators.Length(min=8, max=20), validators.DataRequired()])
     
 
 class loginForm(Form):
+    name = StringField('Name', [validators.Length(min=1, max=150), validators.DataRequired()])
     email = EmailField('Email', [validators.Email(), validators.DataRequired()])
     password = PasswordField('Password', [validators.length(max=100), validators.DataRequired()])
 
 
 # no html link yet
 class changPw(Form):
+    nowpassword = PasswordField('Current Password', [validators.Length(min=8, max=20), validators.DataRequired()])
     newpassword = PasswordField('New Password', [validators.length(max=100), validators.DataRequired()])
+    comfirmpw = PasswordField('Comfirm Password', [validators.Length(min=8, max=20), validators.DataRequired()])
 
 class forgetpw(Form):
     email = EmailField('Email', [validators.Email(), validators.DataRequired()])
@@ -42,7 +46,7 @@ class createEvent(Form):
     seat_image = FileField('Seating Plan')
 
 class addOrder(Form):
-    order_price = RadioField('Seat Price' , [validators.DataRequired()], choices=[],)
+    order_price = RadioField('Seat Price', [validators.DataRequired()] , choices=[])
     order_quantity = IntegerField('Ticket', [validators.NumberRange(min=1), validators.DataRequired()], default=1)
     # def order_price_multiply_quantity(self):
     #     return self.order_price * self.order_quantity

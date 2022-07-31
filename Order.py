@@ -2,13 +2,12 @@ import uuid
 
 class Order:
 
-    # order_id = 0
-    
-    # def __init__(self, order_name, order_image, order_seat_price, order_ticket, order_quantity):
-    def __init__(self, order_name, order_category, event_location, order_image, order_seat_image, event_date, event_time, event_desc, order_seat_type, order_seat_price, order_quantity, order_seating_plan):
+    order_id = uuid.uuid4()
 
-        # Order.order_id +=1
-        self.__order_id = uuid.uuid4()
+    def __init__(self, event_id, order_name, order_category, event_location, order_image, order_seat_image, event_date, event_time, event_desc, order_seat_type, order_seat_price, order_quantity, order_seating_plan):
+        
+        self.__order_id = Order.order_id
+        self.__event_id = event_id
         self.__order_name = order_name
         self.__order_category = order_category
         self.__event_location = event_location
@@ -25,6 +24,9 @@ class Order:
     
     def get_order_id(self):
         return self.__order_id
+    
+    def get_event_id(self):
+        return self.__event_id
 
     def get_order_name(self):
         return self.__order_name
@@ -68,6 +70,9 @@ class Order:
     def set_order_id(self, order_id):
         self.__order_id = order_id
 
+    def set_event_id(self, event_id):
+         self.__event_id = event_id
+
     def set_order_name(self, order_name):
         self.__order_name = order_name
 
@@ -107,6 +112,8 @@ class Order:
 
     def order_cost(self, order_seat_price, order_quantity):
         return int(order_seat_price) * int(order_quantity)
+
+
     
 
 

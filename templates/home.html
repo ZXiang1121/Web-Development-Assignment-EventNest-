@@ -78,7 +78,7 @@
                   </span>
                 </div>
 
-                <a href="/ticketDetails"><button type="button" class="btn btn-primary btn-dark btn-outline-light mt-3 w-100">View</button></a>
+                <a href="/ticketDetails/{{ event.get_event_id() }}"><button type="button" class="btn btn-primary btn-dark btn-outline-light w-100">View</button></a>
               </div>
             </div>
           </div>
@@ -104,7 +104,7 @@
                 <div class="row my-auto px-3 py-2 mb-3">
     
               </div>
-              <a href="/ticketDetails"><button type="button" class="btn btn-primary btn-dark btn-outline-light mt-3 w-100">View</button></a>
+              <a href="/ticketDetails/{{ event.get_event_id() }}"><button type="button" class="btn btn-primary btn-dark btn-outline-light w-100">View</button></a>
               </div>
             </div>
           </div>

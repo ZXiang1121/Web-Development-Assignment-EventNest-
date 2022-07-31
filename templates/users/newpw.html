@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% block title%}Change Password{% endblock %}
+{% block title %}EventNest - Forget Password{% endblock %}
 
-{% block content%}
+{% block content %}
 {% from "_formHelper.html" import render_field %}
 
 
@@ -16,14 +16,15 @@
 <div class="p-5 bg-light">
     <div class="container-sm col-lg-6 ml-auto">
 
-        <h2 class="display-7">Change Password</h2>
+        <h2 class="display-7">Forget Password</h2>
+
+        <form method = "POST" action="">
+
+            <h2 class="display-7">Change Password</h2>
 
         <form action="" method="POST">
 
-            <div class="form-group">
-                {{ render_field(form.nowpassword, class="form-control") }}
-              </div>
-              <br>
+            
 
             <div class="form-group">
                 {{ render_field(form.newpassword, class="form-control") }}
@@ -35,15 +36,19 @@
               </div>
               <br>
 
-            
-            <div class="row justify-content-center mt-5">
+            <div class="row justify-content-center mt-4">
                 <form action="" method="POST">
-                  <input type="submit" class="btn btn-primary btn-md" style="width:30%" value="Submit">
+                <input type="submit" class="btn btn-primary btn-md" style="width:45%" value="Submit">
                 </form>
-              </div>
+            </div>
 
         </form>
 
     </div>
 </div>
+
+
 {% endblock %}
+
+
+
