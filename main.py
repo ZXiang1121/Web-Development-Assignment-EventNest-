@@ -615,6 +615,12 @@ def submit_result():
 def message():
    return render_template('contactusMessage.html')
 
+<<<<<<< HEAD
+@app.route('/askqn')
+def askqn():
+   return render_template('askqnpopup.html')
+=======
+>>>>>>> eb1108ae09591b5ddccf91e0ec99e215f5779ad1
 
 if __name__ == '__main__':
     app.run(debug=True)

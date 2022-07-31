@@ -54,9 +54,9 @@ class addOrder(Form):
 
 
 class ContactForm(FlaskForm):
-    name = TextAreaField("Name")
-    email = TextAreaField("Email")
-    number =  TextAreaField("number")
-    subject = TextAreaField("Subject")
-    message = TextAreaField("Message")
+    name = TextAreaField("Name",[validators.DataRequired()])
+    email = TextAreaField("Email",[validators.DataRequired()])
+    number =  TextAreaField("number",[validators.DataRequired()])
+    subject = TextAreaField("Subject",[validators.DataRequired()])
+    message = TextAreaField("Message",[validators.DataRequired()])
     submit = SubmitField("Send")
