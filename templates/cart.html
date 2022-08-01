@@ -106,7 +106,7 @@
                         <h5 class="font-weight-bold">${{payable}}</h5>
                       </li>
                     </ul>
-
+                    <div id="paypal-button-container"></div>
                     <a href="#" class="btn btn-dark rounded-pill py-2 px-5 btn-block">Checkout</a>
                   </div>
                 </div>
@@ -124,4 +124,52 @@
 
 
     </div>
+
+    <script src="https://www.paypal.com/sdk/js?client-id=AVHtcSrT5bL9qkjoybMjOTAdU0MIhGq273ghCjcmjGKcHOdSHRDAvs8udVEIAqAiq7WIBmykCIJ87Lpv&currency=USD&disable-funding=credit"></script>
+    <script>
+
+      var total = '{{payable}}'
+      // Render the PayPal button into #paypal-button-container
+      paypal.Buttons({
+
+          style:{
+            color:'blue',
+            shape:'rect',
+          },
+
+          // Set up the transaction
+          createOrder: function(data, actions) {
+              return actions.order.create({
+                  purchase_units: [{
+                      amount: {
+                          value: parseFloat(total).toFixed(2)
+                      }
+                  }]
+              });
+          },
+
+          // Finalize the transaction
+          onApprove: function(data, actions) {
+              return actions.order.capture().then(function(orderData) {
+                  // Successful capture! For demo purposes:
+                  console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+                  var transaction = orderData.purchase_units[0].payments.captures[0];
+                  alert('Transaction '+ transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');
+                  window.location.replace("/clearCart/{{ session['user_id'] }}");
+                  // actions.redirect(url_for('clear_cart'));
+                  // Replace the above to show a success message within this page, e.g.
+                  // const element = document.getElementById('paypal-button-container');
+                  // element.innerHTML = '';
+                  // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+                  // Or go to another URL:  actions.redirect('thank_you.html');
+              });
+          }
+
+
+      }).render('#paypal-button-container');
+
+      // if onApprove success then item will be remove from cart.
+
+
+  </script>
 {% endblock %}

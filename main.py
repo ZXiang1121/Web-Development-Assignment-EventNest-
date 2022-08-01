@@ -1,7 +1,7 @@
 import os
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 from forms import createEvent, signupForm, loginForm, forgetpw, changPw, ContactForm, addOrder
-import shelve, Event, account, Seat, Order
+import shelve, Event, account, Seat, Order, Payment
 from werkzeug.utils import secure_filename
 from flask_login import LoginManager
 from werkzeug.datastructures import CombinedMultiDict
@@ -187,8 +187,54 @@ def cart_page():
 
     total_cost = "{:.2f}".format(sum(store_order_price))
 
-        
+
     return render_template('cart.html', count=len(orders_list), orders=orders_list, payable= total_cost)
+
+@app.route('/clearCart/<uuid(strict=False):id>/')
+def clear_cart(id):
+
+    orders_dict = {}
+    db = shelve.open('storage.db', 'r')
+    orders_dict = db['Orders']
+    db.close()
+
+    orders_list = []
+    for key in orders_dict:
+        order = orders_dict.get(key)
+        orders_list.append(order)
+
+    payments_dict = {}
+    db = shelve.open('storage.db', 'c')
+
+    try:
+        payments_dict = db['Payments']
+    except:
+        print('Error in retrieving Events from storage.db')
+    
+    new_payment = Payment.Payment(
+        orders_list
+    )
+
+    db = shelve.open('storage.db', 'w')
+    db['Orders'] = {}
+
+    payments_dict[new_payment.get_payment_id()] = new_payment
+    db['Payment'] = payments_dict
+
+
+    users_dict = {}
+    db = shelve.open('storage.db', 'w')
+    users_dict = db['Users']
+
+    user = users_dict.get(id)
+    user.set_cart_item(orders_list)
+    user.set_payment(new_payment)
+    print(user.set_payment(new_payment))
+
+    db['Users'] = users_dict
+    db.close()
+
+    return redirect(url_for('home'))
 
 
 @app.route('/deleteOrder/<uuid(strict=False):id>/', methods=['GET', 'POST'])
