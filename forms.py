@@ -1,7 +1,6 @@
-from wtforms import Form, StringField, SelectField, TextAreaField, PasswordField, validators,DateField, TimeField, FileField, FieldList, FormField, RadioField, IntegerField, BooleanField, SubmitField
+from wtforms import Form, StringField, SelectField, TextAreaField, PasswordField, validators,DateField, TimeField, FileField, FieldList, FormField, RadioField, IntegerField, SubmitField
 from wtforms.fields import EmailField, DateField
 from flask_wtf import FlaskForm
-
 
 class signupForm(Form):
     name = StringField('Name', [validators.Length(min=1, max=150), validators.DataRequired()])
@@ -51,8 +50,6 @@ class addOrder(Form):
     # def order_price_multiply_quantity(self):
     #     return self.order_price * self.order_quantity
 
-
-
 class ContactForm(FlaskForm):
     name = TextAreaField("Name",[validators.DataRequired()])
     email = TextAreaField("Email",[validators.DataRequired()])
@@ -60,3 +57,11 @@ class ContactForm(FlaskForm):
     subject = TextAreaField("Subject",[validators.DataRequired()])
     message = TextAreaField("Message",[validators.DataRequired()])
     submit = SubmitField("Send")
+
+
+class CreateUserForm(Form):
+    first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
+    last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()])
+    gender = SelectField('Gender', [validators.DataRequired()], choices=[('', 'Select'), ('F', 'Female'), ('M', 'Male')], default='')
+    membership = RadioField('Membership', choices=[('F', 'Fellow'), ('S', 'Senior'), ('P', 'Professional')], default='F')
+    remarks = TextAreaField('Remarks', [validators.Optional()])

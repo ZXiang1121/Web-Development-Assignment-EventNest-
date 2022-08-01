@@ -3,47 +3,65 @@
 
 <!-- here we add our contact forms -->
 {% block content %}
-<div class="contact">
-    <h1>Contact Us</h1>
-    
-    <h3> Got a Question? We'd love to hear from you! Send us a message and we'll respond as soon as possible.</h3>
-<!-- Just here i use "url_for" to call the function get_contact.
-         This function return the html code of our contact page-->
-    <form action="{{url_for('get_contact') }}" method=post>
-        <div>
-            <!-- name forms -->
-            <p>Name:
-                {{ form.name.label }} <br>
-                {{ form.name(placeholder='Your name') }}
-            </p>
-            <!-- email forms -->
-            <p>Email:
-                {{ form.email.label }} <br>
-                {{ form.email(placeholder='Your e-mail ...') }}
-            </p>
-            <!---number forms-->
-            <p> Phone No:
-                {{ form.number.label }} <br>
-                {{ form.number(placeholder='Your number ...') }}
-            </p>
-            <!-- Subject of your request -->
-            <p>Subject:
-                {{ form.subject.label }}<br>
-                {{form.subject(placeholder='Your subject ...')}}
-            </p>
-            <!-- Content of your request -->
-            <p> Feedback/ Question:
-                {{ form.message.label }}<br>
-                {{ form.message(placeholder='Write your feedback/question ...') }}
-            </p>
-            <!-- Submit button -->
-            <a href='/message'><button type="button" class="contact">Submit</button></a>
-                
-             
-           
-            
-        </div>
+<div class="container mt-3">
+    <h3>Contact Us </h3>
+    <p>Still have a question in mind? Let us know! We will be there to provide an answer you best require.</p>
+      
+    <form action="/action_page.php" class="was-validated">
+      <div class="mb-3 mt-3">
+        <label for="uname" class="form-label">Username:</label>
+        <input type="text" class="form-control" id="uname" placeholder="Enter username" name="uname" required>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field.</div>
+      </div>
+      
+      <div class="mb-3">
+        <label for="email" class="form-label">Email:</label>
+        <input type="email" class="form-control" id="email" placeholder="Enter email" name="email" required>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field.</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="number" class="form-label">Contact No.:</label>
+        <input type="number" class="form-control" id="number" placeholder="Enter Phone No." name="number" required>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field.</div>
+      </div>
+
+      <div class="mb-3 mt-3">
+        <label for="gender" class="form-label">Gender:</label>
+        <select class="form-select" name="gender"  type="gender" class="form-control" id="subject" placeholder="Choose Subject"  required>
+            <option>Male</option>
+            <option>Female</option>
+          
+          </select>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field.</div>
+      </div>
+      <div class="mb-3">
+        <label for="subject" class="form-label">Subject:</label>
+        <select class="form-select" name="subject"  type="subject" class="form-control" id="subject" placeholder="Choose Subject"  required>
+            <option>Technical Issue of website</option>
+            <option>Refund Policy</option>
+            <option>Feedback</option>
+            <option>Others</option>
+          </select>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field.</div>
+      </div>
+      <label for="comment">Comments:</label>
+        <textarea class="form-control" rows="5" id="comment" name="text" placeholder="Your question/feedback ..."  required></textarea>
+        
+
+      <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" id="myCheck"  name="remember" required>
+        <label class="form-check-label" for="myCheck">I agree on the Terms & Conditions.</label>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Check this checkbox to continue.</div>
+      </div>
+    <button type="submit" class="btn btn-primary" href="/success">Submit</button>
     </form>
-</div>
+  </div>
 {% endblock %}
 
