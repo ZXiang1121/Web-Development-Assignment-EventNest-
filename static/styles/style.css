@@ -131,6 +131,10 @@ ol, ul {
 
 /* ------------------------------------------------------------------------------------- */
 
+.form-outline input{
+    width:50%;
+}
+
 .contact form {
     margin-top: 0px;
     padding: 0px 30px;
@@ -198,7 +202,10 @@ ol, ul {
     border-radius: 4px;
     padding: 10px;
 }
-.contact input#submit {
+
+
+.contact button {
+    width:100%;
     color: white;
     background: linear-gradient(0.25turn,#2a78ca, #71a1d4);
     float: right;
@@ -208,4 +215,117 @@ ol, ul {
     /* margin-right: 10px; */
     box-shadow: 0px 0px 4px 0px #00000087;
     margin-top: 15px;
+} 
+
+
+
+/* .contact input#submit {
+    color: white;
+    background: linear-gradient(0.25turn,#2a78ca, #71a1d4);
+    float: right;
+    border: none;
+    border-radius: 4px;
+    padding: 15px 23px;
+    /* margin-right: 10px; 
+    box-shadow: 0px 0px 4px 0px #00000087;
+    margin-top: 15px;
+} */
+
+.app-wrapper {
+    background-color: #F4F4F4;
+}
+.container-xl{
+    background-color: #f0f0f0;
+}
+
+
+.cust {
+    padding: 30px;
+    
+
+
+}
+.card.box1 {
+    width: 350px;
+    height: 400px;
+    background-color: #f4f4f4;
+    color: #f6f6f6;
+    border-radius: 0;
+    margin: 0 auto;
+}
+
+.card.box2 {
+    width: 450px;
+    height: 580px;
+    background-color: #ffffff;
+    border-radius: 0;
+    margin: 0 auto;
+}
+
+.text {
+    font-size: 13px
+}
+
+
+
+.form-control {
+    border: none;
+    border-bottom: 1px solid #ddd;
+    box-shadow: none;
+    height: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 15px 0px;
+    letter-spacing: 1.5px;
+    border-radius: 0
+}
+
+.inputWithIcon {
+    position: relative
+}
+
+#img1 {
+    width: 50px;
+    height: 20px;
+    object-fit: cover
+}
+
+.inputWithIcon span {
+    position: absolute;
+    right: 0px;
+    bottom: 9px;
+    color: grey;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 14px
+}
+
+
+
+
+
+form {
+    font-size: 14px
+}
+
+
+
+@media (max-width:750px) {
+    .container {
+        padding: 10px;
+        width: 100%
+    }
+
+    .text-green {
+        font-size: 14px
+    }
+
+    .card.box1,
+    .card.box2 {
+        width: 100%
+    }
+
+    .nav.nav-tabs .nav-item .nav-link {
+        font-size: 12px
+    }
 }

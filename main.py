@@ -1,7 +1,9 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
-from forms import signupForm, loginForm, forgetpw, changPw, createEvent, ContactForm
-import shelve, account
+from forms import createEvent, signupForm, loginForm, forgetpw, changPw, ContactForm
+import shelve, account, Seat
 from werkzeug.utils import secure_filename
+from flask_login import LoginManager
+
 import os
 from werkzeug.datastructures import CombinedMultiDict
 
@@ -10,6 +12,7 @@ from werkzeug.datastructures import CombinedMultiDict
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'I have a dream'
 app.config['UPLOAD_FOLDER'] = 'static/images'
+
 
 @app.route('/')
 def home():
@@ -25,18 +28,47 @@ def cart():
     return render_template('cart.html')
 
 # make account
+login_manager = LoginManager()
+login_manager.init_app(app)
+@login_manager.user_loader
+
+def load_user(user_id):
+    return User.get(user_id)
+
+def get_id(val, my_dict):
+    for key, value in my_dict.items():
+         if val == value.get_email():
+             return key
+    return 'user'
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     login = loginForm(request.form)
+
     if request.method == 'POST':
-        return redirect(url_for('accountDetails'))
+        users_dict = {}
+        db = shelve.open('storage.db', 'r')
+        users_dict = db['Users']
+
+        key = get_id(login.email.data, users_dict)
+
+        if key == 'user':
+            print(key, login.email.data, users_dict)
+            flash('Invalid login credentials', 'danger')
+
+        else:
+            user = users_dict.get(key) # get( user_id )
+            db.close()
+            session['logged_in'] = user.get_name()
+            return redirect(url_for('accountDetails'))
+
     return render_template('users/login.html', form=login)
 
 @app.route('/logout')
 def logout():
    # remove the username from the session if it is there
-   session.pop('username', None)
-   return redirect(url_for('index'))
+   session.pop('logged_in', None)
+   return redirect(url_for('home'))
 
 @app.route('/signup', methods=['GET', 'POST'])
 def create_user():
@@ -51,7 +83,7 @@ def create_user():
         except:
             print("Error in retrieving Users from storage.db.")
 
-        user = account.Account(signup.name.data, signup.email.data, signup.password.data, signup.birthdate.data,)
+        user = account.Account(signup.name.data, signup.email.data, signup.password.data, signup.birthdate.data)
         users_dict[user.get_user_id()] = user
         db['Users'] = users_dict
 
@@ -64,7 +96,7 @@ def create_user():
 
         session['user_created'] = user.get_name()
 
-        return redirect(url_for('accountDetails'))
+        return redirect(url_for('login'))
     return render_template('users/signup.html', form=signup)
 
 @app.route('/forgetpw', methods=['GET', 'POST'])
@@ -83,7 +115,7 @@ def accountDetails():
     users_dict = db['Users']
     db.close()
 
-    users_list = []
+    users_list = [] # all users information
     
     for key in users_dict:
         user = users_dict.get(key)
@@ -139,13 +171,60 @@ def dashboard():
     #     users_list.append(user)
 
     legend = 'Monthly Data'
+    labels = ["Jan", "Feb", "Mar", "Apr", "May"]
+    users_list=[]
+    dict = {'n1':{'ticket_name':"JustinB",'price':20,'date':'23/10/2020','quantity':1,'age':18,'sports':10},
+            'n2': {'ticket_name':"LV",'price':10,'date':'20/8/2020','quantity':3,'age':40,'sports':5},
+            'n3': {'ticket_name':"Rb",'price':12,'date':'20/8/2020','quantity':3,'age':25,'sports':1},
+            'n4': {'ticket_name':'ZX','price':16,'date':'20/8/2020','quantity':3,'age':33,'sports':4},
+            'n5': {'ticket_name':'Zoe','price':14,'date':'20/8/2020','quantity':3,'age':39,'sports':8}
+
+
+}
+
+
+
+    for key in dict:
+        user= dict.get(key)
+        users_list.append(user)
+
+
+    age2 = sum(d['price'] for d in users_list if d['age'] < 20)
+    age3 = sum(d['price'] for d in users_list if d['age'] > 20 and d['age'] < 30 )
+    age4 = sum(d['price'] for d in users_list if d['age'] > 30 and d['age'] <40) 
+
+    arc1 = sum(d['price'] for d in users_list)
+    forarc = ((250 + arc1)/ 1000) * 100
+    narc1 = "{:.0f}".format(((250 + arc1)/ 1000) * 100) + "%"
+    anarac1 = narc1
+
+    ages = [age2,age3,age4]      
+
+    new = [4]
+    values = [12, 9, 5, 9,8, 20]
+    BarVal = [4, 7, 2, 5, 6, 14]
+    return render_template('dashboard.html', values=values, labels=labels, legend=legend,BarVal=BarVal,dict=dict,new=new,users_list=users_list,count=len(users_list),ages=ages,anarac1=anarac1,forarc=forarc)
+
+@app.route('/custdash')
+def custdash():
+    # users_dict = {}
+    # db = shelve.open('storage.db','r')
+    # users_dict = db['Users']
+    # db.close()
+
+    # users_list = []
+    # for key in users_dict:
+    #     user = users_dict.get(key)
+    #     users_list.append(user)
+
+    legend = 'Monthly Data'
     labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
     users_list=[]
-    dict = {'n1': {'ticket_name':'JustinB','price':10,'date':'23/10/2020','quantity':1,'age':18},
-            'n2': {'ticket_name':'LR','price':10,'date':'20/8/2020','quantity':3,'age':40},
-            'n3': {'ticket_name':'LR','price':10,'date':'20/8/2020','quantity':3,'age':25},
-            'n4': {'ticket_name':'LR','price':10,'date':'20/8/2020','quantity':3,'age':33},
-            'n5': {'ticket_name':'LR','price':10,'date':'20/8/2020','quantity':3,'age':39}
+    dict = {'n1':{'ticket_name':1,'price':20,'date':'23/10/2020','quantity':1,'age':18,'sports':10},
+            'n2': {'ticket_name':2,'price':10,'date':'20/8/2020','quantity':3,'age':40,'sports':5},
+            'n3': {'ticket_name':3,'price':10,'date':'20/8/2020','quantity':3,'age':25,'sports':1}
+            # 'n4': {'ticket_name':'LR','price':10,'date':'20/8/2020','quantity':3,'age':33},
+            # 'n5': {'ticket_name':'LR','price':10,'date':'20/8/2020','quantity':3,'age':39}
 
 }
 
@@ -158,67 +237,86 @@ def dashboard():
     age3 = sum(d['price'] for d in users_list if d['age'] > 20 and d['age'] < 30 )
     age4 = sum(d['price'] for d in users_list if d['age'] > 30 and d['age'] <40) 
 
-    ages = [age2,age3,age4]
-
-
-
-            
+    ages = [age2,age3,age4]       
 
     new = [4]
-    values = [8, 3, 1, 4,5, 14]
+    values = [12, 9, 5, 9,8, 20]
     BarVal = [4, 7, 2, 5, 6, 14]
-    return render_template('dashboard.html', values=values, labels=labels, legend=legend,BarVal=BarVal,dict=dict,new=new,users_list=users_list,count=len(users_list),ages=ages)
+    return render_template('custDash.html', values=values, labels=labels, legend=legend,BarVal=BarVal,dict=dict,new=new,users_list=users_list,count=len(users_list),ages=ages)
     
+@app.route('/payment')
+def paymentcard():
+        return render_template('paymentcard.html')
+
 if __name__ == "__main__":
     app.run(debug=True)
 
 
-
-
 @app.route('/createEventForm', methods = ['GET', 'POST'])
 def create_event():
+    # event_form = createEvent(CombinedMultiDict((request.files, request.form)))
     event_form = createEvent(CombinedMultiDict((request.files, request.form)))
+    
     print(event_form)
     print("---")
 
     if request.method == 'POST' and event_form.validate():
-        imageFile = event_form.event_image.data # First grab the file
+        posterFile = event_form.event_poster.data # First grab the file
+        seatFile = event_form.seat_image.data
         print("---")
         print("file")
-        print(imageFile)
+        print(posterFile)
         print("---")
-        savePath = os.path.join(os.path.abspath(os.path.dirname(__file__)), app.config['UPLOAD_FOLDER'], secure_filename(imageFile.filename))
-        imageFile.save(savePath) # Save the file
+        print(seatFile)
+        print("---")
+        savePosterPath = os.path.join(os.path.abspath(os.path.dirname(__file__)), app.config['UPLOAD_FOLDER'], secure_filename(posterFile.filename))
+        posterFile.save(savePosterPath) # Save the file
+        print("---")
+        saveSeatPath = os.path.join(os.path.abspath(os.path.dirname(__file__)), app.config['UPLOAD_FOLDER'], secure_filename(seatFile.filename))
+        seatFile.save(saveSeatPath) # Save the file
 
         events_dict = {}
-        db = shelve.open('storage.db', flag='c' , writeback=True)
+        db = shelve.open('storage.db', flag='c', writeback=True)
         try:
             events_dict = db['Events']
         except:
             print('Error in retrieving Events from storage.db')
 
-        seat = []
 
-        seat_plan = {}
+        ## uuid, createdTime
 
         new_event = Event.Event(
                             event_form.event_name.data,
                             event_form.event_category.data,
-                            
                             event_form.event_location.data,
                             event_form.event_date.data,
                             event_form.event_time.data,
-                            event_form.event_image.data.filename,
+                            event_form.event_poster.data.filename,
+                            event_form.seat_image.data.filename,
                             event_form.event_desc.data,
                             )
+                            
+        seating_plan_list = []
+        for i in event_form.data['seating_plan']:
+            print(i)
+            seat = Seat.Seat(i['seat_type'],
+                             i['seat_available'],
+                             i['seat_price'])
+            seating_plan_list.append(seat)
+        
+        new_event.set_seating_plan(seating_plan_list)
+
+
 
         events_dict[new_event.get_event_id()] = new_event
         db['Events'] = events_dict
 
         db.close()
 
-        return redirect(url_for('admin_homepage'))
+        # return redirect(url_for('admin_homepage'))
+        return redirect(url_for('submit_result'))
     return render_template('createEventForm.html', form=event_form)
+
 
 
 @app.route('/homeAdmin')
@@ -226,12 +324,16 @@ def admin_homepage():
     events_dict = {}
     db = shelve.open('storage.db', 'r')
     events_dict = db['Events']
+
     db.close()
 
     events_list = []
     for key in events_dict:
         event = events_dict.get(key)
         events_list.append(event)
+    
+    print(events_list)
+
     
 
     return render_template('homeAdmin.html', count=len(events_list), events_list=events_list)
@@ -257,5 +359,28 @@ def get_contact():
 def faq():
    return render_template('faq.html')
 
+
+@app.route('/submitResult')
+def submit_result():
+    events_dict = {}
+    db = shelve.open('storage.db', 'r')
+    events_dict = db['Events']
+
+    db.close()
+
+    events_list = []
+    for key in events_dict:
+        event = events_dict.get(key)
+        events_list.append(event)
+
+    return render_template('submitResult.html', count=len(events_list), events_list=events_list)
+
+
+@app.route('/message')
+def message():
+   return render_template('contactusMessage.html')
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,port=8081)
+

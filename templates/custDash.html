@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title%}Dashboard{% endblock %}
+{% block title%}custDash{% endblock %}
 
 {% block content %}
 <body class="app">   	
@@ -8,8 +8,7 @@
 	    <div class="app-content pt-3 p-md-3">
 		    <div class="container-xl">
 			    
-			    <h1 class="app-page-title">Overview</h1>
-
+			    <h1 class="app-page-title mb-2">Overview</h1>
 				<div class="col-12 g-4 mb-4">
 					<div class="app-card app-card-chart h-100 shadow-sm">
 						<div class="app-card-header p-3">
@@ -30,48 +29,29 @@
 									</div><!--//card-header-actions-->
 								</div><!--//col-->
 							</div><!--//row-->
+								<h2>$ {{200 + users_list | sum(attribute='price') }}</h2>
 						</div><!--//app-card-header-->
 						<div class="app-card-body p-3 p-lg-4">
 
 							<div class="chart-container">
 								<canvas style="max-height:250px;" id="myChart"></canvas>
-<script>
+								<script>
 
 const data = {
       labels: [{% for item in labels %} "{{item}}",{% endfor %}], 
       datasets: [{
         label: '{{ legend }}',
-        data: [{% for item in users_list %}
-      		{% set item_2 = labels[loop.index-1] %}
-			{ x: "{{item_2}}", y:{{item.price}},sales:[{{item.quantity}},{{item.sports}}] },
-			{% endfor %}
-	  ],
+        data: [{% for item in values %} {{item}} ,{% endfor %}],
         backgroundColor: [
-          'rgba(255, 26, 104, 0.2)',
+          '	#FFF8DC',
         ],
         borderColor: [
-          'rgba(255, 26, 104, 1)',
+          '#00FFFF',
         ],
         borderWidth: 3,
 		pointRadius:3,
 		yAxisID:'{{ legend }}'
       },
-	  {
-        label: 'Total Users',
-        data:  [{% for item in users_list %} 
-		{% set item_2 = labels[loop.index-1] %}
-		{ x: "{{item_2}}", y:{{item.price}},sales:[{{item.quantity}},{{item.sports}}] },
-		{% endfor %}
-	],
-        backgroundColor: [
-		'rgb(0, 0, 255)',
-        ],
-        borderColor: [
-          'rgba(255, 26, 104, 1)',
-        ],
-		type:'bar',
-		yAxisID:'users'
-      }
 	]
     };
 
@@ -80,6 +60,11 @@ const data = {
       type: 'line',
       data,
 	  options: {
+		plugins:{
+		legend:{
+			display:false
+		}
+	},
        scales: {
 		'{{ legend }}':{
 		beginAtZero:true,
@@ -96,21 +81,6 @@ const data = {
 			display:false
 		}
 		},
-		users:{
-		beginAtZero:true,
-		type:'linear',
-		ticks:{
-			stepSize:10
-		},
-		title:{
-			display:true,
-			text:'Total Sales'
-		},
-		position:'right',
-		grid:{
-			display:false
-		}
-		},
        }
     }
 };
@@ -122,9 +92,8 @@ const data = {
       config
     );
 
-		newData = [{% for item in users_list %} {{item.price}} ,{% endfor %}]
-		gddata = [{% for item in users_list %} {{item.price}} ,{% endfor %}]
-		myChart.config.data.datasets[1].data[5] = newData[0] + {{ users_list | sum(attribute='price') }} ;
+		newData = [{% for item in new %} {{item}} ,{% endfor %}]
+		gddata = [{% for item in BarVal %} {{item}} ,{% endfor %}]
 		myChart.update()
 
     </script>
@@ -137,25 +106,15 @@ const data = {
 				    <div class="col-12 col-sm-6 col-xl-4 mb-4">
 					    <div class="app-card app-card-stat shadow-sm h-70">
 						    <div class="app-card-body p-3 p-lg-4">
-							    <h4 class="stats-type mb-1">Target</h4>
-									<div style="max-height:100px" id="myChartG"></div>
-									<script>
-// Element inside which you want to see the chart
-let element = document.querySelector('#myChartG')
+							    <h4 class="stats-type mb-1">Tickets Bought</h4>
+								<div class="chart-container">
+									<div class="stats-figure py-4">
+										<div class="stats-figure py-4">	
+                      <h2>{{200 + users_list | count }}</h2>
 
-// Properties of the gauge
-let gaugeOptions = {
-  hasNeedle: true,
-  needleColor: 'gray',
-  needleUpdateSpeed: 1000,
-  arcColors: ['rgb(44, 151, 222)','lightgray','rgb(255,0,0)'],
-  arcDelimiters: [{{forarc}} ],
-  centralLabel: '{{anarac1}}',
-}
-
-// Drawing and updating the chart
-GaugeChart.gaugeChart(element, 230, gaugeOptions).updateNeedle({{forarc}})
-</script>	
+				</div>
+									</div>
+								</div>
 						    </div><!--//app-card-body-->
 						    <a class="app-card-link-mask" href="#"></a>
 					    </div><!--//app-card-->
@@ -235,44 +194,50 @@ GaugeChart.gaugeChart(element, 230, gaugeOptions).updateNeedle({{forarc}})
 					    </div><!--//app-card-->
 				    </div><!--//col-->
 			    </div><!--//row-->
-					<div class="chart-container">
-						<canvas style="max-height:200px" id="myChart4"></canvas>
-						<script>
-const ctx4 = document.getElementById('myChart4').getContext('2d');
-const myChart4 = new Chart(ctx4, {
-    type: 'bar',
-    data: {
-        labels:  [{% for item in users_list %} "{{item.ticket_name}}",{% endfor %}],
-        datasets: [{
-            label: '# of Votes',
-            data: [{% for item in users_list %} 
-			{ x:"{{item.ticket_name}}", y:{{item.price}},sales:[{{item.quantity}},{{item.sports}}] },
-			{% endfor %}
-		],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)'
- 
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    }
-});
-</script>
-					</div>			    
+			        
+			        <div class="col-12">
+				        <div class="app-card app-card-stats-table h-50 shadow-sm">
+					        <div class="app-card-header p-3">
+						        <div class="row justify-content-between align-items-center">
+							        <div class="col-auto">
+						                <h4 class="app-card-title">Stats List</h4>
+							        </div><!--//col-->
+							        <div class="col-auto">
+								        <div class="card-header-action">
+									        <a href="#">View report</a>
+								        </div><!--//card-header-actions-->
+							        </div><!--//col-->
+						        </div><!--//row-->
+					        </div><!--//app-card-header-->
+					        <div class="app-card-body p-3 p-lg-4">
+						        <div class="table-responsive">
+							        <table class="table table-borderless mb-0">
+										<thead>
+											<tr>
+												<th class="meta">Ticket Name</th>
+												<th class="meta stat-cell">Quantity</th>
+												<th class="meta stat-cell">Date</th>
+												<th class="meta stat-cell">Price</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% for i in users_list %}
+												
+											
+											<tr>
+												<td><a href="#">{{i.ticket_name}}</a></td>
+												<td class="stat-cell">{{i.quantity}}</td>
+												<td class="stat-cell">{{i.date}}</td>
+												<td class="stat-cell">{{i.quantity * i.price}}</td>
+											</tr>
+											{% endfor %}
+
+										</tbody>
+									</table>
+						        </div><!--//table-responsive-->
+					        </div><!--//app-card-body-->
+				        </div><!--//app-card-->
+			        </div><!--//col-->		    
 		    </div><!--//container-fluid-->
 	    </div><!--//app-content-->
 	</body>

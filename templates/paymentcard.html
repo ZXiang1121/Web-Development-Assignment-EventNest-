@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title%}Payment{% endblock %}
+
+{% block content %}
+<div class="cust">
+             <div class="d flex-column"> 
+                 <div class="card box2 shadow-sm"> <div class="d-flex align-items-center justify-content-between p-md-5 p-4"> <span class="h5 fw-bold m-0">Payment methods</span></div> <div class="d-flex flex-column px-md-5 px-4 mb-4"> <span>Name</span> <div class="inputWithIcon"> <input class="form-control text-uppercase" type="text" value="valdimir berezovkiy"> <span class="far fa-user"></span> </div> </div> <form action=""> <div class="row"> <div class="col-12"> <div class="d-flex flex-column px-md-5 px-4 mb-4"> <span>Credit Card</span> <div class="inputWithIcon"> <input class="form-control" type="text" value="5136 1845 5468 3894"> <span class=""> <img id="img1" src="https://www.freepnglogos.com/uploads/mastercard-png/mastercard-logo-logok-15.png" alt=""></span> </div> </div> </div> <div class="col-md-6"> <div class="d-flex flex-column ps-md-5 px-md-0 px-4 mb-4"> <span>Expiration<span class="ps-1">Date</span></span> <div class="inputWithIcon"> <input type="text" class="form-control" value="05/20"> <span class="fas fa-calendar-alt"></span> </div> </div> </div> <div class="col-md-6"> <div class="d-flex flex-column pe-md-5 px-md-0 px-4 mb-4"> <span>CVV</span> <div class="inputWithIcon"> <input type="password" class="form-control" value="123"> <span class="fas fa-lock"></span> </div> </div> </div> <div class="col-12"> </div> <div class="col-12 px-md-5 px-4 mt-3"> <div class="btn btn-primary w-100">Pay $599.00</div> </div> </div> </form> </div> </div></div>
+{% endblock %}
