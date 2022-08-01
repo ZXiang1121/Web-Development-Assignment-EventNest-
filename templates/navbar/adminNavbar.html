@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light nav-shadow">
     <div class="container">
-        <a class="navbar-brand" href="/"><img src="{{url_for('static', filename='images/logo/eventnest logo png.png')}}" height="50px" alt=""></a>
+        <a class="navbar-brand" href="/homeAdmin"><img src="{{url_for('static', filename='images/logo/eventnest logo png.png')}}" height="50px" alt=""></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -25,9 +25,15 @@
             <button type="button" class="btn btn-link  me-2" >
               <a href="/cart"><i class="bi bi-bag"></a></i>
             </button>
-            <a href="/login"><button type="button" class="btn btn-primary me-3">
-              Login
+            {% if 'admin_in' in session %}
+            <a href="/accountDetails"><button type="button" class="btn btn-link me-3">
+              <i class="fa-regular fa-user"></i>
             </button></a>
+            {% else %}
+            <a href="/login"><button type="button" class="btn btn-primary me-3">
+              Log In
+            </button></a>
+            {% endif %}
           </form>
 
         </div>

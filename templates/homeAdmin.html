@@ -59,164 +59,74 @@
     <div class="table-content py-5 event " id="nav-tabContent">
 
       <div class="row row-cols-1 row-cols-md-3 g-4 tab-pane active" id="nav-all" aria-labelledby="nav-all-tab">
-
         {% for event in events_list %}
+        
 
-        {% if event.get_event_category() == "C" %}
-          <div class="col cat-all cat-concert">
-            <div class="card card-size-image">
-                  <img class="img-fluid fit-image" src="{{url_for('static', filename='images/' + event.get_event_poster() )}}" class="card-img-top" alt="...">
-              
-              <div class="card-body">
-
-                  <h5 class="card-title">{{ event.get_event_name() }}</h5>
-
-
-                <div class="row py-3">
-                  <span class="col">
-                    <i class="bi bi-geo-alt"> <span class="text-muted">{{event.get_event_location()}}</span></i>
-                  </span>
-                  <span class="col">
-                    <i class="bi bi-calendar4-event"> <span class="text-muted">{{event.get_event_date()}}</span></i>
-                  </span>
-                </div>
-                <div class="row">
-                  <!-- <p class="card-text py-2 col">From <strong>$</strong><span><strong>50</strong></span></p> -->
-                  <span class="col d-flex justify-content-evenly mb-3">
-                    <a href="#" class="text-dark"><i class="bi bi-pencil-square">Edit</i></a>
-                    <a href="#" class="text-dark"><i class="bi bi-trash">Delete</i></a>
-                  </span>
-                </div>
-                <a href="/ticketDetails"><button type="button" class="btn btn-primary btn-dark btn-outline-light w-100">View</button></a>
-              </div>
-            </div>
-          </div>
-
-        {% elif event.get_event_category() == "S" %}
-          <div class="col cat-all cat-sport">
-            <div class="card">
-              <a href="/ticketdetails">
+          {% if event.get_event_category() == "C" %}
+            <div class="col cat-all cat-concert">
+              <div class="card card-size-image">
+                    <img class="img-fluid fit-image" src="{{url_for('static', filename='images/' + event.get_event_poster() )}}" class="card-img-top" alt="...">
                 
-                <img class="img-fluid fit-image" src="{{url_for('static', filename='images/' + event.get_event_poster() )}}" class="card-img-top" alt="...">
-    
-              </a>
-              <div class="card-body">
-                <h5 class="card-title">{{ event.get_event_name() }}</h5>
-                <div class="row py-3">
-                  <span class="col">
-                    <i class="bi bi-geo-alt"> <span class="text-muted">{{event.get_event_location()}}</span></i>
-                  </span>
-                  <span class="col">
-                    <i class="bi bi-calendar4-event"> <span class="text-muted">{{event.get_event_date()}}</span></i>
-                  </span>
+                <div class="card-body">
+
+                    <h5 class="card-title">{{ event.get_event_name() }}</h5>
+
+
+                  <div class="row py-3">
+                    <span class="col">
+                      <i class="bi bi-geo-alt"> <span class="text-muted">{{event.get_event_location()}}</span></i>
+                    </span>
+                    <span class="col">
+                      <i class="bi bi-calendar4-event"> <span class="text-muted">{{event.get_event_date()}}</span></i>
+                    </span>
+                  </div>
+                  <div class="row my-auto px-3 py-2 mb-3">
+
+                      <a href="/updateEventForm/{{ event.get_event_id() }}" class="col text-dark"><input type="submit" value="Edit" class="btn-sm btn-dark w-100"></a>
+                      <form class="col" action="{{ url_for('delete_event', id=event.get_event_id()) }}" method="POST">
+                        <input type="submit" value="Delete" class="btn-sm btn-dark w-100" onclick="return confirm('Are you sure you want to delete {{ event.get_event_name()}}?');">
+                      </form>
+        
+                  </div>
+                  <a href="/ticketDetails/{{ event.get_event_id() }}"><button type="button" class="btn btn-primary btn-dark btn-outline-light w-100">View</button></a>
                 </div>
-                <div class="row">
-                  <!-- <p class="card-text py-2 col">From <strong>$</strong><span><strong>50</strong></span></p> -->
-                  <span class="col d-flex justify-content-evenly mb-3">
-                    <a href="#" class="text-dark"><i class="bi bi-pencil-square">Edit</i></a>
-                    <a href="#" class="text-dark"><i class="bi bi-trash">Delete</i></a>
-                  </span>
-                </div>
-                <a href="/ticketdetails"></a><button type="button" class="btn btn-primary btn-dark btn-outline-light w-100">View</button></a>
               </div>
             </div>
-          </div>
-        {% endif %}
 
-      {% endfor %}
-
-        <div class="col cat-all cat-concert">
-            <div class="card card-size-image">
-                  <img class="img-fluid fit-image" src="{{(url_for('static', filename='images/nctconcert.jpg'))}}" class="card-img-top" alt="...">
-              
-              <div class="card-body">
-  
-                  <h5 class="card-title">NCT Concert</h5>
-
-
-                <div class="row py-3">
-                  <span class="col">
-                    <i class="bi bi-geo-alt"> <span class="text-muted">esplanade</span></i>
-                  </span>
-                  <span class="col">
-                    <i class="bi bi-calendar4-event"> <span class="text-muted">4 september</span></i>
-                  </span>
-                </div>
-                <div class="row">
-                  <p class="card-text py-2 col">From <strong>$</strong><span><strong>50</strong></span></p>
-                  <span class="col d-flex justify-content-lg-between">
-                    <a href="#" class="text-dark"><i class="bi bi-pencil-square">Edit</i></a>
-                    <a href="#" class="text-dark"><i class="bi bi-trash">Delete</i></a>
-                  </span>
-                </div>
-                <a href="/ticketDetails"><button type="button" class="btn btn-primary btn-dark btn-outline-light w-100">View</button></a>
-              </div>
-          </div>
-        </div>
-
-        <div class="col cat-all cat-concert">
-          <div class="card">
-            <a href="/ticketDetails">
-              
-              <img class="img-fluid fit-image" src="{{(url_for('static', filename='images/xuezhiqianconcertposter.jpg'))}}" class="card-img-top" alt="...">
-
-            </a>
-            <div class="card-body">
-              <h5 class="card-title">Joker Xue Concert</h5>
-              <div class="row py-3">
-                <span class="col">
-                  <i class="bi bi-geo-alt"> <span class="text-muted">esplanade</span></i>
-                </span>
-                <span class="col">
-                  <i class="bi bi-calendar4-event"> <span class="text-muted">4 september</span></i>
-                </span>
-              </div>
-              <div class="row">
-                <p class="card-text py-2 col">From <strong>$</strong><span><strong>50</strong></span></p>
-                <span class="col d-flex justify-content-lg-between">
-                  <a href="#" class="text-dark"><i class="bi bi-pencil-square">Edit</i></a>
-                  <a href="#" class="text-dark"><i class="bi bi-trash">Delete</i></a>
-                </span>
-              </div>
-              <a href="/ticketdetails"></a><button type="button" class="btn btn-primary btn-dark btn-outline-light w-100">View</button></a>
-            </div>
-        </div>
-      </div>
-
-      <div class="col cat-all cat-sport">
-        <div class="card">
-          <a href="/ticketdetails">
-            
-            <img class="img-fluid fit-image" src="{{(url_for('static', filename='images/sport bwf badminton.png'))}}" class="card-img-top" alt="...">
-
-          </a>
-          <div class="card-body">
-            <h5 class="card-title">BWF Final</h5>
-            <div class="row py-3">
-              <span class="col">
-                <i class="bi bi-geo-alt"> <span class="text-muted">esplanade</span></i>
-              </span>
-              <span class="col">
-                <i class="bi bi-calendar4-event"> <span class="text-muted">4 september</span></i>
-              </span>
-            </div>
-            <div class="row">
-              <p class="card-text py-2 col">From <strong>$</strong><span><strong>50</strong></span></p>
-              <span class="col d-flex justify-content-lg-between">
-                <a href="#" class="text-dark"><i class="bi bi-pencil-square">Edit</i></a>
-                <a href="#" class="text-dark"><i class="bi bi-trash">Delete</i></a>
-              </span>
-            </div>
-            <a href="/ticketdetails"></a><button type="button" class="btn btn-primary btn-dark btn-outline-light w-100">View</button></a>
-          </div>
-      </div>
-    </div>
+          {% elif event.get_event_category() == "S" %}
+            <div class="col cat-all cat-sport">
+              <div class="card">
+                <a href="/ticketdetails">
+                  
+                  <img class="img-fluid fit-image" src="{{url_for('static', filename='images/' + event.get_event_poster() )}}" class="card-img-top" alt="...">
       
+                </a>
+                <div class="card-body">
+                  <h5 class="card-title">{{ event.get_event_name() }}</h5>
+                  <div class="row py-3">
+                    <span class="col">
+                      <i class="bi bi-geo-alt"> <span class="text-muted">{{event.get_event_location()}}</span></i>
+                    </span>
+                    <span class="col">
+                      <i class="bi bi-calendar4-event"> <span class="text-muted">{{event.get_event_date()}}</span></i>
+                    </span>
+                  </div>
+                  <div class="row my-auto px-3 py-2 mb-3">
 
+                    <a href="/updateEventForm/{{ event.get_event_id() }}" class="col text-dark"><input type="submit" value="Edit" class="btn-sm btn-dark w-100"></a>
+                    <form class="col" action="{{ url_for('delete_event', id=event.get_event_id()) }}" method="POST"><input type="submit" value="Delete" class="btn-sm btn-dark w-100"></form>
+      
+                </div>
+                  <a href="/ticketDetails/{{ event.get_event_id() }}"><button type="button" class="btn btn-primary btn-dark btn-outline-light w-100">View</button></a>
+                </div>
+              </div>
+            </div>
+         {% endif %}
+
+        {% endfor %}
       </div>  
-      </div>
-
     </div>
+  </div>
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>

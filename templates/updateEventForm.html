@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block title %}Create Event{% endblock %}
+
+{% block navbar %}
+    {% include 'navbar/adminNavbar.html' %}
+{% endblock%}
+
+{% block content %}
+
+    {% from "includes/_formHelper.html" import render_field %}
+    <div class="p-5 bg-light">
+        <div class="container-sm col-lg-6 ml-auto">
+            <h1>Update Event</h1>
+
+            <form method="POST" action="" enctype="multipart/form-data">
+
+                <div class="form-group">
+                    {{render_field(form.event_name, class="form-control")}}
+                </div>
+
+                <div class="form-group">
+                    {{render_field(form.event_category, class="form-control")}}
+                </div>
+
+
+                <div class="input_fields_wrap border p-5 my-4 rounded shadow-sm">
+
+
+                    {%for i in form['seating_plan'] %}
+                    <div id="add-seating-plan">
+                        <div class="" style="border:1px solid black;" id="seats">
+                         
+                            <div class="form-group">{{render_field(i.form.seat_type)}}</div>
+  
+                            <div class="form-group">{{render_field(i.form.seat_available)}}</div>
+     
+                            <div class="form-group">{{render_field(i.form.seat_price)}}</div>
+
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <button id="add-event-field" type="button">Add new movie</button>
+                               
+            
+                </div>
+
+                <div class="form-group">
+                    {{render_field(form.event_location, class="form-control")}}
+                </div>
+
+                <div class="form-group">
+                    {{render_field(form.event_date, class="form-control")}}
+                </div>
+
+                <div class="form-group">
+                    {{render_field(form.event_time, class="form-control")}}
+                </div>
+
+                <div class="form-group">
+                    {{render_field(form.event_poster, class="form-control-file")}}
+                </div>
+
+                <div class="form-group">
+                    {{render_field(form.seat_image, class="form-control-file")}}
+                </div>
+
+                <div class="form-group">
+                    {{render_field(form.event_desc, class="form-control")}}
+                </div>
+
+                <input type="submit" value="Submit" class="btn btn-primary"/>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+     window.onload = function() {
+        let addMovieFieldBtn = document.getElementById('add-event-field');
+        addMovieFieldBtn.addEventListener('click', function(e){
+            e.preventDefault();
+            let allMoviesFieldWrapper = document.getElementById('add-seating-plan');
+            let allMoviesField = allMoviesFieldWrapper.getElementsByTagName('input');
+            if(allMoviesField.length > (4*5)) {
+                alert('You can  have only five seat type');
+                return;
+            }
+
+            let seatTypeIds = []
+            for(let i = 0; i < allMoviesField.length; i++) {
+                seatTypeIds.push(parseInt(allMoviesField[i].name.split('-')[1]));
+            }
+
+            let seatAvailableIds = []
+            for(let i = 0; i < allMoviesField.length; i++) {
+                seatAvailableIds.push(parseInt(allMoviesField[i].name.split('-')[1]));
+            }
+
+            let seatPriceIds = []
+            for(let i = 0; i < allMoviesField.length; i++) {
+                seatPriceIds.push(parseInt(allMoviesField[i].name.split('-')[1]));
+            }
+
+
+            let newSeatType = `seating_plan-${Math.max(...seatTypeIds) + 1}-seat_type`;
+
+            let newSeatAvailable = `seating_plan-${Math.max(...seatAvailableIds) + 1}-seat_available`;
+
+            let newSeatPrice= `seating_plan-${Math.max(...seatPriceIds) + 1}-seat_price`;
+
+            allMoviesFieldWrapper.insertAdjacentHTML('beforeend',`
+            <div class="" style="border:1px solid black;" id="seats">
+                 <div class="form-group"><label for="${newSeatType}">Seat Type</label> <input id="${newSeatType}" name="${newSeatType}" type="text" value=""></div>
+                 <div class="form-group"><label for="${newSeatAvailable}">Seat Available</label> <input id="${newSeatAvailable}" name="${newSeatAvailable}" type="text" value=""></div>
+                 <div class="form-group"><label for="${newSeatPrice}">Seat Price</label> <input id="${newSeatPrice}" name="${newSeatPrice}" type="text" value=""></div>
+            </div>
+            `);
+        });
+    }
+
+</script>
+
+{% endblock %}

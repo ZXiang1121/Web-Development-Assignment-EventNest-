@@ -5,12 +5,20 @@
     <div class="container mt-5">
         <header class="border-bottom mb-5">
             <h3>My Shopping Bag</h3>
+            {% if count == 0 %}
+            <p>Shopping art is empty</p>
+            {% elif count == 1 %}
+            <p>There is 1 order.</p>
+            {% else %}
+            <p>There are {{ count }} orders.</p>
+            {% endif %}
         </header>
-        <div class="pb-5">
-            <div class="container">
+
+        {%for order in orders%}
+        order_id: {{order.get_order_id()}} ---> event_id:{{order.get_event_id()}} <br>
+        {% endfor %}
               <div class="row">
                 <div class="col-lg-12 p-5 bg-white rounded shadow mb-5">
-        
                   <!-- Shopping cart table -->
                   <div class="table-responsive">
                     <table class="table">
@@ -26,67 +34,41 @@
                             <div class="py-2 text-uppercase">Quantity</div>
                           </th>
                           <th scope="col" class="border-0 bg-light">
+                            <div class="py-2 text-uppercase">Subtotal</div>
+                          </th>
+                          <th scope="col" class="border-0 bg-light">
                             <div class="py-2 text-uppercase">Edit</div>
                           </th>
                           <th scope="col" class="border-0 bg-light">
-                            <div class="py-2 text-uppercase">Remove</div>
+                            <div class="py-2 text-uppercase">DELETE</div>
                           </th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <th scope="row" class="border-0">
-                            <div class="p-2">
-                              <img src="{{(url_for('static', filename='images/jaychouconcertposter.jpg'))}}" alt="" width="200" class="img-fluid rounded shadow-sm">
-                              <div class="ml-3 d-inline-block align-middle">
-                                <h5 class="mb-0"> 
-                                  <a href="#" class="text-dark d-inline-block align-middle">Jay Chou Concert</a>
-                                </h5>
-                                <span class="text-muted font-weight-normal font-italic d-block">10 January 2022</span>
-                                <span class="text-muted font-weight-normal font-italic d-block">Premium</span>
-                              </div>
-                            </div>
-                          </th>
-                          <td class="border-0 align-middle"><strong>$79.00</strong></td>
-                          <td class="border-0 align-middle"><strong >3</strong></td>
-                          <td class="border-0 align-middle"><a href="#" class="text-dark"><i class="bi bi-pencil-square"></i></a></td>
-                          <td class="border-0 align-middle"><a href="#" class="text-dark"><i class="bi bi-trash"></i></a></td>
-                        </tr>
+                      {% for order in orders %}
                         <tr>
                           <th scope="row">
                             <div class="p-2">
-                              <img src="{{(url_for('static', filename='images/nctconcert.jpg'))}}" alt="" width="200" class="img-fluid rounded shadow-sm">
+                              <img src="{{url_for('static', filename='images/' + order.get_order_image() )}}" alt="" width="200" class="img-fluid rounded shadow-sm">
                               <div class="ml-3 d-inline-block align-middle">
-                                <h5 class="mb-0"> 
-                                  <a href="#" class="text-dark d-inline-block align-middle">Jay Chou Concert</a>
-                                </h5>
-                                <span class="text-muted font-weight-normal font-italic d-block">10 January 2022</span>
-                                <span class="text-muted font-weight-normal font-italic d-block">Premium</span>
+                                <h6 class="mb-0"> 
+                                  <a href="/updateTicketDetails/{{order.get_order_id()}}" class="text-dark d-inline-block align-middle">{{order.get_order_name()}}</a>
+                                </h6>
+                                <span class="text-muted font-weight-normal font-italic d-block">{{order.get_event_date()}}</span>
+                                <span class="text-muted font-weight-normal font-italic d-block">{{order.get_order_seat_type()}}</span>
                               </div>
                             </div>
-                          </th>
-                          <td class="align-middle"><strong>$79.00</strong></td>
-                          <td class="align-middle"><strong>3</strong></td>
-                          <td class="border-0 align-middle"><a href="#" class="text-dark"><i class="bi bi-pencil-square"></i></a></td>
-                          <td class="border-0 align-middle"><a href="#" class="text-dark"><i class="bi bi-trash"></i></a></td>
+                            <td class="align-middle"><strong>${{order.get_order_seat_price()}}</strong></td>
+                            <td class="align-middle"><strong>{{order.get_order_quantity()}}</strong></td>
+                            <td class="align-middle"><strong>${{order.order_cost(order.get_order_seat_price(), order.get_order_quantity())}}</strong></td>
+                            <td class="align-middle"><a href="/updateTicketDetails/{{order.get_order_id()}}" class="text-dark"><i class="bi bi-pencil-square"></i></a></td>
+                            <td class="align-middle"><form action="{{url_for('delete_order', id=order.get_order_id())}}" method="POST"><input type="submit" class="fa" style="border: none; background: white;" value="&#xf014;"></form></td>
+
                         </tr>
-                        <tr>
-                          <th scope="row">
-                            <div class="p-2">
-                              <img src="{{(url_for('static', filename='images/xuezhiqianconcertposter.jpg'))}}" alt="" width="200" class="img-fluid rounded shadow-sm">
-                              <div class="ml-3 d-inline-block align-middle">
-                                <h5 class="mb-0"> 
-                                  <a href="#" class="text-dark d-inline-block align-middle">Jay Chou Concert</a>
-                                </h5>
-                                <span class="text-muted font-weight-normal font-italic d-block">10 January 2022</span>
-                                <span class="text-muted font-weight-normal font-italic d-block">Premium</span>
-                              </div>
-                            </div>
-                            <td class="align-middle"><strong>$79.00</strong></td>
-                            <td class="align-middle"><strong>3</strong></td>
-                            <td class="border-0 align-middle"><a href="#" class="text-dark"><i class="bi bi-pencil-square"></i></a></td>
-                            <td class="border-0 align-middle"><a href="#" class="text-dark"><i class="bi bi-trash"></i></a></td>
-                        </tr>
+                      {% endfor%}
+
+
+
                       </tbody>
                     </table>
                   </div>
@@ -102,7 +84,7 @@
                     <div class="input-group mb-4 border rounded-pill p-2">
                       <input type="text" placeholder="Apply coupon" aria-describedby="button-addon3" class="form-control border-0">
                       <div class="input-group-append border-0">
-                        <button id="button-addon3" type="button" class="btn btn-dark px-4 rounded-pill"><i class="fa fa-gift mr-2"></i>Apply coupon</button>
+                        <button id="button-addon3" type="button" class="btn btn-dark px-4 rounded-pill"><i class="fa fa-gift mr-2"></i> Apply coupon</button>
                       </div>
                     </div>
                   </div>
@@ -117,21 +99,28 @@
                   <div class="p-4">
                     <p class="font-italic mb-4">Ticket will be send through email after payment. Please check your mailbox.</p>
                     <ul class="list-unstyled mb-4">
-                      <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Order Subtotal </strong><strong>$390.00</strong></li>
+                      <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Discount</strong><strong>$0.00</strong></li>
                       <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Tax</strong><strong>$0.00</strong></li>
                       <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total</strong>
-                        <h5 class="font-weight-bold">$400.00</h5>
+                      
+                        <h5 class="font-weight-bold">${{payable}}</h5>
                       </li>
                     </ul>
+
                     <a href="#" class="btn btn-dark rounded-pill py-2 px-5 btn-block">Checkout</a>
                   </div>
                 </div>
               </div>
+
         
             </div>
           </div>
-
-
+            {% print(orders) %}<br>
+            {%for order in orders%}
+              {% print(order) %} ----> {%print(order.get_event_id())%}<br>
+              {%print(order.get_order_category())%}
+            {%endfor%}
+            
 
 
     </div>

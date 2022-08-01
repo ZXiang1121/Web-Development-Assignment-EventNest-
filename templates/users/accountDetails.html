@@ -61,15 +61,15 @@
                       
                       <tr>
                         <td scope="row">Name</td>
-                        <td>{{ users_list[0].get_name() }}</td>
+                        <td>{{ session['username'] }}</td>
                       </tr>
                       <tr>
                         <td scope="row">Email</td>
-                        <td>{{ users_list[0].get_email() }}</td>
+                        <td>{{ session['user_email'] }}</td>
                       </tr>
                       <tr>
                         <td scope="row">Birthday</td>
-                        <td>{{ users_list[0].get_birthdate() }}</td>
+                        <td>{{ session['user_birthdate'] }}</td>
                       </tr>
                       
                     </tbody>
@@ -78,50 +78,18 @@
 
                 <div class="row justify-content-center pt-3">
                     <div class="col">
-                        <a href="/EditAcc/{{users_list[0].get_user_id()}}"><button type="button" class="btn btn-primary btn-md form-control btn-block">Edit details</button></a>
+                        <a href="/EditAcc/{{ session['user_id'] }}"><button type="button" class="btn btn-primary btn-md form-control btn-block">Edit details</button></a>
                     </div>
                     <div class="col">
-                        <a href="/ChangePass"><button type="button" class="btn btn-primary btn-md form-control btn-block">Change password</button></a>
+                        <a href="/ChangePass/{{ session['user_id'] }}"><button type="button" class="btn btn-primary btn-md form-control btn-block">Change password</button></a>
                     </div>
                 </div>
 
-                <!-- <div class="row justify-content-center mt-3 mb-3"> -->
-                  
-                
+                <!-- <div class="row justify-content-center mt-3" > -->
+                <div class="d-grid gap-2 col-6 mx-auto mt-3">
+                  <a class="btn btn-outline-primary  display-inline-block" href="/logout" role="button" onclick="return confirm('Are you sure you want to log out?');">Log Out</a>
+                </div>
 
-                    <!-- Button to Open the Modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-      Open modal
-    </button>
-
-    <!-- The Modal -->
-    <div class="modal" id="myModal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-
-          <!-- Modal Header -->
-          <div class="modal-header">
-            <h4 class="modal-title">Modal Heading</h4>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-          </div>
-
-          <!-- Modal body -->
-          <div class="modal-body">
-            Modal body..
-          </div>
-
-          <!-- Modal footer -->
-          <div class="modal-footer">
-            <a class="btn btn-outline-primary btn-md" href="/logout" role="button">Log Out</a>
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-
-                
           </div>
           
 
