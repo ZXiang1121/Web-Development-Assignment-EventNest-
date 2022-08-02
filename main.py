@@ -1,6 +1,11 @@
 import os
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 
+# session timeout
+import flask
+import flask_login
+import datetime
+
 import User
 from forms import createEvent, signupForm, loginForm, forgetpw, changPw, ContactForm, addOrder
 import shelve, Event, account, Seat, Order, Payment
@@ -19,6 +24,12 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'I have a dream'
 app.config['UPLOAD_FOLDER'] = 'static/images'
 
+@app.before_request
+def before_request():
+    flask.session.permanent = True
+    app.permanent_session_lifetime = datetime.timedelta(minutes=30)
+    flask.session.modified = True
+    flask.g.user = flask_login.current_user
 
 @app.route('/')
 def home():
