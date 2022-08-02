@@ -388,7 +388,7 @@ def newpass(id):
 @app.route('/logout')
 def logout():
    # remove the username from the session if it is there
-   session.pop('logged_in', None)
+   session.pop('user_id', None)
    return redirect(url_for('home'))
 
 
