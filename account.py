@@ -13,6 +13,8 @@ class Account:
         self.__email = email
         self.__password = password
         self.__birthdate = birthdate
+        self.__order_item = None
+        self.__payment = None
 
     def get_user_id(self):
         return self.__user_id
@@ -45,3 +47,9 @@ class Account:
         return self.cart_item
     def set_cart_item(self, cart_item):
         self.cart_item = cart_item
+
+    def get_payment(self):
+        return self.payment
+    
+    def set_payment(self, payment):
+        self.payment = payment
