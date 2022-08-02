@@ -27,7 +27,7 @@ class forgetpw(Form):
 
 
 class createSeating(Form):
-    seat_type = StringField('Event Seat', [validators.Length(min=1, max=150), validators.DataRequired()])
+    seat_type = StringField('Seat Type', [validators.Length(min=1, max=150), validators.DataRequired()])
     seat_available = IntegerField('Seat Available', [validators.NumberRange(min=1, max=100000), validators.DataRequired()])
     seat_price = IntegerField('Seat Price', [validators.NumberRange(min=1, max=100000), validators.DataRequired()])
     

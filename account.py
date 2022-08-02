@@ -45,6 +45,7 @@ class Account:
 
     def get_cart_item(self):
         return self.cart_item
+        
     def set_cart_item(self, cart_item):
         self.cart_item = cart_item
 

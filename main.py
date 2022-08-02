@@ -113,11 +113,11 @@ def update_ticket_details(id):
             order = orders_dict.get(key)
             orders_list.append(order)
         
-        print(orders_list)
+        # print(orders_list)
 
         for page in orders_list:
             if page.get_order_id() == id:
-                print(page.get_order_id())
+                # print(page.get_order_id())
                 retrieve_order = page
 
         order = orders_dict.get(id)
@@ -191,6 +191,8 @@ def cart_page():
 
 
     return render_template('cart.html', count=len(orders_list), orders=orders_list, payable= total_cost)
+
+
 
 @app.route('/clearCart/<uuid(strict=False):id>/')
 def clear_cart(id):
@@ -291,7 +293,7 @@ def login():
         key2 = get_pw(login.password.data, users_dict)
 
         if key == 'None' or key != key2: 
-            print(key, login.email.data, users_dict) # test
+            # print(key, login.email.data, users_dict) # test
             flash('Invalid login credentials', 'danger')
 
         elif login.email.data == 'admin@gmail.com' and login.password.data == 'eventnest':
@@ -347,7 +349,7 @@ def create_user():
                 # Test codes
                 users_dict = db['Users']
                 user = users_dict[user.get_user_id()]
-                print(user.get_name(), "was stored in storage.db successfully with user_id ==", user.get_user_id())
+                # print(user.get_name(), "was stored in storage.db successfully with user_id ==", user.get_user_id())
 
                 db.close()
 
@@ -474,8 +476,8 @@ def create_event():
     # event_form = createEvent(CombinedMultiDict((request.files, request.form)))
     event_form = createEvent(CombinedMultiDict((request.files, request.form)))
     
-    print(event_form)
-    print("---")
+    # print(event_form)
+    # print("---")
 
     if request.method == 'POST' and event_form.validate():
         posterFile = event_form.event_poster.data # First grab the file
@@ -645,18 +647,30 @@ def faq():
 
 @app.route('/submitResult')
 def submit_result():
-    events_dict = {}
+    users_dict = {}
     db = shelve.open('storage.db', 'r')
-    events_dict = db['Events']
+    users_dict = db['Users']
 
     db.close()
 
-    events_list = []
-    for key in events_dict:
-        event = events_dict.get(key)
-        events_list.append(event)
+    users_list = []
+    for key in users_dict:
+        user = users_dict.get(key)
+        users_list.append(user)
 
-    return render_template('submitResult.html', count=len(events_list), events_list=events_list)
+    for user in users_list:
+        print(user.get_email())
+        for i in user.get_cart_item():
+            for n in i:
+                print(n.get_order_name())
+            # subtotal = i.order_cost(i.get_order_seat_price(), i.get_order_quantity())
+            
+ 
+
+    return render_template('submitResult.html', count=len(users_list), users_list=users_list)
+
+
+
 
 
 @app.route('/success')
