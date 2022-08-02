@@ -6,9 +6,11 @@ from forms import createEvent, signupForm, loginForm, forgetpw, changPw, Contact
 import shelve, Event, account, Seat, Order, Payment
 from werkzeug.utils import secure_filename
 from flask_login import LoginManager
+
 from werkzeug.datastructures import CombinedMultiDict
 import pandas as pd
-
+import smtplib
+from email.message import EmailMessage
 # admin name: admin
 # admin email: admin@gmail.com
 # admin pw: eventnest
@@ -255,8 +257,8 @@ def delete_order(id):
     return redirect(url_for('cart_page'))
 
 
-
-# make account
+# zowie
+# login
 login_manager = LoginManager()
 login_manager.init_app(app)
 @login_manager.user_loader
@@ -269,6 +271,7 @@ def get_id(val, my_dict):
         if val == value.get_email():
             return key
     return 'None'
+
 def get_pw(val, my_dict):
     for key, value in my_dict.items():
         if val == value.get_password():
@@ -315,12 +318,81 @@ def login():
 
     return render_template('users/login.html', form=login)
 
+
+# reset password
+
+
+@app.route('/forgetpw', methods=['GET', 'POST'])
+def forgetpass():
+    forgetpwform = forgetpw(request.form)
+    if request.method == 'POST':
+        users_dict = {}
+        db = shelve.open('storage.db', 'r')
+        users_dict = db['Users']
+
+        key = get_id(forgetpwform.email.data, users_dict)
+
+        if key == 'None': 
+            flash('Email does not have an account', 'danger')
+        
+        else:
+            sender_email = 'eventnest1@gmail.com'
+            sender_pw = 'tenroviygfhwacpo'
+
+            msg = EmailMessage()
+            msg['Subject'] = 'Reset EventNest password'
+            msg['From'] = sender_email
+            msg['To'] = forgetpwform.email.data
+
+            msg.set_content('Click the link to reset your password. http://127.0.0.1:5000{}'.format(url_for('newpass', id = key)))
+
+
+            with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
+                smtp.ehlo()
+                smtp.starttls()
+                smtp.ehlo()
+
+
+                smtp.login(sender_email, sender_pw)
+
+                smtp.send_message(msg)
+            
+            return redirect(url_for('login'))
+    return render_template('users/forgetpw.html', form=forgetpwform)
+
+@app.route('/newpw/<uuid(strict=False):id>/', methods=['GET', 'POST'])
+def newpass(id):
+    newpw = changPw(request.form)
+    if request.method == 'POST':
+        users_dict = {}
+        db = shelve.open('storage.db', 'w')
+        users_dict = db['Users']
+
+        user = users_dict.get(id)
+
+        if newpw.newpassword.data != newpw.comfirmpw.data:
+            flash('Passwords do not match.', 'danger')
+
+        else:
+            
+            user.set_password(newpw.newpassword.data)
+
+            db['Users'] = users_dict
+            db.close()
+
+            session['user_updated'] = user.get_name()    
+            return redirect(url_for('login'))
+
+    return render_template('users/newpw.html', form=newpw)
+
 @app.route('/logout')
 def logout():
    # remove the username from the session if it is there
    session.pop('logged_in', None)
    return redirect(url_for('home'))
 
+
+# make account
 @app.route('/signup', methods=['GET', 'POST'])
 def create_user():
     signup = signupForm(request.form)
@@ -365,24 +437,14 @@ def create_user():
 
     return render_template('users/signup.html', form=signup)
 
-@app.route('/forgetpw', methods=['GET', 'POST'])
-def forgetpass():
-    forgetpwform = forgetpw(request.form)
-    if request.method == 'POST':
-        return redirect(url_for('login'))
-    return render_template('users/forgetpw.html', form=forgetpwform)
-
-@app.route('/newpw', methods=['GET', 'POST'])
-def newpass():
-    newpw = changPw(request.form)
-    if request.method == 'POST':
-        return redirect(url_for('login'))
-    return render_template('users/newpw.html', form=newpw)
 
 # account made
+@app.route('/profile')
+def profile():
+    return render_template('users/profile.html')
 
 @app.route('/accountDetails')
-def accountDetails(): # how to display info of logged in user
+def accountDetails():
     login = loginForm(request.form)
 
     users_dict = {}
