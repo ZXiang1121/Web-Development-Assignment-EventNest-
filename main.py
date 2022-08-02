@@ -36,6 +36,10 @@ def home():
     return render_template('home.html', count=len(events_list), events_list=events_list)
 
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('error404.html'), 404
+
 @app.route('/ticketDetails/<uuid(strict=False):id>', methods=['GET', 'POST'])
 def ticket_details(id):
 
