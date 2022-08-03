@@ -34,7 +34,7 @@ def before_request():
 @app.route('/')
 def home():
     events_dict = {}
-    db = shelve.open('storage.db', 'r')
+    db = shelve.open('storage.db', 'c')
     events_dict = db['Events']
 
     db.close()
@@ -325,13 +325,57 @@ def login():
             session['user_id'] = user.get_user_id()
             session['user_email'] = user.get_email()
             session['user_birthdate'] = user.get_birthdate()
-            return redirect(url_for('accountDetails'))
+            return redirect(url_for('accountDetails', id = user.get_user_id()))
 
     return render_template('users/login.html', form=login)
 
+# make account
+@app.route('/signup', methods=['GET', 'POST'])
+def create_user():
+    signup = signupForm(request.form)
+    if request.method == 'POST':
+
+        users_dict = {}
+        db = shelve.open('storage.db', 'c')
+
+        try:
+            users_dict = db['Users']
+        except:
+            print("Error in retrieving Users from storage.db.")
+        
+        if signup.password.data != signup.comfirmpw.data:
+            flash('Passwords do not match.', 'danger')
+
+        else:
+
+            key = get_id(signup.email.data, users_dict)
+            if key == 'None': 
+
+                user = account.Account(signup.name.data, signup.email.data, signup.password.data, signup.birthdate.data)
+                users_dict[user.get_user_id()] = user
+                db['Users'] = users_dict
+
+                # Test codes
+                users_dict = db['Users']
+                user = users_dict[user.get_user_id()]
+                # print(user.get_name(), "was stored in storage.db successfully with user_id ==", user.get_user_id())
+
+                db.close()
+
+                session['user_created'] = user.get_name()
+
+                session['username'] = signup.name.data
+                
+
+                return redirect(url_for('login'))
+
+            else:
+                flash('Email is used for an existing account.', 'danger')
+
+    return render_template('users/signup.html', form=signup)
+
 
 # reset password
-
 
 @app.route('/forgetpw', methods=['GET', 'POST'])
 def forgetpass():
@@ -402,51 +446,19 @@ def logout():
    session.pop('user_id', None)
    return redirect(url_for('home'))
 
+@app.route('/deleteacc/<uuid(strict=False):id>/')
+def deleteacc(id):
+    session.pop('user_id', None)
+   
+    users_dict = {}
+    db = shelve.open('storage.db', 'w')
+    users_dict = db['Users']
 
-# make account
-@app.route('/signup', methods=['GET', 'POST'])
-def create_user():
-    signup = signupForm(request.form)
-    if request.method == 'POST':
+    users_dict.pop(id)
 
-        users_dict = {}
-        db = shelve.open('storage.db', 'c')
-
-        try:
-            users_dict = db['Users']
-        except:
-            print("Error in retrieving Users from storage.db.")
-        
-        if signup.password.data != signup.comfirmpw.data:
-            flash('Passwords do not match.', 'danger')
-
-        else:
-
-            key = get_id(signup.email.data, users_dict)
-            if key == 'None': 
-
-                user = account.Account(signup.name.data, signup.email.data, signup.password.data, signup.birthdate.data)
-                users_dict[user.get_user_id()] = user
-                db['Users'] = users_dict
-
-                # Test codes
-                users_dict = db['Users']
-                user = users_dict[user.get_user_id()]
-                # print(user.get_name(), "was stored in storage.db successfully with user_id ==", user.get_user_id())
-
-                db.close()
-
-                session['user_created'] = user.get_name()
-
-                session['username'] = signup.name.data
-                
-
-                return redirect(url_for('login'))
-
-            else:
-                flash('Email is used for an existing account.', 'danger')
-
-    return render_template('users/signup.html', form=signup)
+    db['Users'] = users_dict
+    db.close()
+    return redirect(url_for('home'))
 
 
 # account made
