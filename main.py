@@ -193,6 +193,7 @@ def cart_page():
     orders_dict = db['Orders']
     # print(orders_dict)
     db.close()
+    
 
     orders_list = []
     for key in orders_dict:
@@ -208,8 +209,6 @@ def cart_page():
 
 
     return render_template('cart.html', count=len(orders_list), orders=orders_list, payable= total_cost)
-
-
 
 @app.route('/clearCart/<uuid(strict=False):id>/')
 def clear_cart(id):
@@ -486,7 +485,6 @@ def accountDetails():
         users_list.append(user)
 
     return render_template('users/accountDetails.html', users_list=users_list)
-    # return render_template('users/accountDetails.html')
 
 @app.route('/EditAcc/<uuid(strict=False):id>/', methods=['GET', 'POST'])
 def EditAcc(id):    

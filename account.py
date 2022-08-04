@@ -1,12 +1,10 @@
 import uuid
 
 class Account:
-    # count_id = 99
 
-    cart_item = []
+
 
     def __init__(self, name, email, password, birthdate):
-        # Account.count_id += 1
 
         self.__user_id = uuid.uuid4()
         self.__name = name
@@ -15,6 +13,9 @@ class Account:
         self.__birthdate = birthdate
         self.__order_item = None
         self.__payment = None
+        self.__cart = []
+        cart = user.get_cart()
+        cart.append('item')
 
     def get_user_id(self):
         return self.__user_id
@@ -43,11 +44,12 @@ class Account:
 
 
 
-    def get_cart_item(self):
+    def get_cart(self):
         return self.cart_item
         
-    def set_cart_item(self, cart_item):
+    def set_cart(self, cart_item):
         self.cart_item = cart_item
+
 
     def get_payment(self):
         return self.payment
