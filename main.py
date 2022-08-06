@@ -404,10 +404,9 @@ def forgetpass():
 
             msg.set_content('Click the link to reset your password. http://127.0.0.1:5000{}'.format(url_for('newpass', id = key)))
 
-
             with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
                 smtp.ehlo()
-                smtp.starttls()
+                smtp.starttls() 
                 smtp.ehlo()
 
 
@@ -415,8 +414,12 @@ def forgetpass():
 
                 smtp.send_message(msg)
             
-            return redirect(url_for('login'))
+            return redirect(url_for('comfirmresetpw'))
     return render_template('users/forgetpw.html', form=forgetpwform)
+
+@app.route('/comfirmreset')
+def comfirmresetpw():
+    return render_template('users/comfirmreset.html')
 
 @app.route('/newpw/<uuid(strict=False):id>/', methods=['GET', 'POST'])
 def newpass(id):
