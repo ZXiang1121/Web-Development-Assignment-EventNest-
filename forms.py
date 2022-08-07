@@ -7,7 +7,7 @@ class signupForm(Form):
     email = EmailField('Email', [validators.Email(), validators.DataRequired()])
     birthdate = DateField('Date of Birth', [validators.length(max=8), validators.Optional()])
     password = PasswordField('Password', [validators.Length(min=8, max=20), validators.DataRequired()])
-    comfirmpw = PasswordField('Comfirm Password', [validators.Length(min=8, max=20), validators.DataRequired()])
+    comfirmpw = PasswordField('Confirm Password', [validators.Length(min=8, max=20), validators.DataRequired()])
     
 
 class loginForm(Form):
@@ -20,7 +20,7 @@ class loginForm(Form):
 class changPw(Form):
     nowpassword = PasswordField('Current Password', [validators.Length(min=8, max=20), validators.DataRequired()])
     newpassword = PasswordField('New Password', [validators.length(max=100), validators.DataRequired()])
-    comfirmpw = PasswordField('Comfirm Password', [validators.Length(min=8, max=20), validators.DataRequired()])
+    comfirmpw = PasswordField('Confirm Password', [validators.Length(min=8, max=20), validators.DataRequired()])
 
 class forgetpw(Form):
     email = EmailField('Email', [validators.Email(), validators.DataRequired()])

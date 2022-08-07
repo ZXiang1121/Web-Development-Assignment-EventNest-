@@ -34,7 +34,7 @@ def before_request():
 @app.route('/')
 def home():
     events_dict = {}
-    db = shelve.open('storage.db', 'r')
+    db = shelve.open('storage.db', 'c')
     events_dict = db['Events']
 
     db.close()
@@ -193,6 +193,7 @@ def cart_page():
     orders_dict = db['Orders']
     # print(orders_dict)
     db.close()
+    
 
     orders_list = []
     for key in orders_dict:
@@ -208,8 +209,6 @@ def cart_page():
 
 
     return render_template('cart.html', count=len(orders_list), orders=orders_list, payable= total_cost)
-
-
 
 @app.route('/clearCart/<uuid(strict=False):id>/')
 def clear_cart(id):
@@ -329,83 +328,9 @@ def login():
             session['user_id'] = user.get_user_id()
             session['user_email'] = user.get_email()
             session['user_birthdate'] = user.get_birthdate()
-            return redirect(url_for('accountDetails'))
+            return redirect(url_for('accountDetails', id = user.get_user_id()))
 
     return render_template('users/login.html', form=login)
-
-
-# reset password
-
-
-@app.route('/forgetpw', methods=['GET', 'POST'])
-def forgetpass():
-    forgetpwform = forgetpw(request.form)
-    if request.method == 'POST':
-        users_dict = {}
-        db = shelve.open('storage.db', 'r')
-        users_dict = db['Users']
-
-        key = get_id(forgetpwform.email.data, users_dict)
-
-        if key == 'None': 
-            flash('Email does not have an account', 'danger')
-        
-        else:
-            sender_email = 'eventnest1@gmail.com'
-            sender_pw = 'tenroviygfhwacpo'
-
-            msg = EmailMessage()
-            msg['Subject'] = 'Reset EventNest password'
-            msg['From'] = sender_email
-            msg['To'] = forgetpwform.email.data
-
-            msg.set_content('Click the link to reset your password. http://127.0.0.1:5000{}'.format(url_for('newpass', id = key)))
-
-
-            with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
-                smtp.ehlo()
-                smtp.starttls()
-                smtp.ehlo()
-
-
-                smtp.login(sender_email, sender_pw)
-
-                smtp.send_message(msg)
-            
-            return redirect(url_for('login'))
-    return render_template('users/forgetpw.html', form=forgetpwform)
-
-@app.route('/newpw/<uuid(strict=False):id>/', methods=['GET', 'POST'])
-def newpass(id):
-    newpw = changPw(request.form)
-    if request.method == 'POST':
-        users_dict = {}
-        db = shelve.open('storage.db', 'w')
-        users_dict = db['Users']
-
-        user = users_dict.get(id)
-
-        if newpw.newpassword.data != newpw.comfirmpw.data:
-            flash('Passwords do not match.', 'danger')
-
-        else:
-            
-            user.set_password(newpw.newpassword.data)
-
-            db['Users'] = users_dict
-            db.close()
-
-            session['user_updated'] = user.get_name()    
-            return redirect(url_for('login'))
-
-    return render_template('users/newpw.html', form=newpw)
-
-@app.route('/logout')
-def logout():
-   # remove the username from the session if it is there
-   session.pop('user_id', None)
-   return redirect(url_for('home'))
-
 
 # make account
 @app.route('/signup', methods=['GET', 'POST'])
@@ -453,6 +378,95 @@ def create_user():
     return render_template('users/signup.html', form=signup)
 
 
+# reset password
+
+@app.route('/forgetpw', methods=['GET', 'POST'])
+def forgetpass():
+    forgetpwform = forgetpw(request.form)
+    if request.method == 'POST':
+        users_dict = {}
+        db = shelve.open('storage.db', 'r')
+        users_dict = db['Users']
+
+        key = get_id(forgetpwform.email.data, users_dict)
+
+        if key == 'None': 
+            flash('Email does not have an account', 'danger')
+        
+        else:
+            sender_email = 'eventnest1@gmail.com'
+            sender_pw = 'tenroviygfhwacpo'
+
+            msg = EmailMessage()
+            msg['Subject'] = 'Reset EventNest password'
+            msg['From'] = sender_email
+            msg['To'] = forgetpwform.email.data
+
+            msg.set_content('Click the link to reset your password. http://127.0.0.1:5000{}'.format(url_for('newpass', id = key)))
+
+            with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
+                smtp.ehlo()
+                smtp.starttls() 
+                smtp.ehlo()
+
+
+                smtp.login(sender_email, sender_pw)
+
+                smtp.send_message(msg)
+            
+            return redirect(url_for('comfirmresetpw'))
+    return render_template('users/forgetpw.html', form=forgetpwform)
+
+@app.route('/comfirmreset')
+def comfirmresetpw():
+    return render_template('users/comfirmreset.html')
+
+@app.route('/newpw/<uuid(strict=False):id>/', methods=['GET', 'POST'])
+def newpass(id):
+    newpw = changPw(request.form)
+    if request.method == 'POST':
+        users_dict = {}
+        db = shelve.open('storage.db', 'w')
+        users_dict = db['Users']
+
+        user = users_dict.get(id)
+
+        if newpw.newpassword.data != newpw.comfirmpw.data:
+            flash('Passwords do not match.', 'danger')
+
+        else:
+            
+            user.set_password(newpw.newpassword.data)
+
+            db['Users'] = users_dict
+            db.close()
+
+            session['user_updated'] = user.get_name()    
+            return redirect(url_for('login'))
+
+    return render_template('users/newpw.html', form=newpw)
+
+@app.route('/logout')
+def logout():
+   # remove the username from the session if it is there
+   session.pop('user_id', None)
+   return redirect(url_for('home'))
+
+@app.route('/deleteacc/<uuid(strict=False):id>/')
+def deleteacc(id):
+    session.pop('user_id', None)
+   
+    users_dict = {}
+    db = shelve.open('storage.db', 'w')
+    users_dict = db['Users']
+
+    users_dict.pop(id)
+
+    db['Users'] = users_dict
+    db.close()
+    return redirect(url_for('home'))
+
+
 # account made
 @app.route('/profile')
 def profile():
@@ -474,7 +488,6 @@ def accountDetails():
         users_list.append(user)
 
     return render_template('users/accountDetails.html', users_list=users_list)
-    # return render_template('users/accountDetails.html')
 
 @app.route('/EditAcc/<uuid(strict=False):id>/', methods=['GET', 'POST'])
 def EditAcc(id):    
