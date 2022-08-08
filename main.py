@@ -247,7 +247,7 @@ def clear_cart(id):
     users_dict = db['Users']
 
     user = users_dict.get(id)
-    user.set_cart_item(orders_list)
+    
     user.set_payment(new_payment)
     print(user.set_payment(new_payment))
 
