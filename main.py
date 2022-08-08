@@ -16,8 +16,8 @@ import flask
 import flask_login
 import datetime
 
-import User
-from forms import createEvent, signupForm, loginForm, forgetpw, changPw, ContactForm, addOrder
+
+from forms import createEvent, signupForm, loginForm, forgetpw, changPw, addOrder
 import shelve, Event, account, Seat, Order, Payment
 
 from werkzeug.utils import secure_filename
