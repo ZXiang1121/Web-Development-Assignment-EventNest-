@@ -1,10 +1,12 @@
 {% extends "base.html" %}
-{% block title %}Library Loan System - Retrieve Users{% endblock %}
+{% block title %}Library Loan System - Retrieve Questions{% endblock %}
 
 {% block content %}
+
 <h1 class="display-4">Retrieve Questions</h1>
 <div>
   {% if count == 0 %}
+  
   <p>There are no questions.</p>
   {% elif count == 1 %}
   <p>There is 1 question.</p>
@@ -15,31 +17,37 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>User ID</th>
-        <th>First Name</th>
-        <th>Last Name</th>
+        <th>Question ID</th>
+        <th>Name</th>
+        <th>Email</th>
         <th>Gender</th>
+        <th>Subject</th>
         <th>Comments</th>
-        <th></th>
-        <th></th>
+        <th>Answers</th>
+      
       </tr>
     </thead>
     <tbody>
-    {% for user in users_list %}
+    {% for qn in qns_list %}
+
       <tr>
-        <td>{{ user.get_user_id() }}</td>
-        <td>{{ user.get_first_name() }}</td>
-        <td>{{ user.get_last_name() }}</td>
-        <td>{{ user.get_gender() }}</td>
-        <td>{{ user.get_remarks() }}</td>
-        <td><a href="/updateUser/{{user.get_user_id()}}" class="btn btn-warning">Update</a></td>
+        
+        <td>{{ qn.get_qn_id() }}</td>
+        <td>{{ qn.get_name() }}</td>
+        <td>{{ qn.get_gender() }}</td>
+        <td>{{ qn.get_email() }}</td>
+        <td>{{ qn.get_subject() }}</td>
+        <td>{{ qn.get_remarks() }}</td>
+        <td>{{ qn.get_answers() }}</td>
+        <td></td>
+        <td><a href="/updateQn/{{qn.get_qn_id()}}" class="btn btn-warning">Edit</a></td>
         <td>
           
-  <form action="{{url_for('delete_user', id=user.get_user_id())}}" method="POST">
-    <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{user.get_first_name()}}, {{user.get_last_name()}}?');">
+  <form action="{{url_for('delete_qn', id=qn.get_qn_id())}}" method="POST">
+    <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{qn.get_name()}}?');">
 
     <!-- The Modal -->
-    <div class="modal" id="myModal_{{user.get_user_id()}}">
+    <div class="modal" id="myModal_{{qn.get_qn_id()}}">
       <div class="modal-dialog">
         <div class="modal-content">
 
@@ -51,7 +59,7 @@
 
           <!-- Modal body -->
           <div class="modal-body">
-            Are you sure you want to delete {{user.get_first_name()}} {{user.get_last_name()}}?
+            Are you sure you want to delete {{qn.get_name()}}?
           </div>
 
           <!-- Modal footer -->

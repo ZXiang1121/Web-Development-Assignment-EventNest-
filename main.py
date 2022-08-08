@@ -1,18 +1,18 @@
 import os
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 
-import User
+import Question
 
-from forms import createEvent, signupForm, loginForm, forgetpw, changPw, ContactForm, CreateUserForm
+from forms import createEvent, signupForm, loginForm, forgetpw, changPw, CreateQnForm
 import shelve, Event, account, Seat
 
-from forms import createEvent, signupForm, loginForm, forgetpw, changPw, ContactForm, addOrder
+from forms import createEvent, signupForm, loginForm, forgetpw, changPw,  addOrder
 import shelve, Event, account, Seat, Order
 
 from werkzeug.utils import secure_filename
 from flask_login import LoginManager
 from werkzeug.datastructures import CombinedMultiDict
-import pandas as pd
+import pandas as pdpy
 
 # admin name: admin
 # admin email: admin@gmail.com
@@ -580,26 +580,8 @@ def admin_homepage():
 
     return render_template('homeAdmin.html', count=len(events_list), events_list=events_list)
 
-@app.route('/contactus', methods=["GET","POST"])
-def get_contact():
-    form = ContactForm()
-    # here, if the request type is a POST we get the data on contat
-    #forms and save them else we return the contact forms html page
-    if request.method == 'POST':
-        name =  request.form["name"]
-        email = request.form["email"]
-        subject = request.form["subject"]
-        message = request.form["message"]
-        res = pd.DataFrame({'name':name, 'email':email, 'subject':subject ,'message':message}, index=[0])
-        res.to_csv('./contactusMessage.csv')
-        print("The data are saved !")
-        
-    else:
-        return render_template('contact.html', form=form)
-    
-@app.route('/faq')
-def faq():
-   return render_template('faq.html')
+
+
 
 
 @app.route('/submitResult')
@@ -623,95 +605,159 @@ def message():
    return render_template('contactusMessage.html')
 
 
-
-
-@app.route('/createUser', methods=['GET', 'POST'])
+# ----------------------------------------------------------------------------------------------------------------------------------------------------------
+# Rawtbhik
+@app.route('/createQn', methods=['GET', 'POST'])
 def create_qn():
-    create_user_form = CreateUserForm(request.form)
-    if request.method == 'POST' and create_user_form.validate():
-        users_dict = {}
+    create_qn_form = CreateQnForm(request.form)
+    if request.method == 'POST' and create_qn_form.validate():
+        qns_dict = {}
         db = shelve.open('storage.db', 'c')
 
         try:
-            users_dict = db['Users']
+            qns_dict = db['Questions']
         except:
             print("Error in retrieving Users from storage.db.")
 
-        user = User.User(create_user_form.first_name.data,
-                         create_user_form.last_name.data,
-                         create_user_form.gender.data,
-                         create_user_form.membership.data,
-                         create_user_form.remarks.data)
+        qn = Question.Question(create_qn_form.name.data,
+                         create_qn_form.email.data,
+                         create_qn_form.gender.data,
+                         create_qn_form.subject.data,
+                         create_qn_form.remarks.data,
+                         create_qn_form.answers.data)
 
-        users_dict[user.get_user_id()] = user
-        db['Users'] = users_dict
-
-
-        return redirect(url_for('retrieve_users'))
-    return render_template('createUser.html', form=create_user_form)
+        qns_dict[qn.get_qn_id()] = qn
+        db['Questions'] = qns_dict
 
 
-@app.route('/retrieveUsers')
-def retrieve_users():
-    users_dict = {}
+        return redirect(url_for('retrieve'))
+    return render_template('createQn.html', form=create_qn_form)
+
+
+
+
+
+@app.route('/retrieveqns')
+def retrieve_qns():
+    qns_dict = {}
     db = shelve.open('storage.db', 'r')
-    users_dict = db['Users']
+    qns_dict = db['Questions']
     db.close()
 
-    users_list = []
-    for key in users_dict:
-        user = users_dict.get(key)
-        users_list.append(user)
+    qns_list = []
+    for key in qns_dict:
+        qn = qns_dict.get(key)
+        qns_list.append(qn)
+        
+    return render_template('retrieveQns.html', count=len(qns_list),qns_list=qns_list)
 
 
-    return render_template('retrieveUsers.html', count=len(users_list),users_list=users_list)
+# @app.route('/updateQn/<int:id>/', methods=['GET', 'POST'])
+# def create_ans():
+#     create_ans_form = CreateQnForm(request.form)
+#     if request.method == 'POST' and create_ans_form.validate():
+#         qns_dict = {}
+#         db = shelve.open('storage.db', 'c')
+#         try:
+#             qns_dict = db['Questions']
+#         except:
+#             print("Error in retrieving Users from storage.db.")
 
-@app.route('/updateUser/<int:id>/', methods=['GET', 'POST'])
-def update_user(id):
-    update_user_form = CreateUserForm(request.form)
-    if request.method == 'POST' and update_user_form.validate():
-        users_dict = {}
+#         ans = Question.Question(create_ans_form.name.data)
+        
+#         qns_dict[ans.get_qn_id()] = ans
+#         db['Questions'] = qns_dict
+        
+        
+def update_qn(id):
+    update_qn_form = CreateQnForm(request.form)
+    if request.method == 'POST' and update_qn_form.validate():
+        qns_dict = {}
         db = shelve.open('storage.db', 'w')
-        users_dict = db['Users']
+        qns_dict = db['Questions']
 
-        user = users_dict.get(id)
-        user.set_first_name(update_user_form.first_name.data)
-        user.set_last_name(update_user_form.last_name.data)
-        user.set_gender(update_user_form.gender.data)
-        user.set_membership(update_user_form.membership.data)
-        user.set_remarks(update_user_form.remarks.data)
+        qn = qns_dict.get(id)
+        qn.set_name(update_qn_form.name.data)
+        qn.set_email(update_qn_form.email.data)
+        qn.set_gender(update_qn_form.gender.data)
+        qn.set_subject(update_qn_form.subject.data)
+        qn.set_remarks(update_qn_form.remarks.data)
+        qn.set_answers(update_qn_form.answers.data)
+        
+        
 
-        db['Users'] = users_dict
+        db['Questions'] = qns_dict
         db.close()
 
-        return redirect(url_for('retrieve_users'))
+        return redirect(url_for('retrieve_qns'))
     else:
-        users_dict = {}
+        qns_dict = {}
         db = shelve.open('storage.db', 'r')
-        users_dict = db['Users']
+        qns_dict = db['Questions']
         db.close()
 
-        user = users_dict.get(id)
-        update_user_form.first_name.data = user.get_first_name()
-        update_user_form.last_name.data = user.get_last_name()
-        update_user_form.gender.data = user.get_gender()
-        update_user_form.membership.data = user.get_membership()
-        update_user_form.remarks.data = user.get_remarks()
+        qn = qns_dict.get(id)
+        update_qn_form.name.data = qn.get_name()
+        update_qn_form.email.data = qn.get_email()
+        update_qn_form.gender.data = qn.get_gender()
+        update_qn_form.subject.data = qn.get_subject()
+        update_qn_form.remarks.data = qn.get_remarks()
+        update_qn_form.answers.data = qn.get_answers()
 
-        return render_template('updateUser.html', form=update_user_form)
+        return render_template('updateQn.html', form=update_qn_form)
 
-@app.route('/deleteUser/<int:id>', methods=['POST'])
-def delete_user(id):
-    users_dict = {}
+@app.route('/deleteQn/<int:id>', methods=['POST'])
+def delete_qn(id):
+    qns_dict = {}
     db = shelve.open('storage.db', 'w')
-    users_dict = db['Users']
+    qns_dict = db['Questions']
 
-    users_dict.pop(id)
+    qns_dict.pop(id)
 
-    db['Users'] = users_dict
+    db['Questions'] = qns_dict
     db.close()
 
-    return redirect(url_for('retrieve_users'))
+    return redirect(url_for('retrieve_qns'))
+
+# Here's the create answer app route
+# @app.route("/createAns", methods=['GET', 'POST'])
+# def create_qn():
+#     create_qn_form = CreateQnForm(request.form)
+#     if request.method == 'POST' and create_qn_form.validate():
+#         qns_dict = {}
+#         db = shelve.open('storage.db', 'c')
+
+#         try:
+#             qns_dict = db['Questions']
+#         except:
+#             print("Error in retrieving Users from storage.db.")
+
+#         qn = Question.Question(create_qn_form.answers.data)
+
+#         qns_dict[qn.get_qn_id()] = qn
+#         db['Questions'] = qns_dict
+
+
+#         return redirect(url_for('retrieve'))
+#     return render_template('createQn.html', form=create_qn_form)
+
+
+
+
+
+@app.route('/faqQn')
+def retrieve():
+    qns_dict = {}
+    db = shelve.open('storage.db', 'r')
+    qns_dict = db['Questions']
+    db.close()
+
+    qns_list = []
+    for key in qns_dict:
+        qn = qns_dict.get(key)
+        qns_list.append(qn)
+        
+    return render_template('faq.html', count=len(qns_list),qns_list=qns_list)
 
 if __name__ == '__main__':
     app.run(debug=True)
