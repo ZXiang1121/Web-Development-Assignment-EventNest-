@@ -2,7 +2,7 @@ import uuid
 
 class Account:
 
-
+ 
 
     def __init__(self, name, email, password, birthdate):
 
