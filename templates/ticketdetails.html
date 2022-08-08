@@ -59,18 +59,22 @@
                 <div class="rounded border shadow-sm">
                     {{render_field(form.order_quantity, class="form-control")}}
                 </div>
-
+                {% if 'user_id' in session %}
                 <div class="col-sm mt-5">
                     <input type="submit" value="Add to Cart" class="btn btn-primary"/>
                 </div>
+                
+                {% else %}
+                  <div></div>
+                {% endif %}
             </form>
         </div>
  
         
     </div>
 
-  </div>
 
+  </div>
 
 
 {% endblock %}
