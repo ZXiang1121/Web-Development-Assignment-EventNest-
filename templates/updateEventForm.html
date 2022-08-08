@@ -7,116 +7,121 @@
 
 {% block content %}
 
-    {% from "includes/_formHelper.html" import render_field %}
-    <div class="p-5 bg-light">
-        <div class="container-sm col-lg-6 ml-auto">
-            <h1>Update Event</h1>
+{% from "includes/_formHelper.html" import render_field %}
+<div class="p-5 bg-light">
+    <div class="container-sm col-lg-6 ml-auto">
+        <h1>Create Event</h1>
 
-            <form method="POST" action="" enctype="multipart/form-data">
+        <form method="POST" action="" enctype="multipart/form-data">
 
-                <div class="form-group">
-                    {{render_field(form.event_name, class="form-control")}}
-                </div>
+            <div class="form-group pb-3">
+                {{render_field(form.event_name, class="form-control")}}
+            </div>
 
-                <div class="form-group">
-                    {{render_field(form.event_category, class="form-control")}}
-                </div>
+            <div class="form-group pb-3">
+                {{render_field(form.event_category, class="form-control")}}
+            </div>
 
+            <div class="form-group pb-3">
+                {{render_field(form.event_location, class="form-control")}}
+            </div>
 
-                <div class="input_fields_wrap border p-5 my-4 rounded shadow-sm">
+            <h4>Seating Plan</h4>
+            <div class="input_fields_wrap border p-4 mb-4 rounded shadow-sm">
 
-
-                    {%for i in form['seating_plan'] %}
-                    <div id="add-seating-plan">
-                        <div class="" style="border:1px solid black;" id="seats">
-                         
-                            <div class="form-group">{{render_field(i.form.seat_type)}}</div>
-  
-                            <div class="form-group">{{render_field(i.form.seat_available)}}</div>
-     
-                            <div class="form-group">{{render_field(i.form.seat_price)}}</div>
-
+                {%for i in form['seating_plan'] %}
+                <div id="add-seating-plan">
+                    <div class="pb-3" id="seats">
+                     
+                        <div class="form-group">{{render_field(i.form.seat_type, class="form-control" )}}</div>
+                        <div class="row">
+                            <div class="form-group col">{{render_field(i.form.seat_available, class="form-control")}}</div>
+ 
+                            <div class="form-group col">{{render_field(i.form.seat_price, class="form-control")}}</div>
                         </div>
+
                     </div>
-                    {% endfor %}
-                    <button id="add-event-field" type="button">Add new movie</button>
-                               
-            
                 </div>
+                {% endfor %}
+                <button id="add-event-field" class="btn btn-outline-primary" type="button">Add new movie</button>
+                           
+        
+            </div>
 
-                <div class="form-group">
-                    {{render_field(form.event_location, class="form-control")}}
-                </div>
-
-                <div class="form-group">
+            <div class="row pb-3">
+                <div class="form-group col">
                     {{render_field(form.event_date, class="form-control")}}
                 </div>
 
-                <div class="form-group">
+                <div class="form-group col">
                     {{render_field(form.event_time, class="form-control")}}
                 </div>
+            </div>
 
-                <div class="form-group">
-                    {{render_field(form.event_poster, class="form-control-file")}}
-                </div>
+            <div class="form-group pb-3">
+                {{render_field(form.event_poster, class="form-control")}}
+            </div>
+            
 
-                <div class="form-group">
-                    {{render_field(form.seat_image, class="form-control-file")}}
-                </div>
+            <div class="form-group pb-3">
+                {{render_field(form.seat_image, class="form-control")}}
+            </div>
 
-                <div class="form-group">
-                    {{render_field(form.event_desc, class="form-control")}}
-                </div>
+            <div class="form-group pb-3">
+                {{render_field(form.event_desc, class="form-control")}}
+            </div>
 
-                <input type="submit" value="Submit" class="btn btn-primary"/>
-            </form>
-        </div>
+            <input type="submit" value="Submit" class="btn btn-primary"/>
+        </form>
     </div>
+</div>
 </div>
 
 <script>
-     window.onload = function() {
-        let addMovieFieldBtn = document.getElementById('add-event-field');
-        addMovieFieldBtn.addEventListener('click', function(e){
-            e.preventDefault();
-            let allMoviesFieldWrapper = document.getElementById('add-seating-plan');
-            let allMoviesField = allMoviesFieldWrapper.getElementsByTagName('input');
-            if(allMoviesField.length > (4*5)) {
-                alert('You can  have only five seat type');
-                return;
-            }
+ window.onload = function() {
+    let addMovieFieldBtn = document.getElementById('add-event-field');
+    addMovieFieldBtn.addEventListener('click', function(e){
+        e.preventDefault();
+        let allMoviesFieldWrapper = document.getElementById('add-seating-plan');
+        let allMoviesField = allMoviesFieldWrapper.getElementsByTagName('input');
+        if(allMoviesField.length > (4*5)) {
+            alert('You can  have only five seat type');
+            return;
+        }
 
-            let seatTypeIds = []
-            for(let i = 0; i < allMoviesField.length; i++) {
-                seatTypeIds.push(parseInt(allMoviesField[i].name.split('-')[1]));
-            }
+        let seatTypeIds = []
+        for(let i = 0; i < allMoviesField.length; i++) {
+            seatTypeIds.push(parseInt(allMoviesField[i].name.split('-')[1]));
+        }
 
-            let seatAvailableIds = []
-            for(let i = 0; i < allMoviesField.length; i++) {
-                seatAvailableIds.push(parseInt(allMoviesField[i].name.split('-')[1]));
-            }
+        let seatAvailableIds = []
+        for(let i = 0; i < allMoviesField.length; i++) {
+            seatAvailableIds.push(parseInt(allMoviesField[i].name.split('-')[1]));
+        }
 
-            let seatPriceIds = []
-            for(let i = 0; i < allMoviesField.length; i++) {
-                seatPriceIds.push(parseInt(allMoviesField[i].name.split('-')[1]));
-            }
+        let seatPriceIds = []
+        for(let i = 0; i < allMoviesField.length; i++) {
+            seatPriceIds.push(parseInt(allMoviesField[i].name.split('-')[1]));
+        }
 
 
-            let newSeatType = `seating_plan-${Math.max(...seatTypeIds) + 1}-seat_type`;
+        let newSeatType = `seating_plan-${Math.max(...seatTypeIds) + 1}-seat_type`;
 
-            let newSeatAvailable = `seating_plan-${Math.max(...seatAvailableIds) + 1}-seat_available`;
+        let newSeatAvailable = `seating_plan-${Math.max(...seatAvailableIds) + 1}-seat_available`;
 
-            let newSeatPrice= `seating_plan-${Math.max(...seatPriceIds) + 1}-seat_price`;
+        let newSeatPrice= `seating_plan-${Math.max(...seatPriceIds) + 1}-seat_price`;
 
-            allMoviesFieldWrapper.insertAdjacentHTML('beforeend',`
-            <div class="" style="border:1px solid black;" id="seats">
-                 <div class="form-group"><label for="${newSeatType}">Seat Type</label> <input id="${newSeatType}" name="${newSeatType}" type="text" value=""></div>
-                 <div class="form-group"><label for="${newSeatAvailable}">Seat Available</label> <input id="${newSeatAvailable}" name="${newSeatAvailable}" type="text" value=""></div>
-                 <div class="form-group"><label for="${newSeatPrice}">Seat Price</label> <input id="${newSeatPrice}" name="${newSeatPrice}" type="text" value=""></div>
+        allMoviesFieldWrapper.insertAdjacentHTML('beforeend',`
+        <div id="seats" class="pb-3">
+            <div class="form-group"><label for="${newSeatType}">Seat Type</label> <input id="${newSeatType}" class="form-control" name="${newSeatType}" type="text" value=""></div>
+            <div class="row">
+                <div class="form-group col"><label for="${newSeatAvailable}">Seat Available</label> <input id="${newSeatAvailable}" class="form-control" name="${newSeatAvailable}" type="text" value=""></div>
+                <div class="form-group col"><label for="${newSeatPrice}">Seat Price</label> <input id="${newSeatPrice}" class="form-control" name="${newSeatPrice}" type="text" value=""></div>
             </div>
-            `);
-        });
-    }
+        </div>
+        `);
+    });
+}
 
 </script>
 

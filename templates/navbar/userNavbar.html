@@ -11,19 +11,22 @@
               <a class="nav-link active"  href="/">Event <span class="sr-only"></span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/faq">FAQ</a>
+              <a class="nav-link" href="/faqQn">FAQ</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/contactus">Contact Us</a>
+              <a class="nav-link" href="/createQn">Contact Us</a>
             </li>
           </ul>
 
           <form class="d-flex justify-content-center order-5">
+
+
+            {% if 'user_id' in session %}
             <button type="button" class="btn btn-link  me-2" >
               <a href="/cart"><i class="bi bi-bag"></a></i>
             </button>
 
-            {% if 'user_id' in session %}
+            
             <a href="/accountDetails"><button type="button" class="btn btn-link me-3">
               <i class="fa-regular fa-user"></i>
             </button></a>

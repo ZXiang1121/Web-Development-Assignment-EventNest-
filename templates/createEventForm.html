@@ -14,57 +14,60 @@
 
             <form method="POST" action="" enctype="multipart/form-data">
 
-                <div class="form-group">
+                <div class="form-group pb-3">
                     {{render_field(form.event_name, class="form-control")}}
                 </div>
 
-                <div class="form-group">
+                <div class="form-group pb-3">
                     {{render_field(form.event_category, class="form-control")}}
                 </div>
 
+                <div class="form-group pb-3">
+                    {{render_field(form.event_location, class="form-control")}}
+                </div>
 
-                <div class="input_fields_wrap border p-5 my-4 rounded shadow-sm">
-
+                <h4>Seating Plan</h4>
+                <div class="input_fields_wrap border p-4 mb-4 rounded shadow-sm">
 
                     {%for i in form.seating_plan %}
                     <div id="add-seating-plan">
-                        <div class="" style="border:1px solid black;" id="seats">
+                        <div class="pb-3" id="seats">
                          
-                            <div class="form-group">{{render_field(i.form.seat_type)}}</div>
-  
-                            <div class="form-group">{{render_field(i.form.seat_available)}}</div>
+                            <div class="form-group">{{render_field(i.form.seat_type, class="form-control" )}}</div>
+                            <div class="row">
+                                <div class="form-group col">{{render_field(i.form.seat_available, class="form-control")}}</div>
      
-                            <div class="form-group">{{render_field(i.form.seat_price)}}</div>
+                                <div class="form-group col">{{render_field(i.form.seat_price, class="form-control")}}</div>
+                            </div>
 
                         </div>
                     </div>
                     {% endfor %}
-                    <button id="add-event-field" type="button">Add new movie</button>
+                    <button id="add-event-field" class="btn btn-outline-primary" type="button">Add new movie</button>
                                
             
                 </div>
 
-                <div class="form-group">
-                    {{render_field(form.event_location, class="form-control")}}
+                <div class="row pb-3">
+                    <div class="form-group col">
+                        {{render_field(form.event_date, class="form-control")}}
+                    </div>
+
+                    <div class="form-group col">
+                        {{render_field(form.event_time, class="form-control")}}
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    {{render_field(form.event_date, class="form-control")}}
+                <div class="form-group pb-3">
+                    {{render_field(form.event_poster, class="form-control")}}
+                </div>
+                
+
+                <div class="form-group pb-3">
+                    {{render_field(form.seat_image, class="form-control")}}
                 </div>
 
-                <div class="form-group">
-                    {{render_field(form.event_time, class="form-control")}}
-                </div>
-
-                <div class="form-group">
-                    {{render_field(form.event_poster, class="form-control-file")}}
-                </div>
-
-                <div class="form-group">
-                    {{render_field(form.seat_image, class="form-control-file")}}
-                </div>
-
-                <div class="form-group">
+                <div class="form-group pb-3">
                     {{render_field(form.event_desc, class="form-control")}}
                 </div>
 
@@ -109,10 +112,12 @@
             let newSeatPrice= `seating_plan-${Math.max(...seatPriceIds) + 1}-seat_price`;
 
             allMoviesFieldWrapper.insertAdjacentHTML('beforeend',`
-            <div class="" style="border:1px solid black;" id="seats">
-                 <div class="form-group"><label for="${newSeatType}">Seat Type</label> <input id="${newSeatType}" name="${newSeatType}" type="text" value=""></div>
-                 <div class="form-group"><label for="${newSeatAvailable}">Seat Available</label> <input id="${newSeatAvailable}" name="${newSeatAvailable}" type="text" value=""></div>
-                 <div class="form-group"><label for="${newSeatPrice}">Seat Price</label> <input id="${newSeatPrice}" name="${newSeatPrice}" type="text" value=""></div>
+            <div id="seats" class="pb-3">
+                <div class="form-group"><label for="${newSeatType}">Seat Type</label> <input id="${newSeatType}" class="form-control" name="${newSeatType}" type="text" value=""></div>
+                <div class="row">
+                    <div class="form-group col"><label for="${newSeatAvailable}">Seat Available</label> <input id="${newSeatAvailable}" class="form-control" name="${newSeatAvailable}" type="text" value=""></div>
+                    <div class="form-group col"><label for="${newSeatPrice}">Seat Price</label> <input id="${newSeatPrice}" class="form-control" name="${newSeatPrice}" type="text" value=""></div>
+                </div>
             </div>
             `);
         });
