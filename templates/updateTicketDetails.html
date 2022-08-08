@@ -17,11 +17,11 @@
         <img class="w-75" src="{{(url_for('static', filename='images/' + order.get_order_image() ))}}" class="card-img-top" alt="...">
     </div>
     <div class="row text-center py-5">
-        <div class="col py-3">{{ order.get_order_name() }}</div>
-        <div class="col py-3">{{ order.get_event_date() }}</div>
+        <div class="col py-3"><strong class="design-border">Title</strong><div class="shift-up">{{ order.get_order_name() }}</div></div>
+        <div class="col py-3"><strong class="design-border">Date</strong><div class="shift-up">{{ order.get_event_date() }}</div></div>
         <div class="w-100"></div>
-        <div class="col py-3">{{ order.get_event_location() }}</div>
-        <div class="col py-3">{{ order.get_event_time() }}</div>
+        <div class="col py-3"><strong class="design-border">Location</strong><div class="shift-up">{{ order.get_event_location() }}</div></div>
+        <div class="col py-3"><strong class="design-border">Time</strong><div class="shift-up">{{ order.get_event_time() }}</div></div>
  
     </div>
 
@@ -46,7 +46,7 @@
 
                     <div class="d-flex flex-column">
                         <div class="p-2">
-                            {{form.order_price}}
+                            {{render_field(form.order_price, class="design-radio")}}
                         </div>
                     </div>
 
@@ -58,7 +58,7 @@
                 </div>
 
                 <div class="col-sm mt-5">
-                    <input type="submit" value="Update Order" class="btn btn-primary"/>
+                    <input type="submit" value="Update Order" class="btn btn-primary w-100 p-2"/>
                 </div>
             </form>
         </div>

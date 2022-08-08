@@ -19,11 +19,14 @@
           </ul>
 
           <form class="d-flex justify-content-center order-5">
+
+
+            {% if 'user_id' in session %}
             <button type="button" class="btn btn-link  me-2" >
               <a href="/cart"><i class="bi bi-bag"></a></i>
             </button>
 
-            {% if 'logged_in' in session %}
+            
             <a href="/accountDetails"><button type="button" class="btn btn-link me-3">
               <i class="fa-regular fa-user"></i>
             </button></a>

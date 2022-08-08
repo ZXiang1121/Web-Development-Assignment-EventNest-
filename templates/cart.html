@@ -14,9 +14,7 @@
             {% endif %}
         </header>
 
-        {%for order in orders%}
-        order_id: {{order.get_order_id()}} ---> event_id:{{order.get_event_id()}} <br>
-        {% endfor %}
+
               <div class="row">
                 <div class="col-lg-12 p-5 bg-white rounded shadow mb-5">
                   <!-- Shopping cart table -->
@@ -62,7 +60,33 @@
                             <td class="align-middle"><strong>{{order.get_order_quantity()}}</strong></td>
                             <td class="align-middle"><strong>${{order.order_cost(order.get_order_seat_price(), order.get_order_quantity())}}</strong></td>
                             <td class="align-middle"><a href="/updateTicketDetails/{{order.get_order_id()}}" class="text-dark"><i class="bi bi-pencil-square"></i></a></td>
-                            <td class="align-middle"><form action="{{url_for('delete_order', id=order.get_order_id())}}" method="POST"><input type="submit" class="fa" style="border: none; background: white;" value="&#xf014;"></form></td>
+                            <td class="align-middle"><form action="{{url_for('delete_order', id=order.get_order_id())}}" method="POST">
+                              
+                              <!-- <input type="submit" class="fa" style="border: none; background: white;" value="&#xf014;"> -->
+                              <button type="button" class="fa" style="border: none; background: white;" data-bs-toggle="modal" data-bs-target="#staticBackdrop_{{order.get_order_id()}}">
+                                &#xf014;
+                              </button>
+        
+               
+                              <div class="modal fade" id="staticBackdrop_{{ order.get_order_id() }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="staticBackdropLabel">Delete Confirmation</h5>
+                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                      Are you sure you want to delete {{order.get_order_name()}} from your shopping cart?
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                      <button type="submit" class="btn btn-danger">Delete</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            
+                            </form></td>
 
                         </tr>
                       {% endfor%}
@@ -106,8 +130,9 @@
                         <h5 class="font-weight-bold">${{payable}}</h5>
                       </li>
                     </ul>
+                    
+                    <div id="paypal-button-container"></div>
 
-                    <a href="#" class="btn btn-dark rounded-pill py-2 px-5 btn-block">Checkout</a>
                   </div>
                 </div>
               </div>
@@ -115,13 +140,57 @@
         
             </div>
           </div>
-            {% print(orders) %}<br>
-            {%for order in orders%}
-              {% print(order) %} ----> {%print(order.get_event_id())%}<br>
-              {%print(order.get_order_category())%}
-            {%endfor%}
+
             
 
 
     </div>
+
+    <script src="https://www.paypal.com/sdk/js?client-id=AVHtcSrT5bL9qkjoybMjOTAdU0MIhGq273ghCjcmjGKcHOdSHRDAvs8udVEIAqAiq7WIBmykCIJ87Lpv&currency=USD&disable-funding=credit"></script>
+    <script>
+
+      var total = '{{payable}}'
+      // Render the PayPal button into #paypal-button-container
+      paypal.Buttons({
+
+          style:{
+            color:'blue',
+            shape:'rect',
+          },
+
+          // Set up the transaction
+          createOrder: function(data, actions) {
+              return actions.order.create({
+                  purchase_units: [{
+                      amount: {
+                          value: parseFloat(total).toFixed(2)
+                      }
+                  }]
+              });
+          },
+
+          // Finalize the transaction
+          onApprove: function(data, actions) {
+              return actions.order.capture().then(function(orderData) {
+                  // Successful capture! For demo purposes:
+                  console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+                  var transaction = orderData.purchase_units[0].payments.captures[0];
+                  alert('Transaction '+ transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');
+                  window.location.replace("/clearCart/{{ session['user_id'] }}");
+                  // actions.redirect(url_for('clear_cart'));
+                  // Replace the above to show a success message within this page, e.g.
+                  // const element = document.getElementById('paypal-button-container');
+                  // element.innerHTML = '';
+                  // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+                  // Or go to another URL:  actions.redirect('thank_you.html');
+              });
+          }
+
+
+      }).render('#paypal-button-container');
+
+      // if onApprove success then item will be remove from cart.
+
+
+  </script>
 {% endblock %}

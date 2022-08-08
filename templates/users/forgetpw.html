@@ -3,11 +3,19 @@
 
 {% block content %}
 {% from "_formHelper.html" import render_field %}
+    
+{% with messages=get_flashed_messages(with_categories=true) %}
+{% for category, message in messages %}
+ <div class='alert alert-{{category}} text-center alert-dismissible fade show m-auto'>
+   {{ message }}
+  </div>
+{% endfor %}
+{% endwith %}
 
 <div class="p-5 bg-light">
     <div class="container-sm col-lg-6 ml-auto">
 
-        <h2 class="display-7">Forget Password</h2>
+        <h3 class="display-7 pb-3">Forget Password</h3>
 
         <form method = "POST" action="">
 
@@ -15,10 +23,11 @@
             {{ render_field(form.email, class="form-control") }}
             </div>
             <br>
-            <div class="row justify-content-center mt-4">
+            <div class="row justify-content-center">
                 <form action="" method="POST">
                 <input type="submit" class="btn btn-primary btn-md" style="width:45%" value="Submit">
                 </form>
+                
             </div>
 
         </form>

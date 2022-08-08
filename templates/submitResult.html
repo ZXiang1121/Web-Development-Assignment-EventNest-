@@ -8,64 +8,28 @@
 
 {% block content%}
 
+{% if count == 0 %}
+<p>User is empty</p>
+{% elif count == 1 %}
+<p>There is 1 user.</p>
+{% else %}
+<p>There are {{ count }} users.</p>
+{% endif %}
+
+
+
+
 <div class="container">
+  <!-- {% for i in users_list%}
 
-<div>
-    {% if count == 0 %}
-    <p>There are no events.</p>
-    {% elif count == 1 %}
-    <p>There is 1 event.</p>
-    {% else %}
-    <p>There are {{ count }} events.</p>
-    {% endif %}
-  </div>
-  
+    {{ i.get_email() }}
 
-  <div class="table-content py-5 event " id="nav-tabContent">
+    for i in 
+    {{i.get_cart_item()}}
 
-    <div class="row row-cols-1 row-cols-md-3 g-4 tab-pane active" id="nav-all" aria-labelledby="nav-all-tab">
+  {% endfor %} -->
+</div> 
 
-    {% for event in events_list %}
-
-      {% if event.get_event_category() == "C" %}
-        <img class="img-fluid fit-image" src="{{url_for('static', filename='images/' + event.get_event_poster() )}}" class="card-img-top" alt="...">
-        <img class="img-fluid fit-image" src="{{url_for('static', filename='images/' + event.get_seat_image() )}}" class="card-img-top" alt="...">
-        {{ event.get_event_name() }}
-        {{ event.get_event_location()}}
-        {{ event.get_event_date() }}
-
-        <ul>
-          
-          {% for i in event.get_seating_plan() %}
-            {{ i.get_seat_type() }}
-            {{ i.get_seat_available() }}
-            {{ i.get_seat_price() }}
-          {% endfor%}
-
-        </ul>
-        
-
-      {% elif event.get_event_category() == "S" %}
-
-            <img class="img-fluid fit-image" src="{{url_for('static', filename='images/' + event.get_event_poster() )}}" class="card-img-top" alt="...">
-
-           {{ event.get_event_name() }}
-           {{ event.get_event_location() }}
-           {{ event.get_event_date() }}
-
-           <ul>
-
-            {% for i in event.get_seating_plan() %}
-              {{ i.get_seat_type() }}
-              {{ i.get_seat_available() }}
-              {{ i.get_seat_price() }}
-            {% endfor%}
-  
-          </ul>
-
-      {% endif %}
-
-    {% endfor %}
 
 
 {% endblock%}

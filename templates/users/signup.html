@@ -15,7 +15,7 @@
 <div class="p-5 bg-light">
     <div class="container-sm col-lg-6 ml-auto">
 
-      <h2 class="display-7">Sign Up</h2>
+      <h3 class="display-7 pb-3">Create your account</h3>
 
         <form method = "POST" action="">
 
@@ -31,37 +31,28 @@
                 {{ render_field(form.birthdate, class="form-control") }}
             </div>
             <br>
-            <div class="form-group" id="password">
-             {{ render_field(form.password, class="form-control") }}
+            <div class="form-group">
+             {{ render_field(form.password, class="form-control",id="password") }}
             </div>
             <br>
-            <div class="form-group" id="password">
-              {{ render_field(form.comfirmpw, class="form-control") }}
+            <div class="form-group">
+              {{ render_field(form.comfirmpw, class="form-control",id="cfpassword") }}
              </div>
-            <!-- show password not wrking -->
-            <div>
-              <input class="form-check-input" type="checkbox" value="" id="seepw" onclick="myFunction()">
-              <label class="form-check-label" for="seepw">
+             
+             <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" onclick="myFunction()">
+              <label class="form-check-label" for="flexCheckDefault">
                 Show password
               </label>
             </div>
             <br>
-            
-
-            <!-- <div class="form-group">
-              <label for="password2">Comfirm Password</label>
-              <input type="password" class="form-control" id="password2" required>
-                <div class="valid-feedback">Valid.</div>
-                <div class="invalid-feedback">Passwords have to match.</div>
-            </div>
-            <br> -->
-
             <div class="form-group form-check needs-validation" novalidate>
               <input type="checkbox" class="form-check-input" id="toc" required>
               <label class="form-check-label" for="toc">I agree to the Terms and Conditions of EventNest</label>
             </div>
+            <br>
 
-            <div class="row justify-content-center mt-5 mb-3">
+            <div class="row justify-content-center">
               <form action="" method="POST">
                 <input type="submit" class="btn btn-primary btn-md" style="width:45%" value="Submit">
               </form>
@@ -73,33 +64,22 @@
 
     </div>
 </div>
+
 <script>
-// $("#password").on("focusout", function () {
-//   if ($(this).val() != $("#password2").val()) {
-//     $("#password2").removeClass("valid").addClass("invalid");
-//   } else {
-//     $("#password2").removeClass("invalid").addClass("valid");
-//   }
-// });
-
-// $("#password2").on("keyup", function () {
-//   if ($("#password").val() != $(this).val()) {
-//     $(this).removeClass("valid").addClass("invalid");
-//   } else {
-//     $(this).removeClass("invalid").addClass("valid");
-//   }
-// })
-
-
-
-function myFunction() {
-  var x = document.getElementsByName("{{ form.password.name }}");
+  function myFunction() {
+  var x = document.getElementById('password');
+  var y = document.getElementById('cfpassword');
   if (x.type === "password") {
     x.type = "text";
   } else {
     x.type = "password";
   }
-} 
+  if (y.type === "password") {
+    y.type = "text";
+  } else {
+    y.type = "password";
+  }
+}
 </script>
 
 {% endblock %}

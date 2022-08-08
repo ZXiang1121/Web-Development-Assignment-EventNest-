@@ -1,6 +1,7 @@
 import os
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 
+
 import Question
 
 from forms import createEvent, signupForm, loginForm, forgetpw, changPw, CreateQnForm
@@ -9,10 +10,27 @@ import shelve, Event, account, Seat
 from forms import createEvent, signupForm, loginForm, forgetpw, changPw,  addOrder
 import shelve, Event, account, Seat, Order
 
+
+# session timeout
+import flask
+import flask_login
+import datetime
+
+import User
+from forms import createEvent, signupForm, loginForm, forgetpw, changPw, ContactForm, addOrder
+import shelve, Event, account, Seat, Order, Payment
+
 from werkzeug.utils import secure_filename
 from flask_login import LoginManager
+
 from werkzeug.datastructures import CombinedMultiDict
+
 import pandas as pdpy
+
+
+import pandas as pd
+import smtplib
+from email.message import EmailMessage
 
 # admin name: admin
 # admin email: admin@gmail.com
@@ -22,11 +40,17 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'I have a dream'
 app.config['UPLOAD_FOLDER'] = 'static/images'
 
+@app.before_request
+def before_request():
+    flask.session.permanent = True
+    app.permanent_session_lifetime = datetime.timedelta(minutes=30)
+    flask.session.modified = True
+    flask.g.user = flask_login.current_user
 
 @app.route('/')
 def home():
     events_dict = {}
-    db = shelve.open('storage.db', 'r')
+    db = shelve.open('storage.db', 'c')
     events_dict = db['Events']
 
     db.close()
@@ -38,6 +62,10 @@ def home():
 
     return render_template('home.html', count=len(events_list), events_list=events_list)
 
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('error404.html'), 404
 
 @app.route('/ticketDetails/<uuid(strict=False):id>', methods=['GET', 'POST'])
 def ticket_details(id):
@@ -118,11 +146,11 @@ def update_ticket_details(id):
             order = orders_dict.get(key)
             orders_list.append(order)
         
-        print(orders_list)
+        # print(orders_list)
 
         for page in orders_list:
             if page.get_order_id() == id:
-                print(page.get_order_id())
+                # print(page.get_order_id())
                 retrieve_order = page
 
         order = orders_dict.get(id)
@@ -181,6 +209,7 @@ def cart_page():
     orders_dict = db['Orders']
     # print(orders_dict)
     db.close()
+    
 
     orders_list = []
     for key in orders_dict:
@@ -194,8 +223,54 @@ def cart_page():
 
     total_cost = "{:.2f}".format(sum(store_order_price))
 
-        
+
     return render_template('cart.html', count=len(orders_list), orders=orders_list, payable= total_cost)
+
+@app.route('/clearCart/<uuid(strict=False):id>/')
+def clear_cart(id):
+
+    orders_dict = {}
+    db = shelve.open('storage.db', 'r')
+    orders_dict = db['Orders']
+    db.close()
+
+    orders_list = []
+    for key in orders_dict:
+        order = orders_dict.get(key)
+        orders_list.append(order)
+
+    payments_dict = {}
+    db = shelve.open('storage.db', 'c')
+
+    try:
+        payments_dict = db['Payments']
+    except:
+        print('Error in retrieving Events from storage.db')
+    
+    new_payment = Payment.Payment(
+        orders_list
+    )
+
+    db = shelve.open('storage.db', 'w')
+    db['Orders'] = {}
+
+    payments_dict[new_payment.get_payment_id()] = new_payment
+    db['Payment'] = payments_dict
+
+
+    users_dict = {}
+    db = shelve.open('storage.db', 'w')
+    users_dict = db['Users']
+
+    user = users_dict.get(id)
+    user.set_cart_item(orders_list)
+    user.set_payment(new_payment)
+    print(user.set_payment(new_payment))
+
+    db['Users'] = users_dict
+    db.close()
+
+    return redirect(url_for('home'))
 
 
 @app.route('/deleteOrder/<uuid(strict=False):id>/', methods=['GET', 'POST'])
@@ -212,8 +287,8 @@ def delete_order(id):
     return redirect(url_for('cart_page'))
 
 
-
-# make account
+# zowie
+# login
 login_manager = LoginManager()
 login_manager.init_app(app)
 @login_manager.user_loader
@@ -226,6 +301,7 @@ def get_id(val, my_dict):
         if val == value.get_email():
             return key
     return 'None'
+
 def get_pw(val, my_dict):
     for key, value in my_dict.items():
         if val == value.get_password():
@@ -250,7 +326,7 @@ def login():
         key2 = get_pw(login.password.data, users_dict)
 
         if key == 'None' or key != key2: 
-            print(key, login.email.data, users_dict) # test
+            # print(key, login.email.data, users_dict) # test
             flash('Invalid login credentials', 'danger')
 
         elif login.email.data == 'admin@gmail.com' and login.password.data == 'eventnest':
@@ -268,16 +344,11 @@ def login():
             session['user_id'] = user.get_user_id()
             session['user_email'] = user.get_email()
             session['user_birthdate'] = user.get_birthdate()
-            return redirect(url_for('accountDetails'))
+            return redirect(url_for('accountDetails', id = user.get_user_id()))
 
     return render_template('users/login.html', form=login)
 
-@app.route('/logout')
-def logout():
-   # remove the username from the session if it is there
-   session.pop('logged_in', None)
-   return redirect(url_for('home'))
-
+# make account
 @app.route('/signup', methods=['GET', 'POST'])
 def create_user():
     signup = signupForm(request.form)
@@ -306,7 +377,7 @@ def create_user():
                 # Test codes
                 users_dict = db['Users']
                 user = users_dict[user.get_user_id()]
-                print(user.get_name(), "was stored in storage.db successfully with user_id ==", user.get_user_id())
+                # print(user.get_name(), "was stored in storage.db successfully with user_id ==", user.get_user_id())
 
                 db.close()
 
@@ -322,24 +393,103 @@ def create_user():
 
     return render_template('users/signup.html', form=signup)
 
+
+# reset password
+
 @app.route('/forgetpw', methods=['GET', 'POST'])
 def forgetpass():
     forgetpwform = forgetpw(request.form)
     if request.method == 'POST':
-        return redirect(url_for('login'))
+        users_dict = {}
+        db = shelve.open('storage.db', 'r')
+        users_dict = db['Users']
+
+        key = get_id(forgetpwform.email.data, users_dict)
+
+        if key == 'None': 
+            flash('Email does not have an account', 'danger')
+        
+        else:
+            sender_email = 'eventnest1@gmail.com'
+            sender_pw = 'tenroviygfhwacpo'
+
+            msg = EmailMessage()
+            msg['Subject'] = 'Reset EventNest password'
+            msg['From'] = sender_email
+            msg['To'] = forgetpwform.email.data
+
+            msg.set_content('Click the link to reset your password. http://127.0.0.1:5000{}'.format(url_for('newpass', id = key)))
+
+            with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
+                smtp.ehlo()
+                smtp.starttls() 
+                smtp.ehlo()
+
+
+                smtp.login(sender_email, sender_pw)
+
+                smtp.send_message(msg)
+            
+            return redirect(url_for('comfirmresetpw'))
     return render_template('users/forgetpw.html', form=forgetpwform)
 
-@app.route('/newpw', methods=['GET', 'POST'])
-def newpass():
+@app.route('/comfirmreset')
+def comfirmresetpw():
+    return render_template('users/comfirmreset.html')
+
+@app.route('/newpw/<uuid(strict=False):id>/', methods=['GET', 'POST'])
+def newpass(id):
     newpw = changPw(request.form)
     if request.method == 'POST':
-        return redirect(url_for('login'))
+        users_dict = {}
+        db = shelve.open('storage.db', 'w')
+        users_dict = db['Users']
+
+        user = users_dict.get(id)
+
+        if newpw.newpassword.data != newpw.comfirmpw.data:
+            flash('Passwords do not match.', 'danger')
+
+        else:
+            
+            user.set_password(newpw.newpassword.data)
+
+            db['Users'] = users_dict
+            db.close()
+
+            session['user_updated'] = user.get_name()    
+            return redirect(url_for('login'))
+
     return render_template('users/newpw.html', form=newpw)
 
+@app.route('/logout')
+def logout():
+   # remove the username from the session if it is there
+   session.pop('user_id', None)
+   return redirect(url_for('home'))
+
+@app.route('/deleteacc/<uuid(strict=False):id>/')
+def deleteacc(id):
+    session.pop('user_id', None)
+   
+    users_dict = {}
+    db = shelve.open('storage.db', 'w')
+    users_dict = db['Users']
+
+    users_dict.pop(id)
+
+    db['Users'] = users_dict
+    db.close()
+    return redirect(url_for('home'))
+
+
 # account made
+@app.route('/profile')
+def profile():
+    return render_template('users/profile.html')
 
 @app.route('/accountDetails')
-def accountDetails(): # how to display info of logged in user
+def accountDetails():
     login = loginForm(request.form)
 
     users_dict = {}
@@ -354,7 +504,6 @@ def accountDetails(): # how to display info of logged in user
         users_list.append(user)
 
     return render_template('users/accountDetails.html', users_list=users_list)
-    # return render_template('users/accountDetails.html')
 
 @app.route('/EditAcc/<uuid(strict=False):id>/', methods=['GET', 'POST'])
 def EditAcc(id):    
@@ -433,8 +582,8 @@ def create_event():
     # event_form = createEvent(CombinedMultiDict((request.files, request.form)))
     event_form = createEvent(CombinedMultiDict((request.files, request.form)))
     
-    print(event_form)
-    print("---")
+    # print(event_form)
+    # print("---")
 
     if request.method == 'POST' and event_form.validate():
         posterFile = event_form.event_poster.data # First grab the file
@@ -586,18 +735,30 @@ def admin_homepage():
 
 @app.route('/submitResult')
 def submit_result():
-    events_dict = {}
+    users_dict = {}
     db = shelve.open('storage.db', 'r')
-    events_dict = db['Events']
+    users_dict = db['Users']
 
     db.close()
 
-    events_list = []
-    for key in events_dict:
-        event = events_dict.get(key)
-        events_list.append(event)
+    users_list = []
+    for key in users_dict:
+        user = users_dict.get(key)
+        users_list.append(user)
 
-    return render_template('submitResult.html', count=len(events_list), events_list=events_list)
+    for user in users_list:
+        print(user.get_email())
+        for i in user.get_cart_item():
+            for n in i:
+                print(n.get_order_name())
+            # subtotal = i.order_cost(i.get_order_seat_price(), i.get_order_quantity())
+            
+ 
+
+    return render_template('submitResult.html', count=len(users_list), users_list=users_list)
+
+
+
 
 
 
