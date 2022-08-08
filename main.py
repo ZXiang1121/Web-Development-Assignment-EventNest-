@@ -386,7 +386,7 @@ def ticket_details(id):
         value_list = list(dc.values())
         position = value_list.index(int(add_order_form.order_price.data))
 
-        # print(add_order_form.order_price.)
+
         new_order = Order.Order(
                             retrieve_event.get_event_id(),
                             retrieve_event.get_event_name(),
@@ -574,11 +574,10 @@ def delete_order(id):
 
 @app.route('/createEventForm', methods = ['GET', 'POST'])
 def create_event():
-    # event_form = createEvent(CombinedMultiDict((request.files, request.form)))
+
     event_form = createEvent(CombinedMultiDict((request.files, request.form)))
     
-    # print(event_form)
-    # print("---")
+
 
     if request.method == 'POST' and event_form.validate():
         posterFile = event_form.event_poster.data # First grab the file
@@ -598,7 +597,7 @@ def create_event():
             print('Error in retrieving Events from storage.db')
 
 
-        ## uuid, createdTime
+
 
         new_event = Event.Event(
                             event_form.event_name.data,
@@ -628,7 +627,7 @@ def create_event():
 
         db.close()
 
-        # return redirect(url_for('admin_homepage'))
+
         return redirect(url_for('admin_homepage'))
     return render_template('createEventForm.html', form=event_form)
 

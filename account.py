@@ -14,8 +14,8 @@ class Account:
         self.__order_item = None
         self.__payment = None
         self.__cart = []
-        cart = user.get_cart()
-        cart.append('item')
+        # cart = user.get_cart()
+        # cart.append('item')
 
     def get_user_id(self):
         return self.__user_id
