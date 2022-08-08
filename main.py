@@ -600,13 +600,15 @@ def submit_result():
     return render_template('submitResult.html', count=len(events_list), events_list=events_list)
 
 
-@app.route('/success')
-def message():
-   return render_template('contactusMessage.html')
+
 
 
 # ----------------------------------------------------------------------------------------------------------------------------------------------------------
 # Rawtbhik
+@app.route('/success', methods=['GET', 'POST'])
+def message():
+   return redirect('messages')
+
 @app.route('/createQn', methods=['GET', 'POST'])
 def create_qn():
     create_qn_form = CreateQnForm(request.form)
@@ -758,6 +760,11 @@ def retrieve():
         qns_list.append(qn)
         
     return render_template('faq.html', count=len(qns_list),qns_list=qns_list)
+
+@app.route('/aboutus')
+def aboutus():
+   return render_template('aboutUs.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)

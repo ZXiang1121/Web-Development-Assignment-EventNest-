@@ -54,7 +54,7 @@ class addOrder(Form):
 
 
 class CreateQnForm(Form):
-    name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
+    name = StringField('Name', [validators.Length(min=1, max=150), validators.DataRequired()])
     gender = SelectField('Gender', [validators.DataRequired()], choices=[('', 'Select'), ('F', 'Female'), ('M', 'Male')], default='')
     subject = SelectField('Subject', [validators.DataRequired()], choices=[('', 'Select'), ('Technical', 'Technical Issue of the Transaction'), ('Ticket', 'Ticket Policy'),('Refund', 'Ticket Refund' ),('Feedback', 'Feedback/Review')], default='')
     email = StringField('Email',[validators.Email(), validators.DataRequired()])

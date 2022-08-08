@@ -35,10 +35,77 @@
  
  
 <div class="container mt-3">
-  <h5> Frequent Asked Question</h5>
-  <div id="accordion">
-    <div class="card">
-      {% for qn in qns_list %}
+  
+ 
+    <h5> Frequently Asked Question</h5>
+    <div id="accordion">
+      <div class="card">
+        <div class="card-header">
+          <a class="btn" data-bs-toggle="collapse" href="#collapseOne">
+            <strong>Q</strong>&nbsp Where can I collect my tickets? | <strong>Topic:</strong>&nbspTicket
+          </a>
+        </div>
+        <div id="collapseOne" class="collapse" data-bs-parent="#accordion">
+          <div class="card-body">
+            &nbsp&nbsp&nbsp <strong>A</strong>&nbspAt EventNest, there is no need to collect your tickets or request a delivery as you would be given an <strong>e-ticket via your email</strong>you have use to register for an account with us. 
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <a class="collapsed btn" data-bs-toggle="collapse" href="#collapseTwo">
+            <strong>Q</strong>&nbsp How do I ask for a refund for the tickets i purchased? | <strong>Topic:</strong>&nbsp Refund
+          </a>
+        </div>
+        <div id="collapseTwo" class="collapse" data-bs-parent="#accordion">
+          <div class="card-body">
+            &nbsp&nbsp&nbsp<strong>A</strong>&nbspDo contact us via our Contact Us page.<br> Call us at +65 64125879 or Email us: EventNest@gmail.com
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <a class="collapsed btn" data-bs-toggle="collapse" href="#collapseThree">
+            <strong>Q</strong>&nbsp How do I purchase my tickets when I am experiencing a hard time trying to purchase my tickets? | <strong>Topic:</strong>&nbspTechnical
+          </a>
+        </div>
+        <div id="collapseThree" class="collapse" data-bs-parent="#accordion">
+          <div class="card-body">
+            &nbsp&nbsp&nbsp<strong>A</strong>&nbspHi. You may follow the steps to help solve your issue
+            <br>
+            &nbsp&nbsp&nbsp1. Log out from account safely if you experience this
+            <br>
+            &nbsp&nbsp&nbsp2. Refresh your browser
+            <br>
+            &nbsp&nbsp&nbsp3. If these steps could not help, try restarting your pc/ the webserver you are on does not support our website. Try others such as: Google, Internet Explorer, Mozzila etc.
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <a class="collapsed btn" data-bs-toggle="collapse" href="#collapseFour">
+            <strong>Q</strong>&nbsp To sign up for an account with EventNest is free? 
+          </a>
+        </div>
+        <div id="collapseFour" class="collapse" data-bs-parent="#accordion">
+          <div class="card-body">
+            &nbsp&nbsp&nbsp<strong>A</strong>&nbspIt is free. You do not need to incur any costs.
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <a class="collapsed btn" data-bs-toggle="collapse" href="#collapseFive">
+            <strong>Q</strong>&nbspWhat do I benefit from having account with EventNest
+          </a>
+        </div>
+        <div id="collapseFive" class="collapse" data-bs-parent="#accordion">
+          <div class="card-body">
+            &nbsp&nbsp&nbsp<strong>A</strong>&nbsp All EventNest Users will enjoy 22% off for all tickets purchased.
+          </div>
+        </div>
+      </div>
+      {% for qn in qns_list %} 
       <div class="card-header">
         <a class="btn" data-bs-toggle="collapse" href="#collapseOne">
           <strong>Q</strong> &nbsp{{ qn.get_remarks()}}&nbsp | &nbsp<strong>Topic:</strong> {{ qn.get_subject() }}
