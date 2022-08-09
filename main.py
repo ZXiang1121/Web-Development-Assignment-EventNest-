@@ -417,7 +417,7 @@ def ticket_details(event_id):
 
         db['Users'] = users_dict
         db.close()
-
+        #parik issues
 
         return redirect(url_for('cart_page', user_id = user_id))
     return render_template('ticketDetails.html', event=retrieve_event, form=add_order_form)
