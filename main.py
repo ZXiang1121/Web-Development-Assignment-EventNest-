@@ -12,6 +12,8 @@ import flask_login
 import datetime
 
 
+from forms import createEvent, signupForm, loginForm, forgetpw, changPw, addOrder
+import shelve, Event, account, Seat, Order, Payment
 
 from werkzeug.utils import secure_filename
 from flask_login import LoginManager
@@ -240,9 +242,6 @@ def deleteacc(id):
 
 
 # account made
-@app.route('/profile')
-def profile():
-    return render_template('users/profile.html')
 
 @app.route('/accountDetails')
 def accountDetails():
