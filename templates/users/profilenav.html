@@ -1,22 +1,29 @@
 
-<div id="profilenav" class="d-flex flex-column flex-shrink-0 p-4 sticky " style="width: 20%;">
-<ul class="nav nav-pills nav-flush flex-column mb-auto">
-    <li class="nav-item">
-        <a class="nav-link link-dark active align-items-center" aria-current="true" data-toggle="pill" href="/accountDetails">
-            <i class="fa-solid fa-user-astronaut pe-2"></i>Profile</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link link-dark align-items-center" aria-current="false" data-toggle="pill" href="/new">
-            <i class="fa-solid fa-chart-line pe-2"></i>Dashboard</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link link-dark align-items-center"  data-toggle="pill" aria-current="false" href="/logout" onclick="return confirm('Are you sure you want to log out?')">
-            <i class="fa-solid fa-arrow-right-from-bracket pe-2 fa-1x"></i>Log Out</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link link-dark align-items-center"  data-toggle="pill" aria-current="false" href="/deleteacc/{{ session['user_id'] }}" onclick="return confirm('Are you sure you want to delete your account?')">
-            <i class="fa-solid fa-eraser pe-2 fa-1x"></i>Delete Account</a>
-    </li>
-</nav>
-</div>
-
+<div class="container-fluid g-0 d-inline-block">
+    <div class="row g-0 ">
+        <div class="col-auto ">
+            <div class="flex-column flex-row flex-nowrap d-flex align-items-center align-items-sm-start px-3 pt-2 text-white">
+                
+                <ul class=" pt-4 flex-sm-column flex-row flex-nowrap mb-auto nav nav-pills nav-flush nav-justified flex-column align-items-center align-items-sm-start">
+                    <li class="nav-item">
+                        <a href="/accountDetails" class="ps-2 nav-link active link-dark">
+                            <i class="fa-solid fa-user-astronaut"></i> <span class="ms-1 d-none d-sm-inline">Profile</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="custDashboard/<uuid(strict=False):id>/" class=" link-dark nav-link ps-2">
+                            <i class="fa-solid fa-chart-line"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span> </a>
+                    </li>
+                    <li>
+                        <a href="/logout" class=" link-dark nav-link ps-2" onclick="return confirm('Are you sure you want to log out?')">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i> <span class="ms-1 d-none d-sm-inline">Logout</span></a>
+                    </li>
+                    <li>
+                        <a href="/deleteacc/{{ session['user_id'] }}" onclick="return confirm('Are you sure you want to delete your account?')" class=" link-dark nav-link ps-2">
+                            <i class="fa-solid fa-eraser"></i> <span class="ms-1 d-none d-sm-inline">Delete Account</span></a>
+                    </li>
+                    
+                
+            </div>
+        </div>
+        

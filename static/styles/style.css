@@ -14,6 +14,7 @@
 
 #accountdetails td{
     padding: 15px;
+    font-size: 90%;
 }
 
 .fit-image{
@@ -657,7 +658,7 @@ footer { color: #ccc }
 }
 
 .design-radio {
-    width:90%;
+    width:100%;
 }
 
 .design-radio li input{
@@ -696,4 +697,3 @@ footer { color: #ccc }
     border:2px solid black;
     border-radius:5px;
 } */
->>>>>>> 81c656b90f08748b94ba3fa3c1459ef6e9cd0a7a
