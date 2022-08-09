@@ -628,7 +628,7 @@ def new():
         sales.append(int(g.get_order_quantity()) * int(g.get_order_seat_price()))
     ssales = sum(sales)
 
-    
+
     S_increase = "{:.0f}".format((((2000 +ssales) - 1000)/(2000 + ssales)) * 100)
 
     sales_line_list= []
