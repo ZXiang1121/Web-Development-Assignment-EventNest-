@@ -17,7 +17,7 @@ import flask_login
 import datetime
 
 import dash
-from forms import createEvent, signupForm, loginForm, forgetpw, changPw, ContactForm, addOrder
+from forms import createEvent, signupForm, loginForm, forgetpw, changPw, addOrder
 
 import shelve, account, Event,Seat, Order, Payment
 
@@ -498,11 +498,6 @@ def newpass(id):
 
     return render_template('users/newpw.html', form=newpw)
 
-@app.route('/logout')
-def logout():
-   # remove the username from the session if it is there
-   session.pop('user_id', None)
-   return redirect(url_for('home'))
 
 @app.route('/deleteacc/<uuid(strict=False):id>/')
 def deleteacc(id):
@@ -607,85 +602,85 @@ def ChangePass(id):
     
     
 
-@app.route('/dashboard')
-# /<uuid(strict=False):id>/
-def dashboard():
-    users_dict = {}
-    db = shelve.open('storage.db', 'w')
-    users_dict = db['Users']
+# @app.route('/dashboard')
+# # /<uuid(strict=False):id>/
+# def dashboard():
+#     users_dict = {}
+#     db = shelve.open('storage.db', 'w')
+#     users_dict = db['Users']
 
-    user = users_dict.get(id)
-
-
-    adash_dict = {}
-    db = shelve.open('storage.db', 'c')
-    try:
-        adash_dict = db['adict']
-    except:
-        print('Error in retrieving Orders from storage.db')
-
-    legend = 'Monthly Data'
-    labels = ["Jan", "Feb", "Mar", "Apr", "May"]
-    j1 = dash.cdash('order name','seat price','event date','quantity','category')
-    j2 = dash.cdash('order name','seat price','event date','quantity','category')
-    j3 = dash.cdash('order name','seat price','event date','quantity','category')
-    j4 = dash.cdash('order name','seat price','event date','quantity','category')
-    j5 = dash.cdash('order name','seat price','event date','quantity','category')
-    dict = {"n1":[{dash.cdash.set_order_name(j1,"JustinB"), dash.cdash.set_order_seat_price(j1,20),dash.cdash.set_event_date(j1,23/10/2020),dash.cdash.set_order_quantity(j1,2),dash.cdash.set_order_category(j1,"S")}],
-            "n2": [{dash.cdash.set_order_name(j2,"JustinB"),dash.cdash.set_order_seat_price(j2,10),dash.cdash.set_event_date(j2,13/8/2020),dash.cdash.set_order_quantity(j2,5),dash.cdash.set_order_category(j2,"S")}],
-            "n3": [{dash.cdash.set_order_name(j3,"JustinB"),dash.cdash.set_order_seat_price(j3,12),dash.cdash.set_event_date(j3,10/7/2020),dash.cdash.set_order_quantity(j3,1),dash.cdash.set_order_category(j3,"S")}],
-            "n4": [{dash.cdash.set_order_name(j4,"JustinB"),dash.cdash.set_order_seat_price(j4,16),dash.cdash.set_event_date(j4,6/3/2020),dash.cdash.set_order_quantity(j4,6),dash.cdash.set_order_category(j4,"S")}],
-            "n5": [{dash.cdash.set_order_name(j5,"JustinB"),dash.cdash.set_order_seat_price(j5,14),dash.cdash.set_event_date(j5,1/4/2020),dash.cdash.set_order_quantity(j5,2),dash.cdash.set_order_category(j5,"S")}]
-}
+#     user = users_dict.get(id)
 
 
+#     adash_dict = {}
+#     db = shelve.open('storage.db', 'c')
+#     try:
+#         adash_dict = db['adict']
+#     except:
+#         print('Error in retrieving Orders from storage.db')
 
-    adash_dict =  dict
-    db['adict'] = adash_dict
-
-    db.close()
-
-    #open storage #
-
-    adash_list=[]       
-    db = shelve.open('storage.db', 'r')
-    adash_dict = db['adict']
-    db.close()
-
-    for key in dict:
-        user= dict.get(key)
-        adash_list.append(user)
-
-        							# 	{% for item in adash_list %}
-									# <h2>$ {{200 + item | sum(attribute='price') }}</h2>
-									# {% endfor %}
-                                    				# myChart.config.data.datasets[1].data[5] = newData[0] + {{ adash_list | sum(attribute='price') }} ;
-
-
-    # age2 = sum(d['price'] for d in adash_list if d['age'] < 20)
-    # age3 = sum(d['price'] for d in adash_list if d['age'] > 20 and d['age'] < 30 )
-    # age4 = sum(d['price'] for d in adash_list if d['age'] > 30 and d['age'] <40) 
-
-    # arc1 = sum(d['price'] for d in adash_list)
-    # forarc = ((250 + arc1)/ 1000) * 100
-    # narc1 = "{:.0f}".format(((250 + arc1)/ 1000) * 100) + "%"
-    # anarac1 = narc1
-
-    # ages = [age2,age3,age4]      
-
-    lst = [d.set_order_seat_price() for d in adash_list for v in d for d in v]
-    print(lst)
-
-    for d in adash_list:
-        for v in d:
-            for n in v:
-                print(n.get_order_seat_price())
+#     legend = 'Monthly Data'
+#     labels = ["Jan", "Feb", "Mar", "Apr", "May"]
+#     j1 = dash.cdash('order name','seat price','event date','quantity','category')
+#     j2 = dash.cdash('order name','seat price','event date','quantity','category')
+#     j3 = dash.cdash('order name','seat price','event date','quantity','category')
+#     j4 = dash.cdash('order name','seat price','event date','quantity','category')
+#     j5 = dash.cdash('order name','seat price','event date','quantity','category')
+#     dict = {"n1":[{dash.cdash.set_order_name(j1,"JustinB"), dash.cdash.set_order_seat_price(j1,20),dash.cdash.set_event_date(j1,23/10/2020),dash.cdash.set_order_quantity(j1,2),dash.cdash.set_order_category(j1,"S")}],
+#             "n2": [{dash.cdash.set_order_name(j2,"JustinB"),dash.cdash.set_order_seat_price(j2,10),dash.cdash.set_event_date(j2,13/8/2020),dash.cdash.set_order_quantity(j2,5),dash.cdash.set_order_category(j2,"S")}],
+#             "n3": [{dash.cdash.set_order_name(j3,"JustinB"),dash.cdash.set_order_seat_price(j3,12),dash.cdash.set_event_date(j3,10/7/2020),dash.cdash.set_order_quantity(j3,1),dash.cdash.set_order_category(j3,"S")}],
+#             "n4": [{dash.cdash.set_order_name(j4,"JustinB"),dash.cdash.set_order_seat_price(j4,16),dash.cdash.set_event_date(j4,6/3/2020),dash.cdash.set_order_quantity(j4,6),dash.cdash.set_order_category(j4,"S")}],
+#             "n5": [{dash.cdash.set_order_name(j5,"JustinB"),dash.cdash.set_order_seat_price(j5,14),dash.cdash.set_event_date(j5,1/4/2020),dash.cdash.set_order_quantity(j5,2),dash.cdash.set_order_category(j5,"S")}]
+# }
 
 
-    new = [4]
-    values = [12, 9, 5, 9,8, 20]
-    BarVal = [4, 7, 2, 5, 6, 14]
-    return render_template('dashboard.html', values=values, labels=labels, legend=legend,BarVal=BarVal,dict=dict,new=new,adash_list=adash_list,count=len(adash_list),lst=lst)
+
+#     adash_dict =  dict
+#     db['adict'] = adash_dict
+
+#     db.close()
+
+#     #open storage #
+
+#     adash_list=[]       
+#     db = shelve.open('storage.db', 'r')
+#     adash_dict = db['adict']
+#     db.close()
+
+#     for key in dict:
+#         user= dict.get(key)
+#         adash_list.append(user)
+
+#         							# 	{% for item in adash_list %}
+# 									# <h2>$ {{200 + item | sum(attribute='price') }}</h2>
+# 									# {% endfor %}
+#                                     				# myChart.config.data.datasets[1].data[5] = newData[0] + {{ adash_list | sum(attribute='price') }} ;
+
+
+#     # age2 = sum(d['price'] for d in adash_list if d['age'] < 20)
+#     # age3 = sum(d['price'] for d in adash_list if d['age'] > 20 and d['age'] < 30 )
+#     # age4 = sum(d['price'] for d in adash_list if d['age'] > 30 and d['age'] <40) 
+
+#     # arc1 = sum(d['price'] for d in adash_list)
+#     # forarc = ((250 + arc1)/ 1000) * 100
+#     # narc1 = "{:.0f}".format(((250 + arc1)/ 1000) * 100) + "%"
+#     # anarac1 = narc1
+
+#     # ages = [age2,age3,age4]      
+
+#     lst = [d.set_order_seat_price() for d in adash_list for v in d for d in v]
+#     print(lst)
+
+#     for d in adash_list:
+#         for v in d:
+#             for n in v:
+#                 print(n.get_order_seat_price())
+
+
+#     new = [4]
+#     values = [12, 9, 5, 9,8, 20]
+#     BarVal = [4, 7, 2, 5, 6, 14]
+#     return render_template('dashboard.html', values=values, labels=labels, legend=legend,BarVal=BarVal,dict=dict,new=new,adash_list=adash_list,count=len(adash_list),lst=lst)
     
 @app.route('/custdash')
 def custdash():
@@ -717,28 +712,21 @@ def custdash():
         for g in i.get_order_history():
             if g.get_order_category() == 'C':
                 concert_cat.append(g.get_order_category())
-
-
     
 
-    # age2 = sum(d['price'] for d in adash_list if d['age'] < 20)
-    # age3 = sum(d['price'] for d in adash_list if d['age'] > 20 and d['age'] < 30 )
-    # age4 = sum(d['price'] for d in adash_list if d['age'] > 30 and d['age'] <40) 
-
-    # arc1 = sum(d['price'] for d in adash_list)
-    # forarc = ((250 + arc1)/ 1000) * 100
-    # narc1 = "{:.0f}".format(((250 + arc1)/ 1000) * 100) + "%"
-    # anarac1 = narc1
-        
+    quantity_list= []
+    for i in payments_list:
+      for g in i.get_order_history():
+        quantity_list.append(int(g.get_order_quantity()))
 
     new = [4]
     labels = ["Jan", "Feb", "Mar", "Apr", "May","Jul"]
     values = [25, 70, 120, 100,80,60]
     BarVal = [4, 7, 2, 5, 6, 14]
-    return render_template('custDash.html', values=values,labels=labels,BarVal=BarVal,new=new,adash_list=payments_list,count=len(payments_list),sales_line_list=sum(sales_line_list),sports_cat=len(sports_cat),concert_cat=len(concert_cat))
+    return render_template('custDash.html',quantity_list=sum(quantity_list), values=values,labels=labels,BarVal=BarVal,new=new,adash_list=payments_list,count=len(payments_list),sales_line_list=sum(sales_line_list),sports_cat=len(sports_cat),concert_cat=len(concert_cat))
 
 
-@app.route('/fd')
+@app.route('/custDashboard')
 def paymentcard():
     payments_dict = {}
       
@@ -759,17 +747,17 @@ def paymentcard():
     ssales = sum(sales)
 
     values = [25, 40, 30, 48,50,60]
-    BarVal = [4, 7, 2, 5, 6, 14]
+    BarVal = [13, 45, 26, 55, 44, 50]
     labels = ["Jan", "Feb", "Mar", "Apr", "May","Jul"]
 
 
     forarc = ((250 + ssales)/ 1000) * 100
     narc1 = "{:.0f}".format(((250 + ssales)/ 1000) * 100) + "%"
     anarac1 = narc1
-    return render_template('fd.html',forarc=forarc,anarac1=anarac1,values=values,BarVal=BarVal,labels=labels)
+    return render_template('custDashboard.html',forarc=forarc,anarac1=anarac1,values=values,BarVal=BarVal,labels=labels)
 
 
-@app.route('/new')
+@app.route('/adminDashboard')
 def new():
     payments_dict = {}
       
@@ -783,21 +771,50 @@ def new():
         order = payments_dict.get(key)
         payments_list.append(order)
 
+    count = 300 + len(payments_list)
+    T_increase = "{:.0f}".format(((count - 200)/count) * 100)
+
     sales= []
     for i in payments_list:
       for g in i.get_order_history():
         sales.append(int(g.get_order_quantity()) * int(g.get_order_seat_price()))
     ssales = sum(sales)
 
-    values = [25, 40, 30, 48,50,60]
-    BarVal = [4, 7, 2, 5, 6, 14]
+    S_increase = "{:.0f}".format((((2000 +ssales) - 1000)/(2000 + ssales)) * 100)
+
+    sales_line_list= []
+    for i in payments_list:
+      for g in i.get_order_history():
+        sales_line_list.append(int(g.get_order_quantity()) * int(g.get_order_seat_price()))
+    
+
+    values = [9930, 9000, 3000, 6000,2000,7000]
+    BarVal = [3019, 7000, 1500, 8000, 6000, 5000]
     labels = ["Jan", "Feb", "Mar", "Apr", "May","Jul"]
+
+    sports_cat = []
+    for i in payments_list:
+        for g in i.get_order_history():
+            if g.get_order_category() == 'S':
+                sports_cat.append(g.get_order_category())
+
+    concert_cat = []
+    for i in payments_list:
+        for g in i.get_order_history():
+            if g.get_order_category() == 'C':
+                concert_cat.append(g.get_order_category())
 
 
     forarc = ((250 + ssales)/ 1000) * 100
     narc1 = "{:.0f}".format(((250 + ssales)/ 1000) * 100) + "%"
     anarac1 = narc1
-    return render_template('new.html',forarc=forarc,anarac1=anarac1,values=values,BarVal=BarVal,labels=labels)
+
+    # age2 = sum(d['price'] for d in adash_list if d['age'] < 20)
+    # age3 = sum(d['price'] for d in adash_list if d['age'] > 20 and d['age'] < 30 )
+    # age4 = sum(d['price'] for d in adash_list if d['age'] > 30 and d['age'] <40) 
+
+    
+    return render_template('adminDashboard.html',forarc=forarc,anarac1=anarac1,values=values,labels=labels,BarVal=BarVal,new=new,adash_list=payments_list,count=len(payments_list),sales_line_list=sum(sales_line_list),sports_cat=len(sports_cat),concert_cat=len(concert_cat),ssales=ssales,T_increase=T_increase,S_increase=S_increase)
 
 
 @app.route('/createEventForm', methods = ['GET', 'POST'])

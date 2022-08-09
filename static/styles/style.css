@@ -331,14 +331,12 @@ ol, ul {
     margin-top: 15px;
 } */
 
-<<<<<<< HEAD
-.btn {
-    position: relative;
-    top:0px;
 
-}
-@media(min-width: 1200px){.app-wrapper{margin-left:250px;}}.app{min-height:100vh;height:100%;width:100%;background:#f5f6fe;padding-top:0px;overflow-x:hidden}.app-footer .copyright{font-size:.8125rem}.app-wrapper{transition:all .4s ease-in-out}@media(prefers-reduced-motion: reduce){.app-wrapper{transition:none}}.app-page-title{font-size:1.5rem;font-weight:bolder;margin-bottom:1.5rem}.app-card{position:relative;background:#fff;border-radius:.25rem}.app-card.border-left-decoration{border-left:3px solid #15a362}.app-card .app-card-link-mask{position:absolute;width:100%;height:100%;display:block;left:0;top:0}.app-card .app-card-header{border-bottom:1px solid #e7e9ed}.app-card .app-card-title{font-size:1.125rem;margin-bottom:0}.app-card .card-header-action{font-size:.875rem}.chart-container{position:relative}.app-table-hover>tbody>tr:hover{background-color:#fafbff}.app-card-stat{text-align:left}.app-card-stat .stats-type{font-size:.875rem;color:#828d9f;text-transform:uppercase}.app-card-stat .stats-figure{font-size:2rem;color:#252930}.app-card-stat .stats-meta{font-size:.875rem;color:#828d9f;position: absolute;right:20px;top:20px}.app-card-progress-list .item{position:relative;border-bottom:1px solid #e7e9ed}.app-card-progress-list .item:hover .title{color:#252930}.app-card-stats-table .stat-cell{text-align:right}.app-card-basic{height:100%}.app-card-basic .title{font-size:1rem}.app-card .app-icon-holder{display:inline-block;background:#edfdf6;color:#15a362;width:50px;height:50px;padding-top:10px;font-size:1rem;text-align:center;border-radius:50%}
-=======
+@media(min-width: 1574px){.app-wrapper{margin-left:0px;}}.app{min-height:99vh;height:100%;width:99%;background:#f5f6fe;padding-top:0px;overflow-x:hidden}.app-wrapper{transition:all .4s ease-in-out}@media(prefers-reduced-motion: reduce){.app-wrapper{transition:none}}.app-page-title{font-size:1.5rem;font-weight:bolder;margin-bottom:1.5rem}.app-card{position:relative;background:#fff;border-radius:.25rem}.app-card.border-left-decoration{border-left:3px solid #15a362}.app-card .app-card-link-mask{position:absolute;width:100%;height:100%;display:block;left:0;top:0}.app-card .app-card-header{border-bottom:1px solid #e7e9ed}.app-card .app-card-title{font-size:1.125rem;margin-bottom:0}.app-card .card-header-action{font-size:.875rem}.chart-container{position:relative}.app-table-hover>tbody>tr:hover{background-color:#fafbff}.app-card-stat{text-align:left}.app-card-stat .stats-type{font-size:.875rem;color:#828d9f;text-transform:uppercase}.app-card-stat .stats-figure{font-size:2rem;color:#252930}.app-card-stat .stats-meta{font-size:.875rem;color:#828d9f;position: absolute;right:20px;top:20px}.app-card-progress-list .item{position:relative;border-bottom:1px solid #e7e9ed}.app-card-progress-list .item:hover .title{color:#252930}.app-card-stats-table .stat-cell{text-align:right}.app-card-basic{height:100%}.app-card-basic .title{font-size:1rem}.app-card .app-icon-holder{display:inline-block;background:#edfdf6;color:#15a362;width:50px;height:50px;padding-top:10px;font-size:1rem;text-align:center;border-radius:50%}
+
+
+
+
 /* #footer */
 footer { color: #ccc }
 .footer-widget p {

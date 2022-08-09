@@ -2,7 +2,12 @@
 {% block title%}custDash{% endblock %}
 
 {% block content %}
-<body class="app">   	
+<!-- <div class="row ">
+    {% include 'users/zowie.html' %}
+    <div class="p-2 bg-light pt-5" style="width: 80%;">
+    <div class="container-sm ml-auto"> -->
+
+<div class="app">   	
     <div class="app-wrapper">
 	    
 	    <div class="app-content pt-3 p-md-3">
@@ -12,14 +17,13 @@
 				<div class="col-12 g-4 mb-3">
 					<div class="app-card app-card-chart h-100 shadow-sm" style="background-color:#FFFFFF">
 						<div class="app-card-header p-3">
-							<h4 class="app-card-title">Spending by Month</h4>
+							<h2 class="app-card-title">Spending by Month</h2>
 							<div class="row justify-content-between align-items-center">
 								<div class="col-auto">
-									<h2>$ {{200 + sales_line_list }}</h2>
 								</div><!--//col-->
 								<div class="col-auto">
 									<div class="card-header-action">
-										<div class="mb-2 d-flex">   
+										<div class="d-flex">   
 												<button href="#" onclick="downloadPDF()" class="btn btn-primary btn-sm active" style="background-color:#00719f" role="button" aria-pressed="true">Download PDF</button>
 										</div>
 									</div><!--//card-header-actions-->
@@ -112,40 +116,30 @@ const data = {
 					</div><!--//app-card-->
 				</div><!--//col-->
 				    
-			    <div class="row g-3 mb-4">
+			    <div class="row g-3 mb-4" >
 				    <div class="col-12 col-sm-6 col-xl-4 mb-4">
-					    <div class="app-card app-card-stat shadow-sm h-70">
-						    <div class="app-card-body p-3 p-lg-4" style="background-color:#FFFFFF">
-							    <h4 class="stats-type mb-1">Tickets Bought</h4>
-								<div class="chart-container">
-									<div class="stats-figure py-4">
-										<div class="stats-figure py-4">	
-                      <h2>{{200 + count }}</h2>
-
-				</div>
-									</div>
-								</div>
-						    </div><!--//app-card-body-->
-						    <a class="app-card-link-mask" href="#"></a>
-					    </div><!--//app-card-->
-				    </div><!--//col-->
-				    
-				    <div class="col-12 col-sm-3 col-md-4 mb-4">
-					    <div class="app-card app-card-stat shadow-sm h-70">
-						    <div class="app-card-body p-3 p-lg-4" style="background-color:#FFFFFF">
-							    <h4 class="stats-type mb-1">Most Spent Ticket</h4>
-							    <div class="stats-figure py-4">	
-									<h2>$ {{200 + sales_line_list }}</h2>
-								</div>
-						    </div><!--//app-card-body-->
-						    <a class="app-card-link-mask" href="#"></a>
-					    </div><!--//app-card-->
-				    </div><!--//col-->
-				    <div class="col-12 col-sm-3 col-md-4 mb-4" style="background-color:#FFFFFF">
 					    <div class="app-card app-card-stat shadow-sm h-100">
 						    <div class="app-card-body p-3 p-lg-4">
-							    <h4 class="stats-type">Projects</h4>
+							    <h4 class="stats-type mb-4">Total Sales</h4>
+							    <div class="stats-figure">$ {{200 + sales_line_list }}</div>
 						    </div><!--//app-card-body-->
+						    <a class="app-card-link-mask" href="#"></a>
+					    </div><!--//app-card-->
+				    </div><!--//col-->
+
+					<div class="col-12 col-sm-6 col-xl-4 mb-4">
+						<div class="app-card app-card-stat shadow-sm h-100">
+							<div class="app-card-body p-3 p-lg-4">
+								<h4 class="stats-type mb-4">Ticket Bought</h4>
+								<div class="stats-figure">{{200 + quantity_list }}</div>
+							</div><!--//app-card-body-->
+							<a class="app-card-link-mask" href="#"></a>
+						</div><!--//app-card-->
+					</div><!--//col-->
+					<div class="col-12 col-sm-6 col-xl-4 mb-4">
+					    <div class="app-card app-card-stat shadow-sm h-100">
+						    <div class="app-card-body p-3 p-lg-4">
+							    <h4 class="stats-type mb-4">Expenses</h4>
                             <div class="chart-container">
 								<canvas style="max-height:80px" id="myChart1"></canvas>
 								<script>
@@ -169,8 +163,9 @@ const records = {
           'rgba(255, 159, 64, 0.2)'
         ],
         borderColor: [
-          'rgba(255, 26, 104, 1)',
-          'rgba(255, 159, 64, 1)'
+		'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
         ],
         borderWidth: 1
       }]
@@ -211,6 +206,7 @@ const records = {
 					    </div><!--//app-card-->
 				    </div><!--//col-->
 			    </div><!--//row-->
+				</div>
 			        
 			        <div class="col-12">
 				        <div class="app-card app-card-stats-table h-50 shadow-sm" style="background-color:#FFFFFF">
@@ -256,5 +252,8 @@ const records = {
 			        </div><!--//col-->		    
 		    </div><!--//container-fluid-->
 	    </div><!--//app-content-->
-	</body>
+	</div>
+	</div>
+	</div>
+	</div>
 {% endblock %}
