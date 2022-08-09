@@ -403,6 +403,8 @@ def ticket_details(id):
                             retrieve_event.get_seating_plan()
                             )
         
+        
+        
         orders_dict[new_order.get_order_id()] = new_order
         db['Orders'] = orders_dict
 
@@ -491,7 +493,7 @@ def cart_page():
     orders_dict = {}
     db = shelve.open('storage.db', 'r')
     orders_dict = db['Orders']
-    # print(orders_dict)
+
     db.close()
     
 
@@ -499,7 +501,7 @@ def cart_page():
     for key in orders_dict:
         order = orders_dict.get(key)
         orders_list.append(order)
-    # print(orders_list)
+
 
     store_order_price = []
     for i in orders_list:
