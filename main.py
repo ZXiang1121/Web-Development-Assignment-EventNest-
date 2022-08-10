@@ -2,14 +2,9 @@ import os
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 
 
-
-<<<<<<< HEAD
 from forms import createEvent, signupForm, loginForm, forgetpw, changPw,  addOrder,CreateQnForm
 import shelve, Event, account, Seat, Order, Payment, Question
-=======
-from forms import createEvent, signupForm, loginForm, forgetpw, changPw,  addOrder, CreateQnForm
-import shelve, Event, account, Seat, Order,Payment, Question
->>>>>>> refs/remotes/origin/main
+
 
 
 # session timeout
@@ -17,11 +12,7 @@ import flask
 import flask_login
 import datetime
 
-<<<<<<< HEAD
-=======
 import dash
-from forms import createEvent, signupForm, loginForm, forgetpw, changPw, addOrder
->>>>>>> refs/remotes/origin/main
 
 
 from werkzeug.utils import secure_filename
@@ -111,7 +102,13 @@ def login():
             user = users_dict.get(key) # get( user_id )
             db.close()
             session['admin_in'] = user.get_name()
-            return redirect(url_for('admin_homepage'))
+
+            session['username'] = user.get_name()
+            session['user_id'] = key
+            session['user_email'] = user.get_email()
+            session['user_birthdate'] = user.get_birthdate()
+
+            return redirect(url_for('accountDetails'))
 
         elif key == key2:
             user = users_dict.get(key) # get( user_id )
@@ -122,7 +119,10 @@ def login():
             session['user_id'] = user.get_user_id()
             session['user_email'] = user.get_email()
             session['user_birthdate'] = user.get_birthdate()
-            return redirect(url_for('accountDetails', id = user.get_user_id()))
+
+        
+            return redirect(url_for('accountDetails'))
+        
 
     return render_template('users/login.html', form=login)
 
@@ -167,8 +167,6 @@ def create_user():
                 db.close()
 
                 session['user_created'] = user.get_name()
-
-                session['username'] = signup.name.data
                 
 
                 return redirect(url_for('login'))
@@ -284,7 +282,7 @@ def accountDetails():
         user = users_dict.get(key)
         users_list.append(user)
 
-    return render_template('users/accountDetails.html', users_list=users_list)
+    return render_template('users/accountDetails.html')
 
 @app.route('/EditAcc/<uuid(strict=False):id>', methods=['GET', 'POST'])
 def EditAcc(id):    
