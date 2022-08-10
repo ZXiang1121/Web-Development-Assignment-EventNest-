@@ -3,13 +3,13 @@ from flask import Flask, redirect, url_for, render_template, request, session, f
 
 
 
-<<<<<<< HEAD
-from forms import createEvent, signupForm, loginForm, forgetpw, changPw,  addOrder,CreateQnForm
+
+from forms import createEvent, signupForm, loginForm, forgetpw, changPw,  addOrder, CreateQnForm
 import shelve, Event, account, Seat, Order, Payment, Question
-=======
+
 from forms import createEvent, signupForm, loginForm, forgetpw, changPw,  addOrder, CreateQnForm
 import shelve, Event, account, Seat, Order,Payment, Question
->>>>>>> refs/remotes/origin/main
+
 
 
 # session timeout
@@ -17,11 +17,11 @@ import flask
 import flask_login
 import datetime
 
-<<<<<<< HEAD
-=======
+
+
 import dash
 from forms import createEvent, signupForm, loginForm, forgetpw, changPw, addOrder
->>>>>>> refs/remotes/origin/main
+
 
 
 from werkzeug.utils import secure_filename
@@ -893,7 +893,7 @@ def create_qn():
 
 
 
-@app.route('/retrieveqns')
+@app.route('/retrieveQns')
 def retrieve_qns():
     qns_dict = {}
     db = shelve.open('storage.db', 'r')
@@ -925,6 +925,7 @@ def retrieve_qns():
 #         db['Questions'] = qns_dict
         
         
+@app.route('/updateQn/<int:id>/', methods=['GET', 'POST'])
 def update_qn(id):
     update_qn_form = CreateQnForm(request.form)
     if request.method == 'POST' and update_qn_form.validate():
