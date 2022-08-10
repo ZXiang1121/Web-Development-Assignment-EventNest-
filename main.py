@@ -249,7 +249,7 @@ def deleteacc(id):
     db = shelve.open('storage.db', 'w')
     users_dict = db['Users']
 
-    users_dict.pop(id)
+    users_dict.pop(str(id))
 
     db['Users'] = users_dict
     db.close()
@@ -483,7 +483,7 @@ def update_ticket_details(order_id, user_id):
         user_cart_list = user.get_cart_item()
 
         for page in user_cart_list:
-            print(page)
+            # print(page)
             if page.get_order_id() == order_id:
                 retrieve_order = page
 
@@ -550,13 +550,15 @@ def clear_cart(user_id):
     payments_dict[new_payment.get_payment_id()] = new_payment
     db['Payments'] = payments_dict
 
+    db.close()
+
     users_dict = {}
     db = shelve.open('storage.db', 'w')
     users_dict = db['Users']
     user = users_dict.get(str(user_id))
 
     # Pass payment into user
-    print(new_payment)
+    # print(new_payment)
     user.set_paid_item(new_payment)
     # user_paid_list = user.get_paid_item()
     # print(user_paid_list)
@@ -565,7 +567,6 @@ def clear_cart(user_id):
     user_cart_list = user.get_cart_item()
     user_cart_list.clear()
 
-    users_dict[user] = users_dict
     db['Users'] = users_dict
     db.close()
     
@@ -757,13 +758,15 @@ def admin_homepage():
 # ----------------------------------------------------------------------------------------------------------------------------------------------------------
 # Parik
 
-@app.route('/custDashboard')
-def paymentcard():
+@app.route('/custDashboard/<uuid(strict=False):id>/')
+def paymentcard(id):
     payments_dict = {}
       
     db = shelve.open('storage.db', 'r')
-    payments_dict = db['Payments']
+    payments_dict = db['Users']
     db.close()
+    user = payments_dict.get(str(id))
+    user_payment_list = user.get_paid_item()
 
 
     payments_list = []  
@@ -772,80 +775,113 @@ def paymentcard():
         payments_list.append(order)
 
     sales= []
-    for i in payments_list:
-      for g in i.get_order_history():
-        sales.append(int(g.get_order_quantity()) * int(g.get_order_seat_price()))
+    for g in user_payment_list:
+        for i in g.get_order_history():
+            sales.append((int(i.get_order_quantity()) * int(i.get_order_seat_price())))
     ssales = sum(sales)
+
+    sports_cat = []
+    for g in user_payment_list:
+        for i in g.get_order_history():
+                if i.get_order_category() == 'S':
+                    sports_cat.append(i.get_order_category())
+
+    concert_cat = []
+    for g in user_payment_list:
+        for i in g.get_order_history():
+                if i.get_order_category() == 'C':
+                    concert_cat.append(i.get_order_category())
+
+    tickets_sold = []
+    for g in user_payment_list:
+        for i in g.get_order_history():
+            tickets_sold.append((int(i.get_order_quantity())))
+    total_tickets_sold = sum(tickets_sold)
+
 
     values = [25, 40, 30, 48,50,60]
     BarVal = [13, 45, 26, 55, 44, 50]
     labels = ["Jan", "Feb", "Mar", "Apr", "May","Jul"]
 
 
-    forarc = ((250 + ssales)/ 1000) * 100
-    narc1 = "{:.0f}".format(((250 + ssales)/ 1000) * 100) + "%"
-    anarac1 = narc1
-    return render_template('custDashboard.html',forarc=forarc,anarac1=anarac1,values=values,BarVal=BarVal,labels=labels)
+    return render_template('custDashboard.html',payments_list=user_payment_list,values=values,BarVal=BarVal,labels=labels,ssales=ssales,total_tickets_sold=total_tickets_sold,sports_cat=len(sports_cat),concert_cat=len(concert_cat))
 
 @app.route('/adminDashboard')
 def new():
-    payments_dict = {}
+    users_dict = {}
       
     db = shelve.open('storage.db', 'r')
-    payments_dict = db['Users']
+    users_dict = db['Users']
     db.close()
 
+    users_list = []  
+    for key in users_dict:
+        user = users_dict.get(key)
+        if user.get_email() != 'admin@gmail.com':
+            users_list.append(user)
+        
 
-    payments_list = []  
-    for key in payments_dict:
-        order = payments_dict.get(key)
-        payments_list.append(order)
+    order_price_list = []
+    for i in users_list:
+        for payment in i.get_paid_item():
+            for order in payment.get_order_history():
+                order_price_list.append(order.order_cost(order.get_order_quantity(), order.get_order_seat_price()))
 
-    count = 300 + len(payments_list)
-    T_increase = "{:.0f}".format(((count - 200)/count) * 100)
-
-    sales= []
-    for i in payments_list:
-      for g in i.get_order_history():
-        sales.append(int(g.get_order_quantity()) * int(g.get_order_seat_price()))
-    ssales = sum(sales)
+    ssales = sum(order_price_list)
 
 
-    S_increase = "{:.0f}".format((((2000 +ssales) - 1000)/(2000 + ssales)) * 100)
+    sports_cat = []
+    for i in users_list:
+        for payment in i.get_paid_item():
+            for order in payment.get_order_history():
+                if order.get_order_category() == 'S':
+                    sports_cat.append(order.get_order_category())
 
-    sales_line_list= []
-    for i in payments_list:
-      for g in i.get_order_history():
-        sales_line_list.append(int(g.get_order_quantity()) * int(g.get_order_seat_price()))
-    
+    concert_cat = []
+    for i in users_list:
+        for payment in i.get_paid_item():
+            for order in payment.get_order_history():
+                if order.get_order_category() == 'C':
+                    concert_cat.append(order.get_order_category())
+
+    T_list = []
+    count = 300 + len(users_list)
+    T_list.append(int("{:.0f}".format(((count - 350)/count) * 100)))
+
+
+    S_list = []
+    S_list.append(int("{:.0f}".format((((2000 +ssales) - 1500)/(2000 + ssales)) * 100)))    
 
     values = [9930, 9000, 3000, 6000,2000,7000]
     BarVal = [3019, 7000, 1500, 8000, 6000, 5000]
     labels = ["Jan", "Feb", "Mar", "Apr", "May","Jul"]
 
-    sports_cat = []
-    for i in payments_list:
-        for g in i.get_order_history():
-            if g.get_order_category() == 'S':
-                sports_cat.append(g.get_order_category())
-
-    concert_cat = []
-    for i in payments_list:
-        for g in i.get_order_history():
-            if g.get_order_category() == 'C':
-                concert_cat.append(g.get_order_category())
-
 
     forarc = ((250 + ssales)/ 1000) * 100
     narc1 = "{:.0f}".format(((250 + ssales)/ 1000) * 100) + "%"
     anarac1 = narc1
 
-    # age2 = sum(d['price'] for d in adash_list if d['age'] < 20)
-    # age3 = sum(d['price'] for d in adash_list if d['age'] > 20 and d['age'] < 30 )
-    # age4 = sum(d['price'] for d in adash_list if d['age'] > 30 and d['age'] <40) 
+    new =[]
+    jj = []
+
+    print(users_list)
+
+    for key,value in users_dict.items():
+        sales_per_user = []
+        for payment in value.get_paid_item():
+            for order in payment.get_order_history():
+                sales_per_user.append(order.order_cost(order.get_order_quantity(), order.get_order_seat_price()))
+        new.append(sum(sales_per_user))
+        jj.append(key)
+    
+# sorted_zip = [(350, 'Ryan'), (914, 'Stacy')] - zip list into (value,name)
+
+
 
     
-    return render_template('adminDashboard.html',forarc=forarc,anarac1=anarac1,values=values,labels=labels,BarVal=BarVal,new=new,adash_list=payments_list,count=len(payments_list),sales_line_list=sum(sales_line_list),sports_cat=len(sports_cat),concert_cat=len(concert_cat),ssales=ssales,T_increase=T_increase,S_increase=S_increase)
+
+    
+    return render_template('adminDashboard.html',nn=sorted(zip(new, jj), reverse=True)[:3],jj=jj,users_dict=users_dict,forarc=forarc,anarac1=anarac1,values=values,labels=labels,BarVal=BarVal,new=new,count=len(users_list),sales_line_list=sum(order_price_list),sports_cat=len(sports_cat),concert_cat=len(concert_cat),ssales=ssales,T_list=T_list,S_list=S_list)
 
 
 
