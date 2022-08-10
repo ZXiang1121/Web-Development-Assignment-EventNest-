@@ -2,10 +2,14 @@ import os
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 
 
-import Question
 
+<<<<<<< HEAD
+from forms import createEvent, signupForm, loginForm, forgetpw, changPw,  addOrder,CreateQnForm
+import shelve, Event, account, Seat, Order, Payment, Question
+=======
 from forms import createEvent, signupForm, loginForm, forgetpw, changPw,  addOrder, CreateQnForm
 import shelve, Event, account, Seat, Order,Payment, Question
+>>>>>>> refs/remotes/origin/main
 
 
 # session timeout
@@ -13,8 +17,11 @@ import flask
 import flask_login
 import datetime
 
+<<<<<<< HEAD
+=======
 import dash
 from forms import createEvent, signupForm, loginForm, forgetpw, changPw, addOrder
+>>>>>>> refs/remotes/origin/main
 
 
 from werkzeug.utils import secure_filename
