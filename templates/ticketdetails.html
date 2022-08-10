@@ -61,11 +61,12 @@
                 </div>
                 {% if 'user_id' in session %}
                 <div class="col-sm mt-5">
-                    <input type="submit" value="Add to Cart" class="btn btn-primary w-100 p-2"/>
+                    <!-- <input type="submit" value="Add to Cart" class="btn btn-primary w-100 p-2"/> -->
+                    <button type="submit" name="get_user_id" value="{{ session['user_id'] }}" class="btn btn-primary w-100 p-2">Add to Cart</button>
                 </div>
                 
                 {% else %}
-                  <div></div>
+                  <div class="pt-5"> Please Login before adding item to cart.</div>
                 {% endif %}
             </form>
         </div>
@@ -73,6 +74,11 @@
         
     </div>
 
+
   </div>
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 81c656b90f08748b94ba3fa3c1459ef6e9cd0a7a
 {% endblock %}

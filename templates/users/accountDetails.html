@@ -26,17 +26,19 @@
 </div>
 {% endif %}
 
-<div class="row ">
-    {% include 'users/profilenav.html' %}
+{% include 'users/profilenav.html' %}
+
   
-
-
-<div class="p-3 mb-2 bg-light pt-5" style="width: 80%;">
+<!-- content -->
+<div class="col">
+<div class="p-3 mb-2 bg-light pt-5" >
     <div class="container-sm col-lg-6 ml-auto">
+
+
+<div class="p-3 bg-light pt-5" >
         
-        <!-- Nav tabs -->
         
-                <table id="accountdetails" class="table mx-auto pl-2" style="width: 80%;">
+                <table id="accountdetails" class="table mx-auto ">
                     
                     <tbody>
                       
@@ -57,22 +59,22 @@
                   </table>
                   <br>
 
-                <div class="row justify-content-center py-3">
-                    <div class="col">
+                <div class="row mx-auto">
+                    <div class="col py-3 ">
                         <a href="/EditAcc/{{ session['user_id'] }}"><button type="button" class="btn btn-primary btn-md form-control btn-block">Edit details</button></a>
                     </div>
-                    <div class="col">
+                    <div class="col py-3 ">
                         <a href="/ChangePass/{{ session['user_id'] }}"><button type="button" class="btn btn-primary btn-md form-control btn-block">Change password</button></a>
                     </div>
                 </div>
 
-          </div>
-          
-
+</div>
 </div>
 
+    </div>
+  </div>
 
-</div>
+<!-- end content -->
 
 </div>
 </div>
