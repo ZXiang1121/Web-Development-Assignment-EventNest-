@@ -39,14 +39,6 @@ def before_request():
     flask.g.user = flask_login.current_user
 
 
-@app.before_request
-def before_request():
-    flask.session.permanent = True
-    app.permanent_session_lifetime = datetime.timedelta(minutes=30)
-    flask.session.modified = True
-    flask.g.user = flask_login.current_user
-
-
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('error404.html'), 404
