@@ -19,6 +19,14 @@ from email.message import EmailMessage
 # admin email: admin@gmail.com
 # admin pw: eventnest
 
+# user payment account
+# payment account: eventnestbuyer1@personal.example.com
+# payment password: p!:stYK7
+
+# business account that receive payment
+# business email: eventnestbusiness1@business.example.com
+# business password: p-E"OA8s
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'I have a dream'
 app.config['UPLOAD_FOLDER'] = 'static/images'
