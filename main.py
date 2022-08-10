@@ -98,6 +98,11 @@ def login():
             user = users_dict.get(key) # get( user_id )
             db.close()
             session['admin_in'] = user.get_name()
+
+            session['username'] = user.get_name()
+            session['user_id'] = key
+            session['user_email'] = user.get_email()
+            session['user_birthdate'] = user.get_birthdate()
             return redirect(url_for('admin_homepage'))
 
         elif key == key2:
@@ -118,6 +123,12 @@ def login():
 def logout():
    # remove the username from the session if it is there
    session.pop('user_id')
+   return redirect(url_for('home'))
+
+@app.route('/adminlogout')
+def adminlogout():
+   # remove the username from the session if it is there
+   session.pop('admin_in')
    return redirect(url_for('home'))
 
 

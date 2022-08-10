@@ -9,19 +9,28 @@
                             <i class="fa-solid fa-user-astronaut"></i> <span class="ms-1 d-none d-sm-inline">Profile</span>
                         </a>
                     </li>
-                    <li>
                         {% if 'admin_in' in session %}
+                    <li>
                         <a href="/adminDashboard" class=" link-dark nav-link ps-2">
-                            <i class="fa-solid fa-chart-line"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span> </a>
-                        {% else %}
-                        <a href="/custDashboard/{{ session['user_id'] }}" class=" link-dark nav-link ps-2">
-                            <i class="fa-solid fa-chart-line"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span> </a>
-                        {% endif %}
+                        <i class="fa-solid fa-chart-line"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span> </a>
                     </li>
+                    <li>
+                        <a href="/adminlogout" class=" link-dark nav-link ps-2" onclick="return confirm('Are you sure you want to log out?')">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i> <span class="ms-1 d-none d-sm-inline">Logout</span></a>
+                    </li>
+                        {% else %}
+                    <li>
+                        <a href="/custDashboard/{{ session['user_id'] }}" class=" link-dark nav-link ps-2">
+                        <i class="fa-solid fa-chart-line"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span></a>
+                    </li>
+
                     <li>
                         <a href="/logout" class=" link-dark nav-link ps-2" onclick="return confirm('Are you sure you want to log out?')">
-                            <i class="fa-solid fa-arrow-right-from-bracket"></i> <span class="ms-1 d-none d-sm-inline">Logout</span></a>
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i> <span class="ms-1 d-none d-sm-inline">Logout</span></a>
                     </li>
+                        {% endif %}
+                
+           
                     <li>
                         <a href="/deleteacc/{{ session['user_id'] }}" onclick="return confirm('Are you sure you want to delete your account?')" class=" link-dark nav-link ps-2">
                             <i class="fa-solid fa-eraser"></i> <span class="ms-1 d-none d-sm-inline">Delete Account</span></a>
