@@ -2,6 +2,8 @@ import os
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 
 
+import Question
+
 from forms import createEvent, signupForm, loginForm, forgetpw, changPw,  addOrder, CreateQnForm
 import shelve, Event, account, Seat, Order,Payment, Question
 
@@ -11,21 +13,21 @@ import flask
 import flask_login
 import datetime
 
-
+import dash
 from forms import createEvent, signupForm, loginForm, forgetpw, changPw, addOrder
-import shelve, Event, account, Seat, Order, Payment
+
 
 from werkzeug.utils import secure_filename
 from flask_login import LoginManager
 
 from werkzeug.datastructures import CombinedMultiDict
 
-import pandas as pdpy
 
 
-import pandas as pd
+
 import smtplib
 from email.message import EmailMessage
+
 
 # admin name: admin
 # admin email: admin@gmail.com
@@ -43,8 +45,19 @@ def before_request():
     flask.g.user = flask_login.current_user
 
 
+@app.before_request
+def before_request():
+    flask.session.permanent = True
+    app.permanent_session_lifetime = datetime.timedelta(minutes=30)
+    flask.session.modified = True
+    flask.g.user = flask_login.current_user
 
-# ----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('error404.html'), 404
+
+
 # zowie
 # login
 login_manager = LoginManager()
@@ -106,7 +119,14 @@ def login():
 
     return render_template('users/login.html', form=login)
 
-# make account
+
+@app.route('/logout')
+def logout():
+   # remove the username from the session if it is there
+   session.pop('user_id')
+   return redirect(url_for('home'))
+
+
 @app.route('/signup', methods=['GET', 'POST'])
 def create_user():
     signup = signupForm(request.form)
@@ -220,11 +240,6 @@ def newpass(id):
 
     return render_template('users/newpw.html', form=newpw)
 
-@app.route('/logout')
-def logout():
-   # remove the username from the session if it is there
-   session.pop('user_id', None)
-   return redirect(url_for('home'))
 
 @app.route('/deleteacc/<uuid(strict=False):id>/')
 def deleteacc(id):
@@ -242,6 +257,9 @@ def deleteacc(id):
 
 
 # account made
+@app.route('/profile')
+def profile():
+    return render_template('users/profile.html')
 
 @app.route('/accountDetails')
 def accountDetails():
@@ -323,8 +341,6 @@ def ChangePass(id):
 
     return render_template('users/ChangePass.html', form=changepass)
 
-    
-    
 
 
 
@@ -346,12 +362,8 @@ def home():
     return render_template('home.html', count=len(events_list), events_list=events_list)
 
 
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('error404.html'), 404
-
-@app.route('/ticketDetails/<uuid(strict=False):id>', methods=['GET', 'POST'])
-def ticket_details(id):
+@app.route('/ticketDetails/<uuid(strict=False):event_id>', methods=['GET', 'POST'])
+def ticket_details(event_id):
 
     events_dict = {}
     db = shelve.open('storage.db', 'r')
@@ -364,7 +376,7 @@ def ticket_details(id):
         events_list.append(event)
 
     for page in events_list:
-        if page.get_event_id() == id:
+        if page.get_event_id() == event_id:
             retrieve_event = page
 
     add_order_form = addOrder(request.form)
@@ -401,43 +413,49 @@ def ticket_details(id):
                             add_order_form.order_quantity.data,
                             retrieve_event.get_seating_plan()
                             )
+
+
         
         orders_dict[new_order.get_order_id()] = new_order
         db['Orders'] = orders_dict
 
         db.close()
 
+        users_dict = {}
+        db = shelve.open('storage.db', 'w')
+        users_dict = db['Users']
 
-        return redirect(url_for('cart_page'))
+        user_id =  request.form['get_user_id']
+        user = users_dict.get(user_id)
+        user.set_cart_item(new_order)
+
+        db['Users'] = users_dict
+        db.close()
+        #parik issues
+
+        return redirect(url_for('cart_page', user_id = user_id))
     return render_template('ticketDetails.html', event=retrieve_event, form=add_order_form)
 
 
 
-@app.route('/updateTicketDetails/<uuid(strict=False):id>/', methods=['GET', 'POST'])
-def update_ticket_details(id):
+@app.route('/updateTicketDetails/<uuid(strict=False):order_id>/<uuid(strict=False):user_id>/', methods=['GET', 'POST'])
+def update_ticket_details(order_id, user_id):
 
     update_order_form = addOrder(request.form)
     
     if request.method == 'POST':
-    # if request.method == 'POST' :
+
         db = shelve.open('storage.db', 'w')
-        orders_dict = db['Orders']
+        users_dict = db['Users']
 
+        user = users_dict.get(str(user_id))
+        user_cart_list = user.get_cart_item()
 
-        orders_list = []
-        for key in orders_dict:
-            order = orders_dict.get(key)
-            orders_list.append(order)
-        
-        # print(orders_list)
-
-        for page in orders_list:
-            if page.get_order_id() == id:
-                # print(page.get_order_id())
+        for page in user_cart_list:
+            if page.get_order_id() == order_id:
                 retrieve_order = page
-
-        order = orders_dict.get(id)
-
+        
+        
         update_order_form.order_price.choices = [(i.get_seat_price(), i.get_seat_type())
                                         for i in retrieve_order.get_order_seating_plan()]
         
@@ -446,29 +464,27 @@ def update_ticket_details(id):
         value_list = list(dc.values())
         position = value_list.index(int(update_order_form.order_price.data))
 
-        order.set_order_seat_type(key_list[position])
-        order.set_order_seat_price(update_order_form.order_price.data)
-        order.set_order_quantity(update_order_form.order_quantity.data)
+        retrieve_order.set_order_seat_type(key_list[position])
+        retrieve_order.set_order_seat_price(update_order_form.order_price.data)
+        retrieve_order.set_order_quantity(update_order_form.order_quantity.data)
 
-        db['Orders'] = orders_dict
-        db.close()
+        db['Users'] = users_dict
 
-        return(redirect(url_for('cart_page')))
+        return(redirect(url_for('cart_page', user_id = user_id)))
 
     else:
 
-        orders_dict = {}
+        users_dict = {}
         db = shelve.open('storage.db', 'r')
-        orders_dict = db['Orders']
+        users_dict = db['Users']
         db.close()
+    
+        user = users_dict.get(str(user_id))
+        user_cart_list = user.get_cart_item()
 
-        orders_list = []
-        for key in orders_dict:
-            order = orders_dict.get(key)
-            orders_list.append(order)
-
-        for page in orders_list:
-            if page.get_order_id() == id:
+        for page in user_cart_list:
+            print(page)
+            if page.get_order_id() == order_id:
                 retrieve_order = page
 
         update_order_form.order_price.choices = [(i.get_seat_price(), i.get_seat_type())
@@ -478,50 +494,46 @@ def update_ticket_details(id):
         key_list = list(dc.keys())
         value_list = list(dc.values())
         
-        update_order_form.order_price.data = order.get_order_seat_price()
-        update_order_form.order_quantity.data = order.get_order_quantity()
+        update_order_form.order_price.data = retrieve_order.get_order_seat_price()
+        update_order_form.order_quantity.data = retrieve_order.get_order_quantity()
 
     return render_template('updateTicketDetails.html', order=retrieve_order, form=update_order_form)
 
 
 
-@app.route('/cart')
-def cart_page():
-    orders_dict = {}
+@app.route('/cart/<uuid(strict=False):user_id>')
+def cart_page(user_id):
+
+    users_dict = {}
     db = shelve.open('storage.db', 'r')
-    orders_dict = db['Orders']
-    # print(orders_dict)
+    users_dict = db['Users']
     db.close()
     
 
-    orders_list = []
-    for key in orders_dict:
-        order = orders_dict.get(key)
-        orders_list.append(order)
-    # print(orders_list)
+    user = users_dict.get(str(user_id))
+    user_cart_list = user.get_cart_item()
 
     store_order_price = []
-    for i in orders_list:
+    for i in user_cart_list:
         store_order_price.append(i.order_cost(i.get_order_seat_price(), i.get_order_quantity()))
 
     total_cost = "{:.2f}".format(sum(store_order_price))
 
 
-    return render_template('cart.html', count=len(orders_list), orders=orders_list, payable= total_cost)
+    return render_template('cart.html',user_cart=user_cart_list, count=len(user_cart_list), payable= total_cost)
 
-@app.route('/clearCart/<uuid(strict=False):id>/')
-def clear_cart(id):
+@app.route('/clearCart/<uuid(strict=False):user_id>/')
+def clear_cart(user_id):
 
-    orders_dict = {}
+    users_dict = {}
     db = shelve.open('storage.db', 'r')
-    orders_dict = db['Orders']
+    users_dict = db['Users']
     db.close()
 
-    orders_list = []
-    for key in orders_dict:
-        order = orders_dict.get(key)
-        orders_list.append(order)
+    user = users_dict.get(str(user_id))
+    user_cart_list = user.get_cart_item()
 
+    # Store data into Payments
     payments_dict = {}
     db = shelve.open('storage.db', 'c')
 
@@ -531,43 +543,59 @@ def clear_cart(id):
         print('Error in retrieving Events from storage.db')
     
     new_payment = Payment.Payment(
-        orders_list
+        user_cart_list
     )
-
-    db = shelve.open('storage.db', 'w')
-    db['Orders'] = {}
-
+    
+    
     payments_dict[new_payment.get_payment_id()] = new_payment
-    db['Payment'] = payments_dict
-
+    db['Payments'] = payments_dict
 
     users_dict = {}
     db = shelve.open('storage.db', 'w')
     users_dict = db['Users']
+    user = users_dict.get(str(user_id))
 
-    user = users_dict.get(id)
-    
-    user.set_payment(new_payment)
-    print(user.set_payment(new_payment))
+    # Pass payment into user
+    print(new_payment)
+    user.set_paid_item(new_payment)
+    # user_paid_list = user.get_paid_item()
+    # print(user_paid_list)
 
+    # Empty user cart
+    user_cart_list = user.get_cart_item()
+    user_cart_list.clear()
+
+    users_dict[user] = users_dict
     db['Users'] = users_dict
     db.close()
+    
+
 
     return redirect(url_for('home'))
 
 
-@app.route('/deleteOrder/<uuid(strict=False):id>/', methods=['GET', 'POST'])
-def delete_order(id):
-    orders_dict = {}
+@app.route('/deleteOrder/<uuid(strict=False):order_id>/<uuid(strict=False):user_id>/', methods=['GET', 'POST'])
+def delete_order(order_id, user_id):
+
+    users_dict = {}
     db = shelve.open('storage.db', 'w')
-    orders_dict = db['Orders']
+    users_dict = db['Users']
+    user = users_dict.get(str(user_id))
 
-    orders_dict.pop(id)
+    user_cart_list = user.get_cart_item()
 
-    db['Orders'] = orders_dict
+    count = -1
+    for i in user_cart_list:
+        count += 1
+        if i.get_order_id() == order_id:
+            user_cart_list.pop(count)
+
+    users_dict[user] = users_dict
+    db['Users'] = users_dict
     db.close()
 
-    return redirect(url_for('cart_page'))
+    # return redirect(url_for('cart_page'))
+    return redirect(url_for('cart_page', user_id = user_id))
 
 
 
@@ -707,6 +735,8 @@ def delete_event(id):
 
     return redirect(url_for('admin_homepage'))
 
+
+
 @app.route('/homeAdmin')
 def admin_homepage():
     events_dict = {}
@@ -724,40 +754,98 @@ def admin_homepage():
 
 
 
-
-
-@app.route('/submitResult')
-def submit_result():
-    users_dict = {}
-    db = shelve.open('storage.db', 'r')
-    users_dict = db['Users']
-
-    db.close()
-
-    users_list = []
-    for key in users_dict:
-        user = users_dict.get(key)
-        users_list.append(user)
-
-    for user in users_list:
-        print(user.get_email())
-        for i in user.get_cart_item():
-            for n in i:
-                print(n.get_order_name())
-            # subtotal = i.order_cost(i.get_order_seat_price(), i.get_order_quantity())
-            
- 
-
-    return render_template('submitResult.html', count=len(users_list), users_list=users_list)
-
-
-
-
 # ----------------------------------------------------------------------------------------------------------------------------------------------------------
 # Parik
-@app.route('/dashboard')
-def dashboard():
-    return render_template('dashboard.html')
+
+@app.route('/custDashboard')
+def paymentcard():
+    payments_dict = {}
+      
+    db = shelve.open('storage.db', 'r')
+    payments_dict = db['Payments']
+    db.close()
+
+
+    payments_list = []  
+    for key in payments_dict:
+        order = payments_dict.get(key)
+        payments_list.append(order)
+
+    sales= []
+    for i in payments_list:
+      for g in i.get_order_history():
+        sales.append(int(g.get_order_quantity()) * int(g.get_order_seat_price()))
+    ssales = sum(sales)
+
+    values = [25, 40, 30, 48,50,60]
+    BarVal = [13, 45, 26, 55, 44, 50]
+    labels = ["Jan", "Feb", "Mar", "Apr", "May","Jul"]
+
+
+    forarc = ((250 + ssales)/ 1000) * 100
+    narc1 = "{:.0f}".format(((250 + ssales)/ 1000) * 100) + "%"
+    anarac1 = narc1
+    return render_template('custDashboard.html',forarc=forarc,anarac1=anarac1,values=values,BarVal=BarVal,labels=labels)
+
+@app.route('/adminDashboard')
+def new():
+    payments_dict = {}
+      
+    db = shelve.open('storage.db', 'r')
+    payments_dict = db['Users']
+    db.close()
+
+
+    payments_list = []  
+    for key in payments_dict:
+        order = payments_dict.get(key)
+        payments_list.append(order)
+
+    count = 300 + len(payments_list)
+    T_increase = "{:.0f}".format(((count - 200)/count) * 100)
+
+    sales= []
+    for i in payments_list:
+      for g in i.get_order_history():
+        sales.append(int(g.get_order_quantity()) * int(g.get_order_seat_price()))
+    ssales = sum(sales)
+
+
+    S_increase = "{:.0f}".format((((2000 +ssales) - 1000)/(2000 + ssales)) * 100)
+
+    sales_line_list= []
+    for i in payments_list:
+      for g in i.get_order_history():
+        sales_line_list.append(int(g.get_order_quantity()) * int(g.get_order_seat_price()))
+    
+
+    values = [9930, 9000, 3000, 6000,2000,7000]
+    BarVal = [3019, 7000, 1500, 8000, 6000, 5000]
+    labels = ["Jan", "Feb", "Mar", "Apr", "May","Jul"]
+
+    sports_cat = []
+    for i in payments_list:
+        for g in i.get_order_history():
+            if g.get_order_category() == 'S':
+                sports_cat.append(g.get_order_category())
+
+    concert_cat = []
+    for i in payments_list:
+        for g in i.get_order_history():
+            if g.get_order_category() == 'C':
+                concert_cat.append(g.get_order_category())
+
+
+    forarc = ((250 + ssales)/ 1000) * 100
+    narc1 = "{:.0f}".format(((250 + ssales)/ 1000) * 100) + "%"
+    anarac1 = narc1
+
+    # age2 = sum(d['price'] for d in adash_list if d['age'] < 20)
+    # age3 = sum(d['price'] for d in adash_list if d['age'] > 20 and d['age'] < 30 )
+    # age4 = sum(d['price'] for d in adash_list if d['age'] > 30 and d['age'] <40) 
+
+    
+    return render_template('adminDashboard.html',forarc=forarc,anarac1=anarac1,values=values,labels=labels,BarVal=BarVal,new=new,adash_list=payments_list,count=len(payments_list),sales_line_list=sum(sales_line_list),sports_cat=len(sports_cat),concert_cat=len(concert_cat),ssales=ssales,T_increase=T_increase,S_increase=S_increase)
 
 
 
