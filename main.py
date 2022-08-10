@@ -223,7 +223,7 @@ def newpass(id):
         db = shelve.open('storage.db', 'w')
         users_dict = db['Users']
 
-        user = users_dict.get(id)
+        user = users_dict.get(str(id))
 
         if newpw.newpassword.data != newpw.comfirmpw.data:
             flash('Passwords do not match.', 'danger')
@@ -249,7 +249,7 @@ def deleteacc(id):
     db = shelve.open('storage.db', 'w')
     users_dict = db['Users']
 
-    users_dict.pop(id)
+    users_dict.pop(str(id))
 
     db['Users'] = users_dict
     db.close()
@@ -271,6 +271,7 @@ def accountDetails():
     db.close()
 
     users_list = [] # all users information
+    print(users_dict)
     
     for key in users_dict:
         user = users_dict.get(key)
@@ -278,7 +279,7 @@ def accountDetails():
 
     return render_template('users/accountDetails.html', users_list=users_list)
 
-@app.route('/EditAcc/<uuid(strict=False):id>/', methods=['GET', 'POST'])
+@app.route('/EditAcc/<uuid(strict=False):id>', methods=['GET', 'POST'])
 def EditAcc(id):    
     update_user_form = signupForm(request.form)
 
@@ -287,7 +288,7 @@ def EditAcc(id):
         db = shelve.open('storage.db', 'w')
         users_dict = db['Users']
 
-        user = users_dict.get(id)
+        user = users_dict.get(str(id))
         user.set_name(update_user_form.name.data)
         user.set_email(update_user_form.email.data)
 
@@ -307,7 +308,7 @@ def EditAcc(id):
         users_dict = db['Users']
         db.close()
 
-        user = users_dict.get(id)
+        user = users_dict.get(str(id))
         update_user_form.name.data = user.get_name()
         update_user_form.email.data = user.get_email()
 
@@ -322,7 +323,7 @@ def ChangePass(id):
         db = shelve.open('storage.db', 'w')
         users_dict = db['Users']
 
-        user = users_dict.get(id)
+        user = users_dict.get(str(id))
 
         if changepass.nowpassword.data != user.get_password():
             flash('Password does not match current password.', 'danger')
