@@ -12,6 +12,7 @@ class Account:
         self.__password = password
         self.__birthdate = birthdate
         self.__order_item = None
+
         self.__payment = []
         self.__cart_item = []
         self.__paid_item = []
