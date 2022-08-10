@@ -26,22 +26,19 @@
 </div>
 {% endif %}
 
-<div class="row ">
-    {% include 'users/profilenav.html' %}
+{% include 'users/profilenav.html' %}
 
   
-
-<div class="p-3 mb-2 bg-light pt-5" style="width: 80%;">
-    <div class="container-sm col-lg-6 ml-auto">
-  
-
 <!-- content -->
-<div class="col col-xs-1">
+<div class="col">
+<div class="p-3 mb-2 bg-light pt-5" >
+    <div class="container-sm col-lg-6 ml-auto">
+
+
 <div class="p-3 bg-light pt-5" >
-    <!-- <div class="container-sm col-lg-6 ml-auto"> -->
         
         
-                <table id="accountdetails" class="table mx-auto " style="width: 50%;">
+                <table id="accountdetails" class="table mx-auto ">
                     
                     <tbody>
                       
@@ -62,7 +59,7 @@
                   </table>
                   <br>
 
-                <div class="row mx-auto" style="width: 60%;">
+                <div class="row mx-auto">
                     <div class="col py-3 ">
                         <a href="/EditAcc/{{ session['user_id'] }}"><button type="button" class="btn btn-primary btn-md form-control btn-block">Edit details</button></a>
                     </div>
@@ -74,16 +71,10 @@
 </div>
 </div>
 
-          
-                  
-
-
     </div>
+  </div>
 
 <!-- end content -->
-
-
-
 
 </div>
 </div>
