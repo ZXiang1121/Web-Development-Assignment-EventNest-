@@ -13,7 +13,7 @@
  
 {% block content%}
  
-<header class="bg-success py-4">
+<header class="edit-bg-color py-5">
   <div class="container px-5">
       <div class="row gx-5 justify-content-center">
           <div class="col-lg-6">
@@ -35,8 +35,6 @@
  
  
 <div class="container mt-3">
-  
- 
     <h5> Frequently Asked Question</h5>
     <div id="accordion">
       <div class="card">
@@ -107,12 +105,12 @@
       </div>
       {% for qn in qns_list %} 
       <div class="card-header">
-        <a class="btn" data-bs-toggle="collapse" href="#collapseOne">
+        <a class="btn" data-bs-toggle="collapse" href="#collapseSix">
           <strong>Q</strong> &nbsp{{ qn.get_remarks()}}&nbsp | &nbsp<strong>Topic:</strong> {{ qn.get_subject() }}
          
         </a>
       </div>
-      <div id="collapseOne" class="collapse show" data-bs-parent="#accordion">
+      <div id="collapseSix" class="collapse show" data-bs-parent="#accordion">
         <div class="card-body">
    
           &nbsp&nbsp&nbsp<strong>A:</strong>&nbsp {{ qn.get_answers()}}
@@ -121,12 +119,10 @@
       </div>
     </div>
  
-</td>
- 
-      </tr>
+
     {% endfor %}
 <button type="button">
-  <a href='/retrieveqns'>Edit Question<a>
+  <a href='/retrieveQns'>Edit Question<a>
 </button>
 
 

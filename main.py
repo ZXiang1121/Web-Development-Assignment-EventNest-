@@ -1,30 +1,16 @@
 import os
 from flask import Flask, redirect, url_for, render_template, request, session, flash
-
-
-import Question
-
 from forms import createEvent, signupForm, loginForm, forgetpw, changPw,  addOrder, CreateQnForm
-import shelve, Event, account, Seat, Order,Payment, Question
-
+import shelve, Event, account, Seat, Order, Payment, Question
 
 # session timeout
 import flask
 import flask_login
 import datetime
 
-import dash
-from forms import createEvent, signupForm, loginForm, forgetpw, changPw, addOrder
-
-
 from werkzeug.utils import secure_filename
 from flask_login import LoginManager
-
 from werkzeug.datastructures import CombinedMultiDict
-
-
-
-
 import smtplib
 from email.message import EmailMessage
 
@@ -58,8 +44,8 @@ def page_not_found(e):
     return render_template('error404.html'), 404
 
 
-# zowie
-# login
+# ----------------------------------------------------------------------------------------------------------------------------------------------------------
+# Zowie
 login_manager = LoginManager()
 login_manager.init_app(app)
 @login_manager.user_loader
@@ -223,7 +209,7 @@ def newpass(id):
         db = shelve.open('storage.db', 'w')
         users_dict = db['Users']
 
-        user = users_dict.get(id)
+        user = users_dict.get(str(id))
 
         if newpw.newpassword.data != newpw.comfirmpw.data:
             flash('Passwords do not match.', 'danger')
@@ -271,6 +257,7 @@ def accountDetails():
     db.close()
 
     users_list = [] # all users information
+    print(users_dict)
     
     for key in users_dict:
         user = users_dict.get(key)
@@ -278,7 +265,7 @@ def accountDetails():
 
     return render_template('users/accountDetails.html', users_list=users_list)
 
-@app.route('/EditAcc/<uuid(strict=False):id>/', methods=['GET', 'POST'])
+@app.route('/EditAcc/<uuid(strict=False):id>', methods=['GET', 'POST'])
 def EditAcc(id):    
     update_user_form = signupForm(request.form)
 
@@ -287,7 +274,7 @@ def EditAcc(id):
         db = shelve.open('storage.db', 'w')
         users_dict = db['Users']
 
-        user = users_dict.get(id)
+        user = users_dict.get(str(id))
         user.set_name(update_user_form.name.data)
         user.set_email(update_user_form.email.data)
 
@@ -307,7 +294,7 @@ def EditAcc(id):
         users_dict = db['Users']
         db.close()
 
-        user = users_dict.get(id)
+        user = users_dict.get(str(id))
         update_user_form.name.data = user.get_name()
         update_user_form.email.data = user.get_email()
 
@@ -322,7 +309,7 @@ def ChangePass(id):
         db = shelve.open('storage.db', 'w')
         users_dict = db['Users']
 
-        user = users_dict.get(id)
+        user = users_dict.get(str(id))
 
         if changepass.nowpassword.data != user.get_password():
             flash('Password does not match current password.', 'danger')
@@ -540,7 +527,7 @@ def clear_cart(user_id):
     try:
         payments_dict = db['Payments']
     except:
-        print('Error in retrieving Events from storage.db')
+        print('Error in retrieving Payments from storage.db')
     
     new_payment = Payment.Payment(
         user_cart_list
@@ -566,6 +553,7 @@ def clear_cart(user_id):
     # Empty user cart
     user_cart_list = user.get_cart_item()
     user_cart_list.clear()
+
 
     db['Users'] = users_dict
     db.close()
@@ -751,6 +739,8 @@ def admin_homepage():
         event = events_dict.get(key)
         events_list.append(event)
 
+
+
     return render_template('homeAdmin.html', count=len(events_list), events_list=events_list)
 
 
@@ -922,7 +912,7 @@ def create_qn():
 
 
 
-@app.route('/retrieveqns')
+@app.route('/retrieveQns')
 def retrieve_qns():
     qns_dict = {}
     db = shelve.open('storage.db', 'r')
@@ -954,6 +944,7 @@ def retrieve_qns():
 #         db['Questions'] = qns_dict
         
         
+@app.route('/updateQn/<int:id>/', methods=['GET', 'POST'])
 def update_qn(id):
     update_qn_form = CreateQnForm(request.form)
     if request.method == 'POST' and update_qn_form.validate():
@@ -1044,9 +1035,10 @@ def retrieve():
         
     return render_template('faq.html', count=len(qns_list),qns_list=qns_list)
 
-@app.route('/aboutus')
-def aboutus():
+@app.route('/aboutUs')
+def about_us():
    return render_template('aboutUs.html')
+
 
 
 if __name__ == '__main__':
