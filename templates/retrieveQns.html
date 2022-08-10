@@ -3,18 +3,19 @@
 
 {% block content %}
 
-<h1 class="display-4">Retrieve Questions</h1>
+<h1 class="display-4"></h1>
 <div>
   {% if count == 0 %}
   
-  <p>There are no questions.</p>
+  <p>There are <strong>no</strong> questions posted.</p>
   {% elif count == 1 %}
-  <p>There is 1 question.</p>
+  <p>There is <strong>1</strong> question posted.</p>
   {% else %}
-  <p>There are {{ count }} questions.</p>
+  <p>There are <strong>{{ count }} </strong>questions posted.</p>
   {% endif %}
 </div>
-  <table class="table table-striped">
+
+  <table class="table table-primary table-striped table-hover container mt-3 ">
     <thead>
       <tr>
         <th>Question ID</th>
@@ -24,6 +25,10 @@
         <th>Subject</th>
         <th>Comments</th>
         <th>Answers</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        
       
       </tr>
     </thead>
@@ -59,7 +64,7 @@
 
           <!-- Modal body -->
           <div class="modal-body">
-            Are you sure you want to delete {{qn.get_name()}}?
+            Are you sure you want to delete {{qn.get_name()}}'s question?
           </div>
 
           <!-- Modal footer -->

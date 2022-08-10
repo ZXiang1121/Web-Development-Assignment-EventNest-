@@ -2,13 +2,9 @@ import os
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 
 
-import Question
 
-from forms import createEvent, signupForm, loginForm, forgetpw, changPw, CreateQnForm
-import shelve, Event, account, Seat
-
-from forms import createEvent, signupForm, loginForm, forgetpw, changPw,  addOrder
-import shelve, Event, account, Seat, Order
+from forms import createEvent, signupForm, loginForm, forgetpw, changPw,  addOrder,CreateQnForm
+import shelve, Event, account, Seat, Order, Payment, Question
 
 
 # session timeout
@@ -16,9 +12,7 @@ import flask
 import flask_login
 import datetime
 
-import User
-from forms import createEvent, signupForm, loginForm, forgetpw, changPw, ContactForm, addOrder
-import shelve, Event, account, Seat, Order, Payment
+
 
 from werkzeug.utils import secure_filename
 from flask_login import LoginManager
