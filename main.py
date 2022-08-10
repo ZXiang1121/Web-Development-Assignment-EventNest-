@@ -58,8 +58,8 @@ def page_not_found(e):
     return render_template('error404.html'), 404
 
 
-# zowie
-# login
+# ----------------------------------------------------------------------------------------------------------------------------------------------------------
+# Zowie
 login_manager = LoginManager()
 login_manager.init_app(app)
 @login_manager.user_loader
@@ -540,7 +540,7 @@ def clear_cart(user_id):
     try:
         payments_dict = db['Payments']
     except:
-        print('Error in retrieving Events from storage.db')
+        print('Error in retrieving Payments from storage.db')
     
     new_payment = Payment.Payment(
         user_cart_list
@@ -565,7 +565,7 @@ def clear_cart(user_id):
     user_cart_list = user.get_cart_item()
     user_cart_list.clear()
 
-    users_dict[user] = users_dict
+
     db['Users'] = users_dict
     db.close()
     
@@ -1008,9 +1008,10 @@ def retrieve():
         
     return render_template('faq.html', count=len(qns_list),qns_list=qns_list)
 
-@app.route('/aboutus')
+@app.route('/aboutUs')
 def aboutus():
    return render_template('aboutUs.html')
+
 
 
 if __name__ == '__main__':
