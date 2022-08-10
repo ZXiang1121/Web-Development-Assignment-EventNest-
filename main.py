@@ -737,6 +737,8 @@ def admin_homepage():
         event = events_dict.get(key)
         events_list.append(event)
 
+
+
     return render_template('homeAdmin.html', count=len(events_list), events_list=events_list)
 
 
@@ -996,7 +998,7 @@ def retrieve():
     return render_template('faq.html', count=len(qns_list),qns_list=qns_list)
 
 @app.route('/aboutUs')
-def aboutus():
+def about_us():
    return render_template('aboutUs.html')
 
 
