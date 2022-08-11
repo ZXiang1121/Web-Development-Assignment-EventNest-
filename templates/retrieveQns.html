@@ -3,25 +3,28 @@
 
 {% block content %}
 
-<h1 class="display-4"></h1>
-<div>
-  {% if count == 0 %}
-  
-  <p>There are <strong>no</strong> questions posted.</p>
-  {% elif count == 1 %}
-  <p>There is <strong>1</strong> question posted.</p>
-  {% else %}
-  <p>There are <strong>{{ count }} </strong>questions posted.</p>
-  {% endif %}
-</div>
 
-  <table class="table table-primary table-striped table-hover container mt-3 ">
+
+<div class="container mt-5" style="margin-bottom:10%;">
+    <h1 class="pb-3">Asked Question</h1>
+  <div>
+    {% if count == 0 %}
+    
+    <p>There are <strong>no</strong> questions posted.</p>
+    {% elif count == 1 %}
+    <p>There is <strong>1</strong> question posted.</p>
+    {% else %}
+    <p>There are <strong>{{ count }} </strong>questions posted.</p>
+    {% endif %}
+  </div>
+  <div class="rounded border shadow-sm p-2">
+  <table class="table table-dark table-hover table-responsive">
     <thead>
       <tr>
         <th>Question ID</th>
         <th>Name</th>
-        <th>Email</th>
         <th>Gender</th>
+        <th>Email</th>
         <th>Subject</th>
         <th>Comments</th>
         <th>Answers</th>
@@ -29,18 +32,16 @@
         <th></th>
         <th></th>
         
-      
       </tr>
     </thead>
     <tbody>
     {% for qn in qns_list %}
 
       <tr>
-        
         <td>{{ qn.get_qn_id() }}</td>
         <td>{{ qn.get_name() }}</td>
         <td>{{ qn.get_gender() }}</td>
-        <td>{{ qn.get_email() }}</td>
+        <td>{{ qn.get_email() }}</td> 
         <td>{{ qn.get_subject() }}</td>
         <td>{{ qn.get_remarks() }}</td>
         <td>{{ qn.get_answers() }}</td>
@@ -49,7 +50,7 @@
         <td>
           
   <form action="{{url_for('delete_qn', id=qn.get_qn_id())}}" method="POST">
-    <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{qn.get_name()}}?');">
+    <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete question asked by {{qn.get_name()}}?');">
 
     <!-- The Modal -->
     <div class="modal" id="myModal_{{qn.get_qn_id()}}">
@@ -64,7 +65,7 @@
 
           <!-- Modal body -->
           <div class="modal-body">
-            Are you sure you want to delete {{qn.get_name()}}'s question?
+            Are you sure you want to delete {{qn.get_name()}}?
           </div>
 
           <!-- Modal footer -->
@@ -77,11 +78,13 @@
       </div>
     </div>
   </form>
-</td>
+        </td>
 
       </tr>
     {% endfor %}
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+  </div>
+</div>
 
 {% endblock %}

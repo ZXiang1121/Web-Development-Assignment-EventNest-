@@ -1,9 +1,10 @@
+import uuid
 class Question:
-    count_id = 0
+    # count_id = 0
 
     def __init__(self, name, gender, email, subject, remarks, answers):
-        Question.count_id +=1
-        self.__qn_id = Question.count_id
+        # Question.count_id +=1
+        self.__qn_id = uuid.uuid4()
         self.__name = name
         self.__email = email
         self.__gender = gender

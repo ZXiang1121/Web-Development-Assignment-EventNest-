@@ -59,6 +59,6 @@ class CreateQnForm(Form):
     subject = SelectField('Subject', [validators.DataRequired()], choices=[('', 'Select'), ('Technical', 'Technical Issue of the Transaction'), ('Ticket', 'Ticket Policy'),('Refund', 'Ticket Refund' ),('Feedback', 'Feedback/Review')], default='')
     email = StringField('Email',[validators.Email(), validators.DataRequired()])
     remarks = TextAreaField('Remarks', [validators.DataRequired()])
-    answers = TextAreaField('Answers', [validators.DataRequired()], default='')
+    answers = TextAreaField('Answers', [validators.DataRequired()], default='-')
     
   

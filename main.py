@@ -130,6 +130,7 @@ def logout():
 def adminlogout():
    # remove the username from the session if it is there
    session.pop('admin_in')
+   session.pop('user_id')
    return redirect(url_for('home'))
 
 
@@ -776,7 +777,10 @@ def paymentcard(id):
     payments_dict = db['Users']
     db.close()
     user = payments_dict.get(str(id))
+    #get the id
     user_payment_list = user.get_paid_item()
+    # to get the specific user payments thru the key
+    #paid_item then payment(get_order_history) then can access the accessor methods of the order.py
 
 
     payments_list = []  
@@ -829,6 +833,7 @@ def new():
         user = users_dict.get(key)
         if user.get_email() != 'admin@gmail.com':
             users_list.append(user)
+    #paid_item then payment(get_order_history) then can access the accessor methods of the order.py
         
 
     order_price_list = []
@@ -854,13 +859,13 @@ def new():
                 if order.get_order_category() == 'C':
                     concert_cat.append(order.get_order_category())
 
-    T_list = []
+    indicator_ticket_list = []
     count = 300 + len(users_list)
-    T_list.append(int("{:.0f}".format(((count - 350)/count) * 100)))
+    indicator_ticket_list.append(int("{:.0f}".format(((count - 350)/count) * 100)))
 
 
-    S_list = []
-    S_list.append(int("{:.0f}".format((((2000 +ssales) - 1500)/(2000 + ssales)) * 100)))    
+    indicator_sales_list = []
+    indicator_sales_list.append(int("{:.0f}".format((((2000 +ssales) - 1500)/(2000 + ssales)) * 100)))    
 
     values = [9930, 9000, 3000, 6000,2000,7000]
     BarVal = [3019, 7000, 1500, 8000, 6000, 5000]
@@ -871,27 +876,37 @@ def new():
     narc1 = "{:.0f}".format(((250 + ssales)/ 1000) * 100) + "%"
     anarac1 = narc1
 
-    new =[]
-    jj = []
+    total_sales_per_user =[]
+    name_of_all_user = []
+    id = []
 
-    print(users_list)
-
+    # { 'a':3,'ab':2,'abc':1,'abcd':0 }
+    # [('a', 3), ('ab', 2), ('abc', 1), ('abcd', 0)]
     for key,value in users_dict.items():
         sales_per_user = []
+        #store the total sales from each user as every user can have multiple orders
         for payment in value.get_paid_item():
             for order in payment.get_order_history():
-                sales_per_user.append(order.order_cost(order.get_order_quantity(), order.get_order_seat_price()))
-        new.append(sum(sales_per_user))
-        jj.append(key)
+                total_sales_per_user.append(order.order_cost(order.get_order_quantity(), order.get_order_seat_price()))
+        total_sales_per_user.append(sum(sales_per_user))
+        id.append(key)
+        # get the name of the user in list
+        name = value.get_name()
+        # store the user_if in list
+        name_of_all_user.append(name)
     
-# sorted_zip = [(350, 'Ryan'), (914, 'Stacy')] - zip list into (value,name)
+
+# sorted_zip = [(spent, 'user id'), (spent, 'user id')] - zip list into (spent,user id)
+# zip: takes iterables as it's arguments and takes one element from each iterable, placing them in a tuple.
+# sorted: will sort the data. By default, a tuple element is sorted on the element in the 0 index, so the score in this case. Reverse=True will sort it descending first.
+# the [:3] is slice notation, saying give me all elements from the beginning up to the 3rd element.
 
 
 
     
 
     
-    return render_template('adminDashboard.html',nn=sorted(zip(new, jj), reverse=True)[:3],jj=jj,users_dict=users_dict,forarc=forarc,anarac1=anarac1,values=values,labels=labels,BarVal=BarVal,new=new,count=len(users_list),sales_line_list=sum(order_price_list),sports_cat=len(sports_cat),concert_cat=len(concert_cat),ssales=ssales,T_list=T_list,S_list=S_list)
+    return render_template('adminDashboard.html',top_cust=sorted(zip(total_sales_per_user, name_of_all_user,id), reverse=True)[:3],users_dict=users_dict,forarc=forarc,anarac1=anarac1,values=values,labels=labels,BarVal=BarVal,new=new,count=len(users_list),sales_line_list=sum(order_price_list),sports_cat=len(sports_cat),concert_cat=len(concert_cat),ssales=ssales,indicator_sales=indicator_sales_list,indicator_ticket_list=indicator_ticket_list)
 
 
 
@@ -915,17 +930,18 @@ def create_qn():
             print("Error in retrieving Users from storage.db.")
 
         qn = Question.Question(create_qn_form.name.data,
-                         create_qn_form.email.data,
-                         create_qn_form.gender.data,
-                         create_qn_form.subject.data,
-                         create_qn_form.remarks.data,
-                         create_qn_form.answers.data)
+                            create_qn_form.gender.data,
+                            create_qn_form.email.data,
+                            create_qn_form.subject.data,
+                            create_qn_form.remarks.data,
+                            create_qn_form.answers.data
+                            )
 
         qns_dict[qn.get_qn_id()] = qn
         db['Questions'] = qns_dict
 
 
-        return redirect(url_for('retrieve'))
+        return redirect(url_for('retrieve_faq'))
     return render_template('createQn.html', form=create_qn_form)
 
 
@@ -964,7 +980,7 @@ def retrieve_qns():
 #         db['Questions'] = qns_dict
         
         
-@app.route('/updateQn/<int:id>/', methods=['GET', 'POST'])
+@app.route('/updateQn/<uuid(strict=False):id>/', methods=['GET', 'POST'])
 def update_qn(id):
     update_qn_form = CreateQnForm(request.form)
     if request.method == 'POST' and update_qn_form.validate():
@@ -1002,7 +1018,7 @@ def update_qn(id):
 
         return render_template('updateQn.html', form=update_qn_form)
 
-@app.route('/deleteQn/<int:id>', methods=['POST'])
+@app.route('/deleteQn/<uuid(strict=False):id>', methods=['POST'])
 def delete_qn(id):
     qns_dict = {}
     db = shelve.open('storage.db', 'w')
@@ -1041,8 +1057,8 @@ def delete_qn(id):
 
 
 
-@app.route('/faqQn')
-def retrieve():
+@app.route('/faq')
+def retrieve_faq():
     qns_dict = {}
     db = shelve.open('storage.db', 'r')
     qns_dict = db['Questions']
