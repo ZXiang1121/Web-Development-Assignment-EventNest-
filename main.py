@@ -102,7 +102,8 @@ def login():
             session['username'] = user.get_name()
             session['user_id'] = key
             session['user_email'] = user.get_email()
-            session['user_birthdate'] = user.get_birthdate()
+            bday = user.get_birthdate()
+            session['user_birthdate'] = bday.strftime("%d/%m/%y")
             
             return redirect(url_for('admin_homepage'))
 
@@ -114,7 +115,8 @@ def login():
             session['username'] = user.get_name()
             session['user_id'] = user.get_user_id()
             session['user_email'] = user.get_email()
-            session['user_birthdate'] = user.get_birthdate()
+            bday = user.get_birthdate()
+            session['user_birthdate'] = bday.strftime("%d/%m/%y")
             return redirect(url_for('accountDetails', id = user.get_user_id()))
 
     return render_template('users/login.html', form=login)
@@ -306,7 +308,8 @@ def EditAcc(id):
         session['username'] = user.get_name()
         session['user_id'] = user.get_user_id()
         session['user_email'] = user.get_email()
-        session['user_birthdate'] = user.get_birthdate()
+        bday = user.get_birthdate()
+        session['user_birthdate'] = bday.strftime("%d/%m/%y")
         return redirect(url_for('accountDetails'))
 
     else:
@@ -600,7 +603,7 @@ def delete_order(order_id, user_id):
         if i.get_order_id() == order_id:
             user_cart_list.pop(count)
 
-    users_dict[user] = users_dict
+    
     db['Users'] = users_dict
     db.close()
 
@@ -831,6 +834,9 @@ def new():
     users_list = []  
     for key in users_dict:
         user = users_dict.get(key)
+        print('accountdetails')
+        print(users_dict)
+        print(user)
         if user.get_email() != 'admin@gmail.com':
             users_list.append(user)
     #paid_item then payment(get_order_history) then can access the accessor methods of the order.py
@@ -906,7 +912,7 @@ def new():
     
 
     
-    return render_template('adminDashboard.html',top_cust=sorted(zip(total_sales_per_user, name_of_all_user,id), reverse=True)[:3],users_dict=users_dict,forarc=forarc,anarac1=anarac1,values=values,labels=labels,BarVal=BarVal,new=new,count=len(users_list),sales_line_list=sum(order_price_list),sports_cat=len(sports_cat),concert_cat=len(concert_cat),ssales=ssales,indicator_sales=indicator_sales_list,indicator_ticket_list=indicator_ticket_list)
+    return render_template('adminDashboard.html',top_cust=sorted(zip(total_sales_per_user, name_of_all_user,id), reverse=True)[:3],users_dict=users_dict,forarc=forarc,anarac1=anarac1,values=values,labels=labels,BarVal=BarVal,new=new,count=len(users_list),sales_line_list=sum(order_price_list),sports_cat=len(sports_cat),concert_cat=len(concert_cat),ssales=ssales,indicator_sales=indicator_sales_list,indicator_ticket=indicator_ticket_list)
 
 
 
