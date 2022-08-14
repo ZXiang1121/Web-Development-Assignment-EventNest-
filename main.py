@@ -19,6 +19,12 @@ from email.message import EmailMessage
 # admin email: admin@gmail.com
 # admin pw: eventnest
 
+# Paypal
+# https://developer.paypal.com/developer/accounts
+# Account: eventnest1@gmail.com
+# Password: eventnest1*
+# The above account if used to create the testing payment account => Adjust Funding Here
+
 # user payment account
 # payment account: eventnestbuyer1@personal.example.com
 # payment password: p!:stYK7
@@ -280,7 +286,7 @@ def accountDetails():
     db.close()
 
     users_list = [] # all users information
-    print(users_dict)
+
     
     for key in users_dict:
         user = users_dict.get(key)
@@ -494,7 +500,7 @@ def update_ticket_details(order_id, user_id):
         user_cart_list = user.get_cart_item()
 
         for page in user_cart_list:
-            # print(page)
+
             if page.get_order_id() == order_id:
                 retrieve_order = page
 
@@ -569,10 +575,8 @@ def clear_cart(user_id):
     user = users_dict.get(str(user_id))
 
     # Pass payment into user
-    # print(new_payment)
     user.set_paid_item(new_payment)
-    # user_paid_list = user.get_paid_item()
-    # print(user_paid_list)
+
 
     # Empty user cart
     user_cart_list = user.get_cart_item()
@@ -581,10 +585,40 @@ def clear_cart(user_id):
 
     db['Users'] = users_dict
     db.close()
+
+    users_dict = {}
+    db = shelve.open('storage.db', 'r')
+    users_dict = db['Users']
+    db.close()
+
+    users_list = []
+    for key in users_dict:
+        user = users_dict.get(key)
+        users_list.append(user)
     
+    
+    paid_list = []
+    store_payment = []
+    for i in users_list:
+        for payment in i.get_paid_item():
+            store_payment.append(payment)
+    
+    # Retrieve Last payment
+    get_last_payment = store_payment[-1]
+    
+    for order in get_last_payment.get_order_history():
+        paid_list.append(order)
+
+    store_order_price = []
+    for i in paid_list:
+        store_order_price.append(i.order_cost(i.get_order_seat_price(), i.get_order_quantity()))
+
+    total_cost = "{:.2f}".format(sum(store_order_price))
 
 
-    return redirect(url_for('home'))
+    return render_template('confirmationPage.html', amount_paid = total_cost, ordered_ticket = paid_list)
+
+
 
 
 @app.route('/deleteOrder/<uuid(strict=False):order_id>/<uuid(strict=False):user_id>/', methods=['GET', 'POST'])
@@ -834,9 +868,6 @@ def new():
     users_list = []  
     for key in users_dict:
         user = users_dict.get(key)
-        print('accountdetails')
-        print(users_dict)
-        print(user)
         if user.get_email() != 'admin@gmail.com':
             users_list.append(user)
     #paid_item then payment(get_order_history) then can access the accessor methods of the order.py
@@ -890,16 +921,18 @@ def new():
     # [('a', 3), ('ab', 2), ('abc', 1), ('abcd', 0)]
     for key,value in users_dict.items():
         sales_per_user = []
-        #store the total sales from each user as every user can have multiple orders
-        for payment in value.get_paid_item():
-            for order in payment.get_order_history():
-                total_sales_per_user.append(order.order_cost(order.get_order_quantity(), order.get_order_seat_price()))
-        total_sales_per_user.append(sum(sales_per_user))
-        id.append(key)
-        # get the name of the user in list
-        name = value.get_name()
-        # store the user_if in list
-        name_of_all_user.append(name)
+        if value.get_name() != "admin":
+            #store the total sales from each user as every user can have multiple orders
+            for payment in value.get_paid_item():
+                for order in payment.get_order_history():
+                    g =(order.order_cost(order.get_order_quantity(), order.get_order_seat_price()))
+                    sales_per_user.append(g)
+            total_sales_per_user.append(sum(sales_per_user))
+            id.append(key)
+            # get the name of the user in list
+            name = value.get_name()
+            # store the user_if in list
+            name_of_all_user.append(name)
     
 
 # sorted_zip = [(spent, 'user id'), (spent, 'user id')] - zip list into (spent,user id)
@@ -969,22 +1002,6 @@ def retrieve_qns():
     return render_template('retrieveQns.html', count=len(qns_list),qns_list=qns_list)
 
 
-# @app.route('/updateQn/<int:id>/', methods=['GET', 'POST'])
-# def create_ans():
-#     create_ans_form = CreateQnForm(request.form)
-#     if request.method == 'POST' and create_ans_form.validate():
-#         qns_dict = {}
-#         db = shelve.open('storage.db', 'c')
-#         try:
-#             qns_dict = db['Questions']
-#         except:
-#             print("Error in retrieving Users from storage.db.")
-
-#         ans = Question.Question(create_ans_form.name.data)
-        
-#         qns_dict[ans.get_qn_id()] = ans
-#         db['Questions'] = qns_dict
-        
         
 @app.route('/updateQn/<uuid(strict=False):id>/', methods=['GET', 'POST'])
 def update_qn(id):
@@ -1036,30 +1053,6 @@ def delete_qn(id):
     db.close()
 
     return redirect(url_for('retrieve_qns'))
-
-# Here's the create answer app route
-# @app.route("/createAns", methods=['GET', 'POST'])
-# def create_qn():
-#     create_qn_form = CreateQnForm(request.form)
-#     if request.method == 'POST' and create_qn_form.validate():
-#         qns_dict = {}
-#         db = shelve.open('storage.db', 'c')
-
-#         try:
-#             qns_dict = db['Questions']
-#         except:
-#             print("Error in retrieving Users from storage.db.")
-
-#         qn = Question.Question(create_qn_form.answers.data)
-
-#         qns_dict[qn.get_qn_id()] = qn
-#         db['Questions'] = qns_dict
-
-
-#         return redirect(url_for('retrieve'))
-#     return render_template('createQn.html', form=create_qn_form)
-
-
 
 
 

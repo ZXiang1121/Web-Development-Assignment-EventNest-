@@ -37,7 +37,7 @@
           <div class="row mb-5">
               <div class="col-md-12 col-lg-4">
                   <div class="dk-footer-box-info mb-5">
-                      <a href="index.html" class="footer-logo">
+                      <a href="/" class="footer-logo">
                           <img src="{{url_for('static', filename='images/logo/eventnest logo png.png')}}" height="50px" alt="footer_logo" >
                       </a>
                       <p class="footer-info-text">
@@ -95,18 +95,18 @@
                                       <a href="/">Event</a>
                                   </li>
                                   <li>
-                                      <a href="#">Dashboard</a>
+                                      <a href="/custDashboard/{{ session['user_id'] }}">Dashboard</a>
                                   </li>
                               </ul>
                               <ul>
                                   <li>
-                                      <a href="#">Profile</a>
+                                      <a href="/accountDetails">Profile</a>
                                   </li>
                                   <li>
-                                      <a href="#">FAQ</a>
+                                      <a href="/faq">FAQ</a>
                                   </li>
                                   <li>
-                                      <a href="#">Contact us</a>
+                                      <a href="/createQn">Contact us</a>
                                   </li>
                               </ul>
                           </div>
@@ -194,7 +194,7 @@
                             <div class="copyright-menu">
                                 <ul>
                                     <li>
-                                        <a href="#">Home</a>
+                                        <a href="/">Home</a>
                                     </li>
                                     <li>
                                         <a href="#">Terms</a>
@@ -203,7 +203,7 @@
                                         <a href="#">Privacy Policy</a>
                                     </li>
                                     <li>
-                                        <a href="#">Contact</a>
+                                        <a href="/createQn">Contact</a>
                                     </li>
                                 </ul>
                             </div>
