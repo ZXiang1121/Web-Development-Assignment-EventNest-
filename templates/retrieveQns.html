@@ -48,7 +48,7 @@
         <td class="align-middle"><a href="/updateQn/{{qn.get_qn_id()}}" class="text-dark"><i class="bi bi-pencil-square"></i></a></td>
         <td>
           
-  <form action="{{url_for('delete_qn', id=qn.get_qn_id())}}" class="mt-2 text-center" method="POST">
+  <form action="{{url_for('delete_qn', id=qn.get_qn_id())}}" class="align-middle text-center" method="POST">
     <!-- <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete question asked by {{qn.get_name()}}?');"> -->
     <button type="button" class="fa" style="border: none; background: white;" data-bs-toggle="modal" data-bs-target="#myModal_{{qn.get_qn_id()}}">
       &#xf014;
@@ -80,7 +80,7 @@
       </div>
     </div>
   </form>
-        </td>
+  </td>
 
       </tr>
     {% endfor %}
