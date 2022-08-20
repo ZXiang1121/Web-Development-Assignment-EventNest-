@@ -1,8 +1,8 @@
-## EventNest
-# Stay Entertained Through ABC
-   Access, Book, Connect
+# EventNest
+## Stay Entertained Through ABC
+### Access, Book, Connect
 
-# Steps:
+## Steps:
 1) Sign Up/Login
 
 2) Account management CRUD and different controls is created
