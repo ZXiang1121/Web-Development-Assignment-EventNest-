@@ -25,6 +25,7 @@ from email.message import EmailMessage
 # Password: eventnest1*
 # The above account if used to create the testing payment account => Adjust Funding Here
 
+# https://www.sandbox.paypal.com/us/home
 # user payment account
 # payment account: eventnestbuyer1@personal.example.com
 # payment password: p!:stYK7
@@ -32,6 +33,7 @@ from email.message import EmailMessage
 # business account that receive payment
 # business email: eventnestbusiness1@business.example.com
 # business password: p-E"OA8s
+# Check for payment paid/received from the link above
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'I have a dream'
@@ -448,7 +450,7 @@ def ticket_details(event_id):
 
         db['Users'] = users_dict
         db.close()
-        #parik issues
+
 
         return redirect(url_for('cart_page', user_id = user_id))
     return render_template('ticketDetails.html', event=retrieve_event, form=add_order_form)
@@ -475,7 +477,7 @@ def update_ticket_details(order_id, user_id):
         
         update_order_form.order_price.choices = [(i.get_seat_price(), i.get_seat_type())
                                         for i in retrieve_order.get_order_seating_plan()]
-        
+        # Retrieve/Search for "seat type" from corresponding "seat price" by finding its index
         dc = {v:k for k, v in update_order_form.order_price.choices}
         key_list = list(dc.keys())
         value_list = list(dc.values())
@@ -529,11 +531,11 @@ def cart_page(user_id):
 
     user = users_dict.get(str(user_id))
     user_cart_list = user.get_cart_item()
-
+    # Store all ticket price in a list "store_order_price"
     store_order_price = []
     for i in user_cart_list:
         store_order_price.append(i.order_cost(i.get_order_seat_price(), i.get_order_quantity()))
-
+    # Add all cost together in a list
     total_cost = "{:.2f}".format(sum(store_order_price))
 
 
@@ -569,6 +571,7 @@ def clear_cart(user_id):
 
     db.close()
 
+    # Assign paid item into a cart.
     users_dict = {}
     db = shelve.open('storage.db', 'w')
     users_dict = db['Users']
@@ -603,7 +606,7 @@ def clear_cart(user_id):
         for payment in i.get_paid_item():
             store_payment.append(payment)
     
-    # Retrieve Last payment
+    # Retrieve Last paid order for confirmation page
     get_last_payment = store_payment[-1]
     
     for order in get_last_payment.get_order_history():
@@ -655,7 +658,7 @@ def create_event():
 
     if request.method == 'POST' and event_form.validate():
         posterFile = event_form.event_poster.data # First grab the file
-        seatFile = event_form.seat_image.data
+        seatFile = event_form.seat_image.data # First grab the file
 
         savePosterPath = os.path.join(os.path.abspath(os.path.dirname(__file__)), app.config['UPLOAD_FOLDER'], secure_filename(posterFile.filename))
         posterFile.save(savePosterPath) # Save the file
@@ -683,13 +686,14 @@ def create_event():
                             event_form.seat_image.data.filename,
                             event_form.event_desc.data,
                             )
-                            
+        # Retrieve seating plan from the form filled using WTForms FieldList                   
         seating_plan_list = []
         for i in event_form.data['seating_plan']:
 
             seat = Seat.Seat(i['seat_type'],
                              i['seat_available'],
                              i['seat_price'])
+            # Add seating plan to seating_plan_list
             seating_plan_list.append(seat)
         
         new_event.set_seating_plan(seating_plan_list)
@@ -711,7 +715,7 @@ def update_event(id):
     update_event_form = createEvent(CombinedMultiDict((request.files, request.form)))
     if request.method == 'POST' and update_event_form.validate():
         posterFile = update_event_form.event_poster.data # First grab the file
-        seatFile = update_event_form.seat_image.data
+        seatFile = update_event_form.seat_image.data # First grab the file
 
         savePosterPath = os.path.join(os.path.abspath(os.path.dirname(__file__)), app.config['UPLOAD_FOLDER'], secure_filename(posterFile.filename))
         posterFile.save(savePosterPath) # Save the file
