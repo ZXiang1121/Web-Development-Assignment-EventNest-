@@ -1,6 +1,6 @@
 ## EventNest
 # Stay Entertained Through ABC
-#   Access, Book, Connect
+   Access, Book, Connect
 
 # Steps:
 1) Sign Up/Login
