@@ -913,13 +913,21 @@ def new():
     labels = ["Jan", "Feb", "Mar", "Apr", "May","Jul"]
 
 
-    forarc = ((250 + ssales)/ 1000) * 100
-    narc1 = "{:.0f}".format(((250 + ssales)/ 1000) * 100) + "%"
+    forarc = ((250 + ssales)/ 10000) * 100
+    narc1 = "{:.0f}".format(((250 + ssales)/ 10000) * 100) + "%"
     anarac1 = narc1
 
     total_sales_per_user =[]
     name_of_all_user = []
     id = []
+
+    order_quantity_list = []
+    for i in users_list:
+        for payment in i.get_paid_item():
+            for order in payment.get_order_history():
+                order_quantity_list.append(order.get_order_quantity())
+
+    stickets = sum(order_quantity_list)
 
     # { 'a':3,'ab':2,'abc':1,'abcd':0 }
     # [('a', 3), ('ab', 2), ('abc', 1), ('abcd', 0)]
@@ -949,7 +957,7 @@ def new():
     
 
     
-    return render_template('adminDashboard.html',top_cust=sorted(zip(total_sales_per_user, name_of_all_user,id), reverse=True)[:3],users_dict=users_dict,forarc=forarc,anarac1=anarac1,values=values,labels=labels,BarVal=BarVal,new=new,count=len(users_list),sales_line_list=sum(order_price_list),sports_cat=len(sports_cat),concert_cat=len(concert_cat),ssales=ssales,indicator_sales=indicator_sales_list,indicator_ticket=indicator_ticket_list)
+    return render_template('adminDashboard.html',stickets = stickets,top_cust=sorted(zip(total_sales_per_user, name_of_all_user,id), reverse=True)[:3],users_dict=users_dict,forarc=forarc,anarac1=anarac1,values=values,labels=labels,BarVal=BarVal,new=new,count=len(users_list),sales_line_list=sum(order_price_list),sports_cat=len(sports_cat),concert_cat=len(concert_cat),ssales=ssales,indicator_sales=indicator_sales_list,indicator_ticket=indicator_ticket_list)
 
 
 
