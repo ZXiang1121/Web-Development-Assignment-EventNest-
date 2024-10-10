@@ -2,6 +2,8 @@
 ## Stay Entertained Through ABC
 ### Access, Book, Connect
 
+Preview website pages in /website-previews
+
 ## Steps:
 1) Sign Up/Login
 
